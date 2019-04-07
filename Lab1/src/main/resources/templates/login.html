@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http:/>/www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="stile.css">
+</head>
+<body>
+
+<div class="container-fluid p-5">
+    <h1>Login</h1><br>
+    <div class="row">
+        <div th:text="${messageLogin}"></div>
+    </div>
+    <div id="menuLogin">
+        <form method="post">
+            <div class="form-group">
+                <br><label for="e">E-mail</label>
+                <input name="mail" id="e" type="email" placeholder="e-mail" th:value="${mailLogin}" minlength="10" maxlength="20" required>
+                <div th:text="${msgEmailLogin}" class="errors"></div>
+            </div>
+            <div class="form-group">
+                <label for="p1">Password</label>
+                <input name="pass1" id="p1" type="password" placeholder="password" th:value="${passLogin}" minlength="7" maxlength="20" required>
+                <div th:text="${msgPass1Login}" class="errors"></div>
+            </div>
+            <div>
+                <input type="submit" value="Login" id="l">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
