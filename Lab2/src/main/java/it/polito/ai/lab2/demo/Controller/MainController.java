@@ -1,11 +1,22 @@
 package it.polito.ai.lab2.demo.Controller;
 
+import it.polito.ai.lab2.demo.Entity.Fermata;
+import it.polito.ai.lab2.demo.Entity.Linea;
+import it.polito.ai.lab2.demo.Entity.Prenotazione;
+import it.polito.ai.lab2.demo.Entity.idPrenotazione;
 import it.polito.ai.lab2.demo.Repository.FermataRepository;
 import it.polito.ai.lab2.demo.Repository.LineaRepository;
 import it.polito.ai.lab2.demo.Repository.PrenotazioneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Controller
 @RequestMapping(path = "demo") // This means URL's start with /demo (after Application path)
@@ -77,8 +88,9 @@ public class MainController {
 
     /* ------------------------------------------- */
 
-    /* @GetMapping(path="/lines")
-    public @ResponseBody List<String> getAllLinea() {
+     @GetMapping(path="/lines")
+    public @ResponseBody
+     List<String> getAllLinea() {
         Iterable<Linea> linee = lineaRepository.findAll();
         List<String> nomiLinee = new ArrayList<>();
         for (Linea linea : linee)
@@ -99,7 +111,121 @@ public class MainController {
         for(Fermata f : fermate)
             dettagliRitorno += "----> " + f.getId()+" "+f.getNome()+" "+f.getOra_ritorno()+"<br>";
         return dettagliAndata+dettagliRitorno;
-    } */
+    }
 
+
+    @GetMapping(path="/add1")
+    public @ResponseBody String addPrenotazioni() {
+        Prenotazione p = new Prenotazione();
+        idPrenotazione iP = new idPrenotazione();
+        iP.setData(LocalDate.of(2001, 01, 01));
+        iP.setPersona("Barberinho");
+        iP.setVerso("A");
+        p.setId(iP);
+        Optional<Fermata> f = fermataRepository.findById(319);
+        if (f.isPresent())
+            p.setFermata(f.get());
+
+        Prenotazione p1 = new Prenotazione();
+        idPrenotazione iP1 = new idPrenotazione();
+        iP1.setData(LocalDate.of(2002, 02, 02));
+        iP1.setPersona("Mario Rossi");
+        iP1.setVerso("A");
+        p1.setId(iP1);
+        Optional<Fermata> f1 = fermataRepository.findById(323);
+        if (f1.isPresent())
+            p1.setFermata(f1.get());
+
+        Prenotazione p2 = new Prenotazione();
+        idPrenotazione iP2 = new idPrenotazione();
+        iP2.setData(LocalDate.of(2002, 02, 02));
+        iP2.setPersona("Malnati Greit");
+        iP2.setVerso("R");
+        p2.setId(iP2);
+        Optional<Fermata> f2 = fermataRepository.findById(323);
+        if (f2.isPresent())
+            p2.setFermata(f2.get());
+
+
+        prenotazioneRepository.save(p);
+        prenotazioneRepository.save(p1);
+        prenotazioneRepository.save(p2);
+        return "saved";
+    }
+
+    @GetMapping(path="/reservations/{nome_linea}")
+    public @ResponseBody String getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea) {
+        {
+
+
+            LocalDate data = LocalDate.of(2002, 02, 02);
+
+            Linea linea = lineaRepository.findByNome(nomeLinea);
+            List<Fermata> fermate = fermataRepository.findByLinea(linea);
+
+            List<Prenotazione> prenotazioni_A = new ArrayList<Prenotazione>();
+            List<Prenotazione> prenotazioni_R = new ArrayList<Prenotazione>();
+
+            Iterable<Prenotazione> prenotazioni = prenotazioneRepository.findAll();
+            Map<Fermata, List<String>> fermata_persone_A = new HashMap<>();
+            Map<Fermata, List<String>> fermata_persone_R = new HashMap<>();
+            for (Prenotazione p : prenotazioni) {
+                if (p.getId().getData().equals(data)) {
+                    if (p.getId().getVerso().equals("A"))
+                        prenotazioni_A.add(p);
+                    else
+                        prenotazioni_R.add(p);
+                }
+            }
+
+            for (Fermata f2 : fermate) {
+                List<String> persone = new ArrayList<>();
+                for (Prenotazione p1 : prenotazioni_A) {
+                    if (p1.getFermata().getId() == f2.getId()) {
+                        persone.add(p1.getId().getPersona());
+                    }
+                }
+                if (persone.isEmpty() == false)
+                    fermata_persone_A.put(f2, persone);
+            }
+
+            for (Fermata f2 : fermate) {
+                List<String> persone = new ArrayList<>();
+                for (Prenotazione p1 : prenotazioni_R) {
+                    if (p1.getFermata().getId() == f2.getId()) {
+                        persone.add(p1.getId().getPersona());
+                    }
+                }
+                if (persone.isEmpty() == false)
+                    fermata_persone_R.put(f2, persone);
+            }
+
+
+            String res = "Fermata Andata: <br>";
+            for (Fermata key : fermata_persone_A.keySet()) {
+                res+=key.getId()+": <br>";
+                for (List<String> pers : fermata_persone_A.values()) {
+                    for (String s : pers) {
+                        res+=s+" ";
+                    }
+                }
+            }
+
+            res+= "<br><br> Fermate ritorno: <br>";
+            for (Fermata key : fermata_persone_A.keySet()) {
+                res+=key.getId()+": <br>";
+                for (List<String> pers : fermata_persone_R.values()) {
+                    for (String s : pers) {
+                        res+=s+" ";
+                    }
+                }
+            }
+
+            return res;
+
+        }
+
+    }
 
 }
+

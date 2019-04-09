@@ -12,4 +12,5 @@ public interface FermataRepository extends CrudRepository<Fermata, Integer> {
 
     @Query("select f from Fermata f where f.linea = ?1 order by f.n_seq")
     List<Fermata> findByLinea(Linea linea);
+
 }
