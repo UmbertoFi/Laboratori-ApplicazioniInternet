@@ -11,6 +11,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 
@@ -33,14 +37,14 @@ public class DemoApplication {
             ObjectMapper mapper = new ObjectMapper();
              //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             try {
-                Linea linea = mapper.readValue(new File("/home/umb/Scrivania/labo/src/main/resources/json/12.json"), Linea.class);
-                serv.addLinea(linea);
-                servF.addFermate(linea);
-                //lineaRepository.save(linea);
-                /*for (Fermata f : linea.getFermate()) {
-                    fermataRepository.save(f);
-                }*/
-                //System.out.println(linea.getAmministratore());
+                ClassLoader cl = this.getClass().getClassLoader();
+                ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
+                Resource[] resources = resolver.getResources("classpath*:/json/*.json");
+                for(Resource r : resources) {
+                    Linea linea = mapper.readValue(ResourceUtils.getFile("classpath:json/"+r.getFilename()), Linea.class);
+                    serv.addLinea(linea);
+                    servF.addFermate(linea);
+                    }
             } catch (Exception e) {
                 System.out.println("Impossibile salvare la linea: " );
                 e.printStackTrace();
