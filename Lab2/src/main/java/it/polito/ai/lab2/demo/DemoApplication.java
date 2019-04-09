@@ -30,12 +30,12 @@ public class DemoApplication {
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
-//
+
     @Bean
     CommandLineRunner runner(FermataRepository fermataRepository, LineaRepository lineaRepository) {
         return args -> {
             ObjectMapper mapper = new ObjectMapper();
-             //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             try {
                 ClassLoader cl = this.getClass().getClassLoader();
                 ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
@@ -44,7 +44,7 @@ public class DemoApplication {
                     Linea linea = mapper.readValue(ResourceUtils.getFile("classpath:json/"+r.getFilename()), Linea.class);
                     serv.addLinea(linea);
                     servF.addFermate(linea);
-                    }
+                }
             } catch (Exception e) {
                 System.out.println("Impossibile salvare la linea: " );
                 e.printStackTrace();

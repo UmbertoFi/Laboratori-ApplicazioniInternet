@@ -113,7 +113,6 @@ public class MainController {
         return dettagliAndata+dettagliRitorno;
     }
 
-
     @GetMapping(path="/add1")
     public @ResponseBody String addPrenotazioni() {
         Prenotazione p = new Prenotazione();
@@ -153,12 +152,15 @@ public class MainController {
         return "saved";
     }
 
-    @GetMapping(path="/reservations/{nome_linea}")
-    public @ResponseBody String getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea) {
+    @GetMapping(path="/reservations/{nome_linea}/{date}")
+    public @ResponseBody String getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
+                                                             @PathVariable("date")  String date) {
         {
 
 
-            LocalDate data = LocalDate.of(2002, 02, 02);
+            String[] pieces=date.split("-");
+            LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+            //LocalDate data = LocalDate.of(2002, 02, 02);
 
             Linea linea = lineaRepository.findByNome(nomeLinea);
             List<Fermata> fermate = fermataRepository.findByLinea(linea);

@@ -5,10 +5,17 @@ import it.polito.ai.lab2.demo.Entity.Prenotazione;
 import it.polito.ai.lab2.demo.Entity.idPrenotazione;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Collection;
+import java.util.List;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface PrenotazioneRepository extends CrudRepository<Prenotazione, idPrenotazione> {
+
+    /*@Query("Select p.id from Prenotazione p where p.fermata in :fermate")
+    List<idPrenotazione> findPrenotazioneByFermataList(@Param("fermate")Collection<Fermata>)*/
 
 }
