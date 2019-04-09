@@ -7,7 +7,7 @@
       "id": "443",
       "nome": "Marmolada",
       "n_seq": "1",
-      "id_linea": "58",
+      "linea": "58",
       "ora_andata": "08:00:00",
       "ora_ritorno": "14:10:00"
     },
@@ -15,7 +15,7 @@
       "id": "441",
       "nome": "Rivalta",
       "n_seq": "2",
-      "id_linea": "58",
+      "linea": "58",
       "ora_andata": "08:05:00",
       "ora_ritorno": "14:05:00"
     },
@@ -23,7 +23,7 @@
       "id": "439",
       "nome": "Mediterraneo",
       "n_seq": "3",
-      "id_linea": "58",
+      "linea": "58",
       "ora_andata": "08:10:00",
       "ora_ritorno": "14:00:00"
     },
@@ -31,7 +31,7 @@
       "id": "437",
       "nome": "Vespucci",
       "n_seq": "4",
-      "id_linea": "58",
+      "linea": "58",
       "ora_andata": "08:15:00",
       "ora_ritorno": "13:55:00"
     },
@@ -39,7 +39,7 @@
       "id": "435",
       "nome": "Einaudi",
       "n_seq": "5",
-      "id_linea": "58",
+      "linea": "58",
       "ora_andata": "08:20:00",
       "ora_ritorno": "13:50:00"
     },
@@ -47,7 +47,7 @@
       "id": "433",
       "nome": "Politecnico",
       "n_seq": "6",
-      "id_linea": "58",
+      "linea": "58",
       "ora_andata": "08:25:00",
       "ora_ritorno": "13:45:00"
     }

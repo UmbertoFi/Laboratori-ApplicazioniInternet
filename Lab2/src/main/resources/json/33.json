@@ -7,7 +7,7 @@
       "id": "233",
       "nome": "Porta Nuova",
       "n_seq": "1",
-      "id_linea": "33",
+      "linea": "33",
       "ora_andata": "08:05:00",
       "ora_ritorno": "13:55:00"
     },
@@ -15,7 +15,7 @@
       "id": "246",
       "nome": "Vittorio Emanuele II",
       "n_seq": "2",
-      "id_linea": "33",
+      "linea": "33",
       "ora_andata": "08:10:00",
       "ora_ritorno": "13:50:00"
     },
@@ -23,7 +23,7 @@
       "id": "249",
       "nome": "Re Umberto",
       "n_seq": "3",
-      "id_linea": "33",
+      "linea": "33",
       "ora_andata": "08:15:00",
       "ora_ritorno": "13:45:00"
     },
@@ -31,7 +31,7 @@
       "id": "298",
       "nome": "Stati Uniti",
       "n_seq": "4",
-      "id_linea": "33",
+      "linea": "33",
       "ora_andata": "08:20:00",
       "ora_ritorno": "13:40:00"
     },
@@ -39,7 +39,7 @@
       "id": "211",
       "nome": "Politecnico",
       "n_seq": "5",
-      "id_linea": "33",
+      "linea": "33",
       "ora_andata": "08:25:00",
       "ora_ritorno": "13:35:00"
     }
