@@ -29,64 +29,6 @@ public class MainController {
     private PrenotazioneRepository prenotazioneRepository;
 
 
-    /* ------------------------------------------- */
-
-    /* @GetMapping(path="/add1")
-    public @ResponseBody String addLinea1(){
-        Linea l = new Linea();
-        l.setId(1);
-        l.setNome("Linea1");
-        l.setAmministratore("amm1");
-        lineaRepository.save(l);
-        return "saved";
-    }
-    @GetMapping(path="/add2")
-    public @ResponseBody String addLinea2(){
-        Linea l = new Linea();
-        l.setId(2);
-        l.setNome("Linea2");
-        l.setAmministratore("amm2");
-        lineaRepository.save(l);
-        return "saved";
-    }
-    @GetMapping(path="/add3")
-    public @ResponseBody String addFermata3(){
-        Fermata f = new Fermata();
-        f.setId(121);
-        f.setLinea(lineaRepository.findByNome("Linea1"));
-        f.setN_seq(1);
-        f.setNome("ciaociao");
-        f.setOra_andata("08:30");
-        f.setOra_ritorno("13:00");
-        fermataRepository.save(f);
-        return "saved";
-    }
-    @GetMapping(path="/add4")
-    public @ResponseBody String addFermata4(){
-        Fermata f = new Fermata();
-        f.setId(123);
-        f.setLinea(lineaRepository.findByNome("Linea1"));
-        f.setN_seq(2);
-        f.setNome("ciaociao4");
-        f.setOra_andata("08:40");
-        f.setOra_ritorno("12:50");
-        fermataRepository.save(f);
-        return "saved";
-    }
-    @GetMapping(path="/add5")
-    public @ResponseBody String addFermata5(){
-        Fermata f = new Fermata();
-        f.setId(125);
-        f.setLinea(lineaRepository.findByNome("Linea1"));
-        f.setN_seq(3);
-        f.setNome("ciaociao5");
-        f.setOra_andata("08:50");
-        f.setOra_ritorno("12:40");
-        fermataRepository.save(f);
-        return "saved";
-    } */
-
-    /* ------------------------------------------- */
 
      @GetMapping(path="/lines")
     public @ResponseBody
@@ -154,7 +96,7 @@ public class MainController {
 
     @GetMapping(path="/reservations/{nome_linea}/{date}")
     public @ResponseBody String getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
-                                                             @PathVariable("date")  String date) {
+                                                             @PathVariable("date")  String date)
         {
 
 
@@ -203,6 +145,7 @@ public class MainController {
             }
 
 
+
             String res = "Fermata Andata: <br>";
             for (Fermata key : fermata_persone_A.keySet()) {
                 res+=key.getId()+": <br>";
@@ -214,7 +157,7 @@ public class MainController {
             }
 
             res+= "<br><br> Fermate ritorno: <br>";
-            for (Fermata key : fermata_persone_A.keySet()) {
+            for (Fermata key : fermata_persone_R.keySet()) {
                 res+=key.getId()+": <br>";
                 for (List<String> pers : fermata_persone_R.values()) {
                     for (String s : pers) {
@@ -225,9 +168,42 @@ public class MainController {
 
             return res;
 
+     }
+
+
+    @GetMapping(path="/reservations/{nome_linea}/{date}/{id_prenotazione}")
+    public @ResponseBody String getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
+                                                             @PathVariable("date")  String date,
+                                                             @PathVariable("id_prenotazione") String res_id)
+    {
+
+        Linea linea = lineaRepository.findByNome(nomeLinea);
+        List<Fermata> fermate = fermataRepository.findByLinea(linea);
+        String[] pieces = res_id.split("_");
+
+        idPrenotazione iP = new idPrenotazione();
+        String[] dataPieces = pieces[1].split("-");
+        iP.setData(LocalDate.of(Integer.parseInt(dataPieces[0]),Integer.parseInt(dataPieces[1]),Integer.parseInt(dataPieces[2])));
+        iP.setPersona(pieces[0]);
+        iP.setVerso(pieces[2]);
+        Optional<Prenotazione> pren = prenotazioneRepository.findById(iP);
+
+        String res="";
+
+        if(pren.isPresent() && date.equals(pieces[1])){
+            for (Fermata f : fermate){
+                if(f.getId()== pren.get().getFermata().getId()){
+                    res += "Persona: "+pren.get().getId().getPersona() + " Data: " + pren.get().getId().getData() + " Verso: " + pren.get().getId().getVerso() + " id_fermata: " + pren.get().getFermata().getId();
+                    return res;
+                }
+            }
         }
 
+        return "nessuna prenotazione";
     }
+
+
+
 
 }
 
