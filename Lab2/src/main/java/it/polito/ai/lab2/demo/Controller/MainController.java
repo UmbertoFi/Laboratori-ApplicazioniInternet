@@ -7,12 +7,10 @@ import it.polito.ai.lab2.demo.Entity.idPrenotazione;
 import it.polito.ai.lab2.demo.Repository.FermataRepository;
 import it.polito.ai.lab2.demo.Repository.LineaRepository;
 import it.polito.ai.lab2.demo.Repository.PrenotazioneRepository;
+import it.polito.ai.lab2.demo.Service.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -27,6 +25,8 @@ public class MainController {
     private FermataRepository fermataRepository;
     @Autowired
     private PrenotazioneRepository prenotazioneRepository;
+    @Autowired
+    private PrenotazioneService servP;
 
 
 
@@ -200,6 +200,32 @@ public class MainController {
         }
 
         return "nessuna prenotazione";
+    }
+
+    @PostMapping(path="/reservations/{nome_linea}/{date}")
+    public @ResponseBody String postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
+                                                              @PathVariable("date") String date,
+                                                              @RequestParam("persona") String persona,
+                                                              @RequestParam("fermata") String fermata,
+                                                              @RequestParam("verso") String verso){
+
+
+         Prenotazione p = new Prenotazione();
+         Optional<Fermata> f = fermataRepository.findById(Integer.parseInt(fermata));
+         if(f.isPresent()) {
+             p.setFermata(f.get());
+             idPrenotazione iP = new idPrenotazione();
+             String[] pieces=date.split("-");
+             LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+             iP.setData(data);
+             iP.setPersona(persona);
+             iP.setVerso(verso);
+             p.setId(iP);
+             prenotazioneRepository.save(p);
+             f.get().getPrenotazioni().add(p);
+             return iP.toString();
+         }
+         return "errore";
     }
 
 

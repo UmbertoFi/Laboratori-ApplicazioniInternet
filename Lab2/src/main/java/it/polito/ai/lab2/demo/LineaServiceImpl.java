@@ -17,4 +17,7 @@ public class LineaServiceImpl implements LineaService {
     public void addLinea(Linea l){
         repo.save(l);
     }
+
+    public static class PrenotazioneServiceImpl {
+    }
 }
