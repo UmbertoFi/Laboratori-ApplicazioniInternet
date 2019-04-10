@@ -229,11 +229,12 @@ public class MainController {
         return "errore";
     }
 
-    /* @PutMapping(path = "/reservations/{nome_linea}/{date}/{reservation_id}")
+    @PutMapping(path = "/reservations/{nome_linea}/{date}/{reservation_id}")
     public @ResponseBody
     String updatePrenotazione(@PathVariable("nome_linea") String nomeLinea,
                                  @PathVariable("date") String date,
-                                 @PathVariable("reservation_id") String res_id) {
+                                 @PathVariable("reservation_id") String res_id,
+                                @RequestParam("fermata") String fermata  ) {
 
         idPrenotazione iP = new idPrenotazione();
         String[] pieces = res_id.split("_");
@@ -242,14 +243,18 @@ public class MainController {
         iP.setPersona(pieces[0]);
         iP.setVerso(pieces[2]);
 
+        Optional<Fermata> f = fermataRepository.findById(Integer.parseInt(fermata));
         Optional<Prenotazione> p = prenotazioneRepository.findById(iP);
         if(p.isPresent()){
-
-            return "aggiornamento fatto!";
+            if(f.isPresent()) {
+                p.get().setFermata(f.get());
+                prenotazioneRepository.save(p.get());
+                return "aggiornamento fatto!";
+            }
         }
 
         return "errore!";
-    } */
+    }
 
     @DeleteMapping(path = "/reservations/{nome_linea}/{date}/{reservation_id}")
     public @ResponseBody String deletePrenotazione(@PathVariable("nome_linea") String nomeLinea,
