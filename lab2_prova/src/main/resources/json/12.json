@@ -1,0 +1,56 @@
+{
+  "id": "12",
+  "nome": "Santa Rita - Politecnico",
+  "amministratore": "Mr.Jones",
+  "fermate": [
+    {
+      "id": "319",
+      "nome": "Santa Rita",
+      "n_seq": "1",
+      "ora_andata": "08:00:00",
+      "ora_ritorno": "14:00:00"
+    },
+    {
+      "id": "321",
+      "nome": "Caprera",
+      "n_seq": "2",
+      "ora_andata": "08:05:00",
+      "ora_ritorno": "13:55:00"
+    },
+    {
+      "id": "323",
+      "nome": "Gessi",
+      "n_seq": "3",
+      "ora_andata": "08:10:00",
+      "ora_ritorno": "13:50:00"
+    },
+    {
+      "id": "325",
+      "nome": "Orbassano",
+      "n_seq": "4",
+      "ora_andata": "08:15:00",
+      "ora_ritorno": "13:45:00"
+    },
+    {
+      "id": "327",
+      "nome": "Torricelli",
+      "n_seq": "5",
+      "ora_andata": "08:20:00",
+      "ora_ritorno": "13:40:00"
+    },
+    {
+      "id": "329",
+      "nome": "Braccini",
+      "n_seq": "6",
+      "ora_andata": "08:25:00",
+      "ora_ritorno": "13:35:00"
+    },
+    {
+      "id": "331",
+      "nome": "Politecnico",
+      "n_seq": "7",
+      "ora_andata": "08:30:00",
+      "ora_ritorno": "13:30:00"
+    }
+  ]
+}
