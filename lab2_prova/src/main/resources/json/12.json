@@ -1,11 +1,11 @@
 {
   "id": "12",
-  "nome": "Santa Rita - Politecnico",
+  "nome": "Santa_Rita-Politecnico",
   "amministratore": "Mr.Jones",
   "fermate": [
     {
       "id": "319",
-      "nome": "Santa Rita",
+      "nome": "Santa_Rita",
       "n_seq": "1",
       "ora_andata": "08:00:00",
       "ora_ritorno": "14:00:00"

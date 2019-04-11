@@ -15,7 +15,8 @@ import java.util.List;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Setter(value = AccessLevel.PACKAGE)
+// @Setter(value = AccessLevel.PACKAGE)
+@Setter
 @Getter
 public class Linea {
     @Id
@@ -26,19 +27,19 @@ public class Linea {
     private List<Fermata> fermate = new ArrayList<Fermata>();
 
 
-    /* public LineaDTO convertToDTO() {
+    public LineaDTO convertToDTO() {
+
+        List<FermataDTO> fermate = new ArrayList<FermataDTO>();
+        for(Fermata f : this.fermate)
+            fermate.add(f.convertToDTO());
+
         LineaDTO l = LineaDTO.builder()
                 .id(this.id)
                 .nome(this.nome)
                 .amministratore(this.amministratore)
+                .fermate(fermate)
                 .build();
 
-        List<FermataDTO> fermate = new ArrayList<FermataDTO>();
-        for(Fermata f : this.fermate)
-            fermate.add(f.convertToDTO(l));
-
-        l.toBuilder().fermate(fermate).build();
-
         return l;
-    } */
+    }
 }

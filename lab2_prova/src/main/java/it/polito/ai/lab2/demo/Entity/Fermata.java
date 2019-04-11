@@ -12,7 +12,8 @@ import java.util.Set;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Setter(value = AccessLevel.PACKAGE)
+// @Setter(value = AccessLevel.PACKAGE)
+@Setter
 @Getter
 public class Fermata {
     @Id
@@ -25,7 +26,7 @@ public class Fermata {
     private String ora_andata;
     private String ora_ritorno;
 
-    /* public FermataDTO convertToDTO() {
+    public FermataDTO convertToDTO() {
         FermataDTO f = FermataDTO.builder()
                 .id(this.id)
                 .nome(this.nome)
