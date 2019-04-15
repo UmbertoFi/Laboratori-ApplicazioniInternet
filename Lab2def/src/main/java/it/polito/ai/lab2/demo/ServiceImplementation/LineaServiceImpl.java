@@ -1,11 +1,10 @@
 package it.polito.ai.lab2.demo.ServiceImplementation;
 
-import it.polito.ai.lab2.demo.DTO.FermataDTO;
 import it.polito.ai.lab2.demo.DTO.LineaDTO;
-import it.polito.ai.lab2.demo.Entity.Fermata;
 import it.polito.ai.lab2.demo.Entity.Linea;
 import it.polito.ai.lab2.demo.Repository.LineaRepository;
 import it.polito.ai.lab2.demo.Service.LineaService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,7 @@ public class LineaServiceImpl implements LineaService {
     private EntityManager em;
 
     @Autowired
-    LineaRepository lineaRepository;
+    private LineaRepository lineaRepository;
 
     public void save(LineaDTO l) {
         Linea linea = l.convertToEntity();

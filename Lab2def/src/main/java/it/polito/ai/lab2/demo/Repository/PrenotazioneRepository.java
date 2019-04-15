@@ -13,8 +13,12 @@ import java.util.List;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PrenotazioneRepository extends CrudRepository<Prenotazione, idPrenotazione> {
+
+    @Query("select l from Prenotazione l where l.id = ?1")
+    Optional<Prenotazione> findById(idPrenotazione dPre);
 
 }

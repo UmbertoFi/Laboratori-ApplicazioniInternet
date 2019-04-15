@@ -10,12 +10,14 @@ import java.util.List;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Setter(value = AccessLevel.PACKAGE)
+/*@Setter(value = AccessLevel.PACKAGE)*/
+@Setter
 @Getter
 public class LineaDTO {
     private int id;
     private String nome;
     private String amministratore;
+    @Builder.Default
     private List<FermataDTO> fermate = new ArrayList<FermataDTO>();
 
     public Linea convertToEntity() {
