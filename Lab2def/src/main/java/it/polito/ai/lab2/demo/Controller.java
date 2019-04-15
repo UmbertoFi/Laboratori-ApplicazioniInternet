@@ -1,17 +1,15 @@
 package it.polito.ai.lab2.demo;
 
-import it.polito.ai.lab2.demo.DTO.FermataDTO;
-import it.polito.ai.lab2.demo.DTO.LineaDTO;
+import it.polito.ai.lab2.demo.DTO.NomeLineaDTO;
 import it.polito.ai.lab2.demo.Entity.Fermata;
 import it.polito.ai.lab2.demo.Entity.Linea;
-import it.polito.ai.lab2.demo.Entity.Prenotazione;
-import it.polito.ai.lab2.demo.Entity.idPrenotazione;
+import it.polito.ai.lab2.demo.Repository.FermataRepository;
+import it.polito.ai.lab2.demo.Repository.LineaRepository;
 import it.polito.ai.lab2.demo.Service.FermataService;
 import it.polito.ai.lab2.demo.Service.LineaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -20,20 +18,25 @@ public class Controller {
     @Autowired
     private LineaService lineaService;
     @Autowired
+    private LineaRepository lineaRepository;
+    @Autowired
     private FermataService fermataService;
+    @Autowired
+    private FermataRepository fermataRepository;
+
 
 
     @GetMapping(path="/lines")
     public @ResponseBody
-    List<LineaDTO> getAllLinea() {
+    List<NomeLineaDTO> getAllLinea() {
         Iterable<Linea> linee = lineaService.getLines();
-        List<LineaDTO> nomiLinee = new ArrayList<>();
+        List<NomeLineaDTO> nomiLinee = new ArrayList<>();
         for (Linea linea : linee)
-            nomiLinee.add(linea.convertToDTO());
+            nomiLinee.add(linea.convertToNomeLineaDTO());
         return nomiLinee;
     }
 
-    /* @GetMapping(path = "/lines/{nome_linea}")
+    @GetMapping(path = "/lines/{nome_linea}")
     public @ResponseBody
     String getDettagliLinea(@PathVariable("nome_linea") String nomeLinea) {
 
@@ -48,7 +51,7 @@ public class Controller {
             dettagliRitorno += "----> " + f.getId() + " " + f.getNome() + " " + f.getOra_ritorno() + "<br>";
         return dettagliAndata + dettagliRitorno;
     }
-
+/*
     @GetMapping(path = "/add1")
     public @ResponseBody
     String addPrenotazioni() {

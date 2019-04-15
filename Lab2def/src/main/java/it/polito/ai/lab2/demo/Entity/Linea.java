@@ -2,6 +2,7 @@ package it.polito.ai.lab2.demo.Entity;
 
 import it.polito.ai.lab2.demo.DTO.FermataDTO;
 import it.polito.ai.lab2.demo.DTO.LineaDTO;
+import it.polito.ai.lab2.demo.DTO.NomeLineaDTO;
 import lombok.*;
 
 import javax.persistence.CascadeType;
@@ -38,6 +39,14 @@ public class Linea {
                 .nome(this.nome)
                 .amministratore(this.amministratore)
                 .fermate(fermate)
+                .build();
+
+        return l;
+    }
+
+    public NomeLineaDTO convertToNomeLineaDTO(){
+        NomeLineaDTO l = NomeLineaDTO.builder()
+                .nome(this.nome)
                 .build();
 
         return l;
