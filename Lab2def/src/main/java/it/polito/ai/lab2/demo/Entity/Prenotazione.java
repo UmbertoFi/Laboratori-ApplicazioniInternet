@@ -2,9 +2,7 @@ package it.polito.ai.lab2.demo.Entity;
 
 
 import it.polito.ai.lab2.demo.DTO.PrenotazioneDTO;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -13,6 +11,10 @@ import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
+@Builder(toBuilder = true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+/*@Setter(value = AccessLevel.PACKAGE)*/
 @Setter
 @Getter
 public class Prenotazione {

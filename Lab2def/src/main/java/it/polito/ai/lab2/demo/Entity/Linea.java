@@ -13,8 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+
 @Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 // @Setter(value = AccessLevel.PACKAGE)
 @Setter
@@ -24,8 +25,10 @@ public class Linea {
     private int id;
     private String nome;
     private String amministratore;
+    @Builder.Default
     @OneToMany(mappedBy = "linea", cascade = CascadeType.ALL)
     private List<Fermata> fermate = new ArrayList<Fermata>();
+
 
 
     public LineaDTO convertToDTO() {

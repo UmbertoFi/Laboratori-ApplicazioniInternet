@@ -2,38 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3805471d-62a5-4c30-9e4e-085be72e269e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Laboratori-ApplicazioniInternet.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/.mvn/wrapper/MavenWrapperDownloader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Controller.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/DTO/FermataDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/DTO/LineaDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/DemoApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Entity/Fermata.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Entity/Linea.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Entity/Prenotazione.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Entity/idPrenotazione.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Repository/FermataRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Repository/LineaRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Repository/PrenotazioneRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Service/FermataService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Service/LineaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/Service/PrenotazioneService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/ServiceImplementation/FermataServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/java/it/polito/ai/lab2/demo/ServiceImplementation/LineaServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/resources/json/12.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/resources/json/33.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/main/resources/json/58.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2_prova/src/test/java/it/polito/ai/lab2/demo/DemoApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lab2def/src/main/java/it/polito/ai/lab2/demo/Entity/Linea.java" beforeDir="false" afterPath="$PROJECT_DIR$/Lab2def/src/main/java/it/polito/ai/lab2/demo/Entity/Linea.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lab2def/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Lab2def/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,10 +12,23 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Lab2def/src/main/java/it/polito/ai/lab2/demo/Entity/Fermata.java">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Lab2def/src/main/java/it/polito/ai/lab2/demo/Entity/Fermata.java" />
+      </list>
+    </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="25" />
@@ -57,19 +40,14 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="Laboratori-ApplicazioniInternet" type="b2602c69:ProjectViewProjectNode" />
               <item name="Laboratori-ApplicazioniInternet" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Laboratori-ApplicazioniInternet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Laboratori-ApplicazioniInternet" type="462c0819:PsiDirectoryNode" />
-              <item name="Lab2def" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -81,7 +59,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Lab2def" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -110,16 +88,17 @@
       <workItem from="1554994265133" duration="83000" />
       <workItem from="1554994374138" duration="8000" />
       <workItem from="1554997926257" duration="22000" />
+      <workItem from="1555344285104" duration="148000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="113000" />
+    <option name="totallyTimeSpent" value="261000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="743" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25757575" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26136363" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -155,6 +134,9 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/lab2_prova/src/main/resources/application.properties" />
+    <entry file="file://$PROJECT_DIR$/Lab2def/src/main/java/it/polito/ai/lab2/demo/Entity/Fermata.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
   </component>
   <component name="masterDetails">
     <states>

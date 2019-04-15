@@ -37,7 +37,7 @@ public class DemoApplication {
     }
 //
     @Bean
-    CommandLineRunner runner(FermataService fs, LineaService ls) {
+    CommandLineRunner runner(LineaService ls) {
         return args -> {
             ObjectMapper mapper = new ObjectMapper();
             try {

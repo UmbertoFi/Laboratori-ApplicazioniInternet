@@ -1,9 +1,7 @@
 package it.polito.ai.lab2.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Embeddable;
@@ -12,6 +10,10 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Embeddable
+@Builder(toBuilder = true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+//@Setter(value = AccessLevel.PACKAGE)
 @Setter
 @Getter
 public class idPrenotazione implements Serializable {
