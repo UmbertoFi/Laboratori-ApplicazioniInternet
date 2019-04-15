@@ -27,12 +27,6 @@ public class LineaServiceImpl implements LineaService {
     public void save(LineaDTO l) {
         Linea linea = l.convertToEntity();
         em.persist(linea);
-
-        /* List<FermataDTO> fermate = l.getFermate();
-                for(FermataDTO fDTO : fermate){
-                    Fermata f = fDTO.convertToEntity(linea);
-                    em.persist(f);
-                } */
     }
 
     public Iterable<Linea> getLines(){

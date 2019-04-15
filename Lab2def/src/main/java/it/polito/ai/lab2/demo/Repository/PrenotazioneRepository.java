@@ -17,7 +17,4 @@ import java.util.List;
 @Repository
 public interface PrenotazioneRepository extends CrudRepository<Prenotazione, idPrenotazione> {
 
-    /*@Query("Select p.id from Prenotazione p where p.fermata in :fermate")
-    List<idPrenotazione> findPrenotazioneByFermataList(@Param("fermate")Collection<Fermata>)*/
-
 }

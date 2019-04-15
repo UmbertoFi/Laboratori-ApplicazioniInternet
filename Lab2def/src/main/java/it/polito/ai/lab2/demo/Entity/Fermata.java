@@ -1,11 +1,15 @@
 package it.polito.ai.lab2.demo.Entity;
 
+import it.polito.ai.lab2.demo.DTO.DettagliLineaDTO;
+import it.polito.ai.lab2.demo.DTO.DettagliLineaPersoneDTO;
 import it.polito.ai.lab2.demo.DTO.FermataDTO;
 import it.polito.ai.lab2.demo.DTO.LineaDTO;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,6 +21,7 @@ import java.util.Set;
 @Getter
 public class Fermata {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     private int n_seq;
@@ -25,6 +30,8 @@ public class Fermata {
     private Linea linea;
     private String ora_andata;
     private String ora_ritorno;
+    @OneToMany(mappedBy = "fermata", cascade = CascadeType.ALL)
+    private List<Prenotazione> prenotazioni = new ArrayList<Prenotazione>();
 
     public FermataDTO convertToDTO() {
         FermataDTO f = FermataDTO.builder()
@@ -37,8 +44,35 @@ public class Fermata {
 
         return f;
     }
-    /* @OneToMany(mappedBy = "fermata", cascade = CascadeType.ALL)
-    private List<Prenotazione> prenotazioni = new ArrayList<Prenotazione>(); */
+
+    public DettagliLineaDTO convertToDettagliLineaDTO(String verso) {
+        if (verso.compareTo("andata") == 0) {
+            DettagliLineaDTO dl = DettagliLineaDTO.builder()
+                    .id(this.id)
+                    .nome(this.nome)
+                    .ora(this.ora_andata)
+                    .build();
+            return dl;
+        } else {
+            DettagliLineaDTO dl = DettagliLineaDTO.builder()
+                    .id(this.id)
+                    .nome(this.nome)
+                    .ora(this.ora_ritorno)
+                    .build();
+            return dl;
+        }
+    }
+
+    public DettagliLineaPersoneDTO convertToDettagliLineaPersoneDTO(List<String> strings) {
+        DettagliLineaPersoneDTO dtl = DettagliLineaPersoneDTO.builder()
+                .id(this.id)
+                .nome(this.nome)
+                .persone(strings)
+                .build();
+        return dtl;
+
+    }
+
 
 
 }

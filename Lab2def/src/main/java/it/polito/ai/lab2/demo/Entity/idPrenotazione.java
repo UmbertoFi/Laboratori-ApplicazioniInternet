@@ -20,9 +20,6 @@ public class idPrenotazione implements Serializable {
     private LocalDate data;
     private String verso;
 
-    // Scrivere hashcode, equals e toString
-
-
     @Override
     public String toString() {
 

@@ -1,6 +1,7 @@
 package it.polito.ai.lab2.demo.Entity;
 
 
+import it.polito.ai.lab2.demo.DTO.PrenotazioneDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,5 +35,17 @@ public class Prenotazione {
     @Override
     public int hashCode() {
         return Objects.hash(id, fermata);
+    }
+
+    public PrenotazioneDTO convertToDTO() {
+
+        PrenotazioneDTO p = PrenotazioneDTO.builder()
+                .persona(this.getId().getPersona())
+                .data(this.getId().getData())
+                .verso(this.getId().getVerso())
+                .id_fermata(this.getFermata().getId())
+                .build();
+
+        return p;
     }
 }

@@ -1,15 +1,20 @@
 package it.polito.ai.lab2.demo;
 
-import it.polito.ai.lab2.demo.DTO.NomeLineaDTO;
+import it.polito.ai.lab2.demo.DTO.*;
 import it.polito.ai.lab2.demo.Entity.Fermata;
 import it.polito.ai.lab2.demo.Entity.Linea;
+import it.polito.ai.lab2.demo.Entity.Prenotazione;
+import it.polito.ai.lab2.demo.Entity.idPrenotazione;
 import it.polito.ai.lab2.demo.Repository.FermataRepository;
 import it.polito.ai.lab2.demo.Repository.LineaRepository;
+import it.polito.ai.lab2.demo.Repository.PrenotazioneRepository;
 import it.polito.ai.lab2.demo.Service.FermataService;
 import it.polito.ai.lab2.demo.Service.LineaService;
+import it.polito.ai.lab2.demo.Service.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -23,7 +28,10 @@ public class Controller {
     private FermataService fermataService;
     @Autowired
     private FermataRepository fermataRepository;
-
+    @Autowired
+    private PrenotazioneService prenotazioneService;
+    @Autowired
+    private PrenotazioneRepository prenotazioneRepository;
 
 
     @GetMapping(path="/lines")
@@ -38,20 +46,29 @@ public class Controller {
 
     @GetMapping(path = "/lines/{nome_linea}")
     public @ResponseBody
-    String getDettagliLinea(@PathVariable("nome_linea") String nomeLinea) {
+    List<List<DettagliLineaDTO>> getDettagliLinea(@PathVariable("nome_linea") String nomeLinea) {
 
         Linea linea = lineaRepository.findByNome(nomeLinea);
         List<Fermata> fermate = fermataRepository.findByLinea(linea);
-        String dettagliAndata = "Andata:<br>";
-        String dettagliRitorno = "<br>Ritorno:<br>";
-        for (Fermata f : fermate)
-            dettagliAndata += "----> " + f.getId() + " " + f.getNome() + " " + f.getOra_andata() + "<br>";
+        List<DettagliLineaDTO> fermateAndata = new ArrayList<>();
+        List<DettagliLineaDTO> fermateRitorno = new ArrayList<>();
+        for(Fermata f : fermate){
+            DettagliLineaDTO fDTO = f.convertToDettagliLineaDTO("andata");
+            fermateAndata.add(fDTO);
+        }
         Collections.reverse(fermate);
-        for (Fermata f : fermate)
-            dettagliRitorno += "----> " + f.getId() + " " + f.getNome() + " " + f.getOra_ritorno() + "<br>";
-        return dettagliAndata + dettagliRitorno;
+        for(Fermata f : fermate){
+            DettagliLineaDTO fDTO2 = f.convertToDettagliLineaDTO("ritorno");
+            fermateRitorno.add(fDTO2);
+        }
+
+        List<List<DettagliLineaDTO>> dettagliLinea = new ArrayList<>();
+        dettagliLinea.add(fermateAndata);
+        dettagliLinea.add(fermateRitorno);
+
+        return dettagliLinea;
     }
-/*
+
     @GetMapping(path = "/add1")
     public @ResponseBody
     String addPrenotazioni() {
@@ -61,7 +78,7 @@ public class Controller {
         iP.setPersona("Barberinho");
         iP.setVerso("A");
         p.setId(iP);
-        Optional<Fermata> f = fermataRepository.findById(319);
+        Optional<Fermata> f = fermataRepository.findById(4);
         if (f.isPresent())
             p.setFermata(f.get());
 
@@ -71,7 +88,7 @@ public class Controller {
         iP1.setPersona("Mario Rossi");
         iP1.setVerso("A");
         p1.setId(iP1);
-        Optional<Fermata> f1 = fermataRepository.findById(323);
+        Optional<Fermata> f1 = fermataRepository.findById(5);
         if (f1.isPresent())
             p1.setFermata(f1.get());
 
@@ -81,7 +98,7 @@ public class Controller {
         iP2.setPersona("Malnati Greit");
         iP2.setVerso("R");
         p2.setId(iP2);
-        Optional<Fermata> f2 = fermataRepository.findById(323);
+        Optional<Fermata> f2 = fermataRepository.findById(5);
         if (f2.isPresent())
             p2.setFermata(f2.get());
 
@@ -94,7 +111,7 @@ public class Controller {
 
     @GetMapping(path = "/reservations/{nome_linea}/{date}")
     public @ResponseBody
-    String getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
+    List<List<DettagliLineaPersoneDTO>> getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
                                         @PathVariable("date") String date) {
 
 
@@ -108,9 +125,11 @@ public class Controller {
         List<Prenotazione> prenotazioni_A = new ArrayList<Prenotazione>();
         List<Prenotazione> prenotazioni_R = new ArrayList<Prenotazione>();
 
+        List<DettagliLineaPersoneDTO> fermateAndata = new ArrayList<>();
+        List<DettagliLineaPersoneDTO> fermateRitorno = new ArrayList<>();
+
+
         Iterable<Prenotazione> prenotazioni = prenotazioneRepository.findAll();
-        Map<Fermata, List<String>> fermata_persone_A = new HashMap<>();
-        Map<Fermata, List<String>> fermata_persone_R = new HashMap<>();
         for (Prenotazione p : prenotazioni) {
             if (p.getId().getData().equals(data)) {
                 if (p.getId().getVerso().equals("A"))
@@ -127,10 +146,11 @@ public class Controller {
                     persone.add(p1.getId().getPersona());
                 }
             }
-            if (persone.isEmpty() == false)
-                fermata_persone_A.put(f2, persone);
+            DettagliLineaPersoneDTO dlp = f2.convertToDettagliLineaPersoneDTO(persone);
+            fermateAndata.add(dlp);
         }
 
+        Collections.reverse(fermate);
         for (Fermata f2 : fermate) {
             List<String> persone = new ArrayList<>();
             for (Prenotazione p1 : prenotazioni_R) {
@@ -138,41 +158,25 @@ public class Controller {
                     persone.add(p1.getId().getPersona());
                 }
             }
-            if (persone.isEmpty() == false)
-                fermata_persone_R.put(f2, persone);
+            DettagliLineaPersoneDTO dlp2 = f2.convertToDettagliLineaPersoneDTO(persone);
+            fermateRitorno.add(dlp2);
         }
 
 
-        String res = "Fermata Andata: <br>";
-        for (Fermata key : fermata_persone_A.keySet()) {
-            res += key.getId() + ": <br>";
-            for (List<String> pers : fermata_persone_A.values()) {
-                for (String s : pers) {
-                    res += s + " ";
-                }
-            }
-        }
 
-        res += "<br><br> Fermate ritorno: <br>";
-        for (Fermata key : fermata_persone_R.keySet()) {
-            res += key.getId() + ": <br>";
-            for (List<String> pers : fermata_persone_R.values()) {
-                for (String s : pers) {
-                    res += s + " ";
-                }
-            }
-        }
+        List<List<DettagliLineaPersoneDTO>> dettagliLineaPersone = new ArrayList<>();
+        dettagliLineaPersone.add(fermateAndata);
+        dettagliLineaPersone.add(fermateRitorno);
 
-        return res;
+        return dettagliLineaPersone;
 
     }
 
-
     @GetMapping(path = "/reservations/{nome_linea}/{date}/{id_prenotazione}")
     public @ResponseBody
-    String getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
-                                        @PathVariable("date") String date,
-                                        @PathVariable("id_prenotazione") String res_id) {
+    PrenotazioneDTO getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
+                                                 @PathVariable("date") String date,
+                                                 @PathVariable("id_prenotazione") String res_id) {
 
         Linea linea = lineaRepository.findByNome(nomeLinea);
         List<Fermata> fermate = fermataRepository.findByLinea(linea);
@@ -185,41 +189,34 @@ public class Controller {
         iP.setVerso(pieces[2]);
         Optional<Prenotazione> pren = prenotazioneRepository.findById(iP);
 
-        String res = "";
 
         if (pren.isPresent() && date.equals(pieces[1])) {
-            for (Fermata f : fermate) {
-                if (f.getId() == pren.get().getFermata().getId()) {
-                    res += "Persona: " + pren.get().getId().getPersona() + " Data: " + pren.get().getId().getData() + " Verso: " + pren.get().getId().getVerso() + " id_fermata: " + pren.get().getFermata().getId();
-                    return res;
-                }
-            }
+            PrenotazioneDTO p = pren.get().convertToDTO();
+            return p;
         }
 
-        return "nessuna prenotazione";
+        return null;
     }
+
 
     @PostMapping(path = "/reservations/{nome_linea}/{date}")
     public @ResponseBody
     String postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
                                  @PathVariable("date") String date,
-                                 @RequestParam("persona") String persona,
-                                 @RequestParam("fermata") String fermata,
-                                 @RequestParam("verso") String verso) {
-
+                                 @RequestBody PostDTO postDTO) {
 
         Prenotazione p = new Prenotazione();
-        Optional<Fermata> f = fermataRepository.findById(Integer.parseInt(fermata));
+        Optional<Fermata> f = fermataRepository.findById(Integer.parseInt(postDTO.getFermata()));
         if (f.isPresent()) {
             p.setFermata(f.get());
             idPrenotazione iP = new idPrenotazione();
             String[] pieces = date.split("-");
             LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
             iP.setData(data);
-            iP.setPersona(persona);
-            iP.setVerso(verso);
+            iP.setPersona(postDTO.getPersona());
+            iP.setVerso(postDTO.getVerso());
             p.setId(iP);
-            prenotazioneRepository.save(p);
+            prenotazioneService.save(p);
             f.get().getPrenotazioni().add(p);
             return iP.toString();
         }
@@ -231,7 +228,7 @@ public class Controller {
     String updatePrenotazione(@PathVariable("nome_linea") String nomeLinea,
                               @PathVariable("date") String date,
                               @PathVariable("reservation_id") String res_id,
-                              @RequestParam("fermata") String fermata  ) {
+                              @RequestBody PostDTO postDTO) {
 
         idPrenotazione iP = new idPrenotazione();
         String[] pieces = res_id.split("_");
@@ -240,7 +237,7 @@ public class Controller {
         iP.setPersona(pieces[0]);
         iP.setVerso(pieces[2]);
 
-        Optional<Fermata> f = fermataRepository.findById(Integer.parseInt(fermata));
+        Optional<Fermata> f = fermataRepository.findById(Integer.parseInt(postDTO.getFermata()));
         Optional<Prenotazione> p = prenotazioneRepository.findById(iP);
         if(p.isPresent()){
             if(f.isPresent()) {
@@ -272,5 +269,5 @@ public class Controller {
         }
 
         return "errore!";
-    } */
+    }
 }
