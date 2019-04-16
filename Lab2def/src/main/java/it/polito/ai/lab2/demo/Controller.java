@@ -9,7 +9,6 @@ import it.polito.ai.lab2.demo.Service.FermataService;
 import it.polito.ai.lab2.demo.Service.LineaService;
 import it.polito.ai.lab2.demo.Service.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -40,6 +39,7 @@ public class Controller {
             nomiLinee.add(linea.convertToNomeLineaDTO());
         return nomiLinee;
     }
+
 
     @GetMapping(path = "/lines/{nome_linea}")
     public @ResponseBody
@@ -173,9 +173,9 @@ public class Controller {
 
     @GetMapping(path = "/reservations/{nome_linea}/{date}/{id_prenotazione}")
     public @ResponseBody
-    PrenotazioneDTO getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
-                                                 @PathVariable("date") String date,
-                                                 @PathVariable("id_prenotazione") String res_id) {
+    PrenotatoDTO getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
+                                              @PathVariable("date") String date,
+                                              @PathVariable("id_prenotazione") String res_id) {
 
         /*Linea linea = lineaRepository.findByNome(nomeLinea);
         List<Fermata> fermate = fermataRepository.findByLinea(linea);*/
@@ -195,7 +195,7 @@ public class Controller {
 
 
         if (pren.isPresent() && date.equals(pieces[1])) {
-            PrenotazioneDTO p = pren.get().convertToDTO();
+            PrenotatoDTO p = pren.get().convertToDTO();
             return p;
         }
 
@@ -207,10 +207,10 @@ public class Controller {
     public @ResponseBody
     String postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
                                  @PathVariable("date") String date,
-                                 @RequestBody PostDTO postDTO) {
+                                 @RequestBody PrenotazioneDTO prenotazioneDTO) {
 
 
-        Optional<Fermata> f = fermataService.getFermata(Integer.parseInt(postDTO.getFermata()));
+        Optional<Fermata> f = fermataService.getFermata(Integer.parseInt(prenotazioneDTO.getFermata()));
         if (f.isPresent()) {
 
             String[] pieces = date.split("-");
@@ -218,8 +218,8 @@ public class Controller {
 
             idPrenotazione iP= idPrenotazione.builder()
                     .data(data)
-                    .persona(postDTO.getPersona())
-                    .verso(postDTO.getVerso())
+                    .persona(prenotazioneDTO.getPersona())
+                    .verso(prenotazioneDTO.getVerso())
                     .build();
 
             Prenotazione p = Prenotazione.builder()
@@ -239,7 +239,7 @@ public class Controller {
     String updatePrenotazione(@PathVariable("nome_linea") String nomeLinea,
                               @PathVariable("date") String date,
                               @PathVariable("reservation_id") String res_id,
-                              @RequestBody PostDTO postDTO) {
+                              @RequestBody PrenotazioneDTO prenotazioneDTO) {
 
 
         String[] pieces = res_id.split("_");
@@ -252,9 +252,9 @@ public class Controller {
                             .verso(pieces[2])
                             .build();
 
-        //Optional<Fermata> f = fermataRepository.findById(Integer.parseInt(postDTO.getFermata()));
+        //Optional<Fermata> f = fermataRepository.findById(Integer.parseInt(prenotazioneDTO.getFermata()));
         //Optional<Prenotazione> p = prenotazioneRepository.findById(iP);
-        Optional<Fermata> f=fermataService.getFermata(Integer.parseInt(postDTO.getFermata()));
+        Optional<Fermata> f=fermataService.getFermata(Integer.parseInt(prenotazioneDTO.getFermata()));
         Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
         if(p.isPresent()){
             if(f.isPresent()) {

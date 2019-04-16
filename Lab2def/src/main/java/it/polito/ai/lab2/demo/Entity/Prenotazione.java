@@ -1,7 +1,7 @@
 package it.polito.ai.lab2.demo.Entity;
 
 
-import it.polito.ai.lab2.demo.DTO.PrenotazioneDTO;
+import it.polito.ai.lab2.demo.DTO.PrenotatoDTO;
 import lombok.*;
 
 import javax.persistence.EmbeddedId;
@@ -39,9 +39,9 @@ public class Prenotazione {
         return Objects.hash(id, fermata);
     }
 
-    public PrenotazioneDTO convertToDTO() {
+    public PrenotatoDTO convertToDTO() {
 
-        PrenotazioneDTO p = PrenotazioneDTO.builder()
+        PrenotatoDTO p = PrenotatoDTO.builder()
                 .persona(this.getId().getPersona())
                 .data(this.getId().getData())
                 .verso(this.getId().getVerso())
