@@ -90,10 +90,78 @@ public class Controller {
         return dettagliLinea;
     }
 
-    @GetMapping(path = "/reservations/{nome_linea}/{date}")
+   /* @GetMapping(path = "/reservations/{nome_linea}/{date}")
     public @ResponseBody
     List<List<DettagliLineaPersoneDTO>> getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
                                         @PathVariable("date") String date) {
+
+
+        String[] pieces = date.split("-");
+        LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+        //LocalDate data = LocalDate.of(2002, 02, 02);
+
+        //Linea linea = lineaRepository.findByNome(nomeLinea);
+        //List<Fermata> fermate = fermataRepository.findByLinea(linea);
+        List<Fermata> fermate =fermataService.getFermateList(nomeLinea);
+
+        List<Prenotazione> prenotazioni_A = new ArrayList<Prenotazione>();
+        List<Prenotazione> prenotazioni_R = new ArrayList<Prenotazione>();
+
+        List<DettagliLineaPersoneDTO> fermateAndata = new ArrayList<>();
+        List<DettagliLineaPersoneDTO> fermateRitorno = new ArrayList<>();
+
+
+        Iterable<Prenotazione> prenotazioni = prenotazioneService.getPrenotazioni();
+        for (Prenotazione p : prenotazioni) {
+            if (p.getId().getData().equals(data)) {
+                if (p.getId().getVerso().equals("A"))
+                    prenotazioni_A.add(p);
+                else
+                    prenotazioni_R.add(p);
+            }
+        }
+
+        for (Fermata f2 : fermate) {
+            List<String> persone = new ArrayList<>();
+            for (Prenotazione p1 : prenotazioni_A) {
+                if (p1.getFermata().getId() == f2.getId()) {
+                    persone.add(p1.getId().getPersona());
+                }
+            }
+            DettagliLineaPersoneDTO dlp = f2.convertToDettagliLineaPersoneDTO(persone);
+            fermateAndata.add(dlp);
+        }
+
+        Collections.reverse(fermate);
+        for (Fermata f2 : fermate) {
+            List<String> persone = new ArrayList<>();
+            for (Prenotazione p1 : prenotazioni_R) {
+                if (p1.getFermata().getId() == f2.getId()) {
+                    persone.add(p1.getId().getPersona());
+                }
+            }
+            DettagliLineaPersoneDTO dlp2 = f2.convertToDettagliLineaPersoneDTO(persone);
+            fermateRitorno.add(dlp2);
+        }
+
+
+
+        List<List<DettagliLineaPersoneDTO>> dettagliLineaPersone = new ArrayList<>();
+        dettagliLineaPersone.add(fermateAndata);
+        dettagliLineaPersone.add(fermateRitorno);
+
+        return dettagliLineaPersone;
+
+    }
+
+*/
+
+
+
+    @GetMapping(path = "/reservations/{nome_linea}/{date}")
+    public @ResponseBody
+    PasseggeriDTO getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
+                                                                     @PathVariable("date") String date) {
 
 
         String[] pieces = date.split("-");
@@ -146,13 +214,14 @@ public class Controller {
 
 
 
-        List<List<DettagliLineaPersoneDTO>> dettagliLineaPersone = new ArrayList<>();
-        dettagliLineaPersone.add(fermateAndata);
-        dettagliLineaPersone.add(fermateRitorno);
+        PasseggeriDTO dettagliLineaPersone = new PasseggeriDTO();
+        dettagliLineaPersone.setFermateA(fermateAndata);
+        dettagliLineaPersone.setFermateR(fermateRitorno);
 
         return dettagliLineaPersone;
 
     }
+
 
     @GetMapping(path = "/reservations/{nome_linea}/{date}/{id_prenotazione}")
     public @ResponseBody
