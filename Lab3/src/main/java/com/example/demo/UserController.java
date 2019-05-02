@@ -1,10 +1,12 @@
 package com.example.demo;
 
+import com.example.demo.DTO.LoginDTO;
 import com.example.demo.DTO.RegisterDTO;
 import com.example.demo.Entity.Utente;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -26,6 +28,24 @@ public class UserController {
     @Autowired
     EmailService email;
 
+    //@ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @PostMapping(path = "/login")
+    public @ResponseBody
+    String postLogin(@RequestBody LoginDTO loginDTO){
+
+
+        if(userRepository.findById(loginDTO.getUserName()).isPresent()){
+            Utente u=userRepository.findById(loginDTO.getUserName()).get();
+            if(loginDTO.getPassword().compareTo(u.getPassword())==0 && u.getStatus().compareTo("active")==0){
+                //dovrebbe ritornare il JWT
+                return "login effettuato con successo";
+            }
+        }
+
+        return "errore";
+    }
+
+
     @PostMapping(path = "/register")
     public @ResponseBody
     String postNuovoUser(@RequestBody RegisterDTO registerDTO) {
@@ -42,7 +62,7 @@ public class UserController {
     Utente u= Utente.builder()
             .UserName(registerDTO.getUserName())
             .Password(registerDTO.getPassword())
-            .Status("waiting")
+            .Status("active")//andrebbe "waiting"
             .build();
 
     System.out.println("ci sono");
