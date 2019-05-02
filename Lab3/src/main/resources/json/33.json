@@ -1,0 +1,37 @@
+{
+  "id": "33",
+  "nome": "Porta_Nuova-Politecnico",
+  "amministratore": "Mr.Nobody",
+  "fermate": [
+    {
+      "nome": "Porta_Nuova",
+      "n_seq": "1",
+      "ora_andata": "08:05:00",
+      "ora_ritorno": "13:55:00"
+    },
+    {
+      "nome": "Vittorio_Emanuele_II",
+      "n_seq": "2",
+      "ora_andata": "08:10:00",
+      "ora_ritorno": "13:50:00"
+    },
+    {
+      "nome": "Re_Umberto",
+      "n_seq": "3",
+      "ora_andata": "08:15:00",
+      "ora_ritorno": "13:45:00"
+    },
+    {
+      "nome": "Stati_Uniti",
+      "n_seq": "4",
+      "ora_andata": "08:20:00",
+      "ora_ritorno": "13:40:00"
+    },
+    {
+      "nome": "Politecnico",
+      "n_seq": "5",
+      "ora_andata": "08:25:00",
+      "ora_ritorno": "13:35:00"
+    }
+  ]
+}
