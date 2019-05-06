@@ -6,7 +6,10 @@ import com.example.demo.Entity.Utente;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -28,8 +31,11 @@ public class UserController {
     @Autowired
     EmailService email;
 
-    //@ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @PostMapping(path = "/login")
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public class UnauthorizedException extends RuntimeException {
+    }
+
+    /*@PostMapping(path = "/login")
     public @ResponseBody
     String postLogin(@RequestBody LoginDTO loginDTO){
 
@@ -40,11 +46,12 @@ public class UserController {
                 //dovrebbe ritornare il JWT
                 return "login effettuato con successo";
             }
-        }
-
-        return "errore";
+            else
+                throw new UnauthorizedException();
+        } else
+            throw new UnauthorizedException();
     }
-
+*/
 
     @PostMapping(path = "/register")
     public @ResponseBody
@@ -53,7 +60,6 @@ public class UserController {
     if(userRepository.findById(registerDTO.getUserName()).isPresent()){
        return "utente già esistente";
     }
-
     if(registerDTO.getPassword().compareTo(registerDTO.getPassword2())!=0){
         return "password diverse";
 
@@ -61,7 +67,7 @@ public class UserController {
 
     Utente u= Utente.builder()
             .UserName(registerDTO.getUserName())
-            .Password(registerDTO.getPassword())
+            .Password(new BCryptPasswordEncoder(11).encode(registerDTO.getPassword()))
             .Status("active")//andrebbe "waiting"
             .build();
 
@@ -72,5 +78,8 @@ public class UserController {
 
     return "ok";
     }
+
+
+
 
 }
