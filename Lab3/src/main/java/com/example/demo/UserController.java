@@ -28,7 +28,10 @@ public class UserController {
     @Autowired
     EmailService email;
 
-    //@ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public class UnauthorizedException extends RuntimeException {
+    }
+
     @PostMapping(path = "/login")
     public @ResponseBody
     String postLogin(@RequestBody LoginDTO loginDTO){
@@ -40,9 +43,10 @@ public class UserController {
                 //dovrebbe ritornare il JWT
                 return "login effettuato con successo";
             }
-        }
-
-        return "errore";
+            else
+                throw new UnauthorizedException();
+        } else
+            throw new UnauthorizedException();
     }
 
 
@@ -53,7 +57,6 @@ public class UserController {
     if(userRepository.findById(registerDTO.getUserName()).isPresent()){
        return "utente già esistente";
     }
-
     if(registerDTO.getPassword().compareTo(registerDTO.getPassword2())!=0){
         return "password diverse";
 
