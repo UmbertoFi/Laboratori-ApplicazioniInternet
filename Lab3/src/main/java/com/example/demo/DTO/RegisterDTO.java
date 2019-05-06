@@ -11,11 +11,11 @@ import lombok.*;
 @Getter
 public class RegisterDTO {
 
-    private String UserName;
+    private String username;
 
-    private String Password;
+    private String password;
 
-    private String Password2;
+    private String password2;
 
 
 }

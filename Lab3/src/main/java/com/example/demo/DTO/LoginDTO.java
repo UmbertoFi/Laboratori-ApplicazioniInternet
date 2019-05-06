@@ -3,17 +3,17 @@ package com.example.demo.DTO;
 
 import lombok.*;
 
-@Builder(toBuilder = true)
-/*@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Setter(value = AccessLevel.PACKAGE)*/
-@Setter
-@Getter
-public class LoginDTO {
+import java.io.Serializable;
 
-    private String UserName;
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoginDTO implements Serializable {
 
-    private String Password;
+    private String username;
+
+    private String password;
 
 
 }
