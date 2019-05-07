@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.DTO.LoginDTO;
 import com.example.demo.DTO.RegisterDTO;
+import com.example.demo.DTO.UsernameDTO;
 import com.example.demo.Entity.Utente;
 import com.example.demo.Entity.UtenteRuolo;
 import com.example.demo.Entity.idRuolo;
@@ -146,6 +147,14 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 
 
+    /***
+     * Lab 3 Punto 2
+     * @param registerDTO
+     * @return
+     *
+     * Funzione di registrazione, verifica la presenza di utente e in caso di nuovo utente invia una email di conferma
+     */
+
 
 
     @PostMapping(path = "/register")
@@ -186,15 +195,21 @@ public class UserController {
                     .build();
     utenteRuoloService.save(ur);
 
-String body="Gentilissimo, confermi di esseri registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/demo/confirm/"+UUID;
+String body="Gentilissimo, confermi di esserti registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/demo/confirm/"+UUID;
     email.sendSimpleMessage(registerDTO.getUsername(), "Benvenuto!", body);
 
     return "ok";
     }
 
+    /***
+     * Lab 3 Punto 3
+     * @param randomUUID
+     *
+     * Funzione di conferma del link inviato via email in seguito alla registrazione
+     */
 
     @GetMapping(path = "/confirm/{randomUUID}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     void confirmNuovoUser(@PathVariable("randomUUID") String randomUUID) {
         Utente u=userService.getToken(randomUUID);
@@ -206,6 +221,35 @@ String body="Gentilissimo, confermi di esseri registrato al servizio?, se sì cl
     }
 
 
+
+
+    /***
+     * Lab 3 Punto 4
+     * @param usernameDTO
+     *
+     * funzione che innesca il cambio password
+     */
+
+
+    @PostMapping(path = "/recover")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    void recoverPassword(@RequestBody UsernameDTO usernameDTO) {
+        Utente u=userService.getUserById(usernameDTO.getUsername());
+        if(u!=null){
+            String UUID=generateUUID();
+            u.setExpiredCredential(false);
+            u.setToken(UUID);
+            String body="Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì clicca il seguente link per modificare la tua password http://localhost:8080/demo/recover/"+UUID;
+            email.sendSimpleMessage(usernameDTO.getUsername(), "Password Recovery!", body);
+
+        }
+    }
+
+    /***
+     * funzione per generare un numero di conferma random
+     * @return
+     */
     public String generateUUID() {
         Random r=new Random();
         StringBuilder generatedString = new StringBuilder();

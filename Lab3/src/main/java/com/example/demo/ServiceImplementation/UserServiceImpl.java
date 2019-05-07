@@ -32,7 +32,14 @@ public class UserServiceImpl implements UserService {
             return u.get();
         }
             return null;
+    }
 
+    public Utente getUserById(String username){
+        Optional<Utente> u=userRepository.findById(username);
 
+        if(u.isPresent()==true){
+            return u.get();
+        }
+        return null;
     }
 }
