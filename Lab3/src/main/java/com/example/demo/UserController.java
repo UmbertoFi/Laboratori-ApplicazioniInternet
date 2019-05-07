@@ -3,28 +3,26 @@ package com.example.demo;
 import com.example.demo.DTO.LoginDTO;
 import com.example.demo.DTO.RegisterDTO;
 import com.example.demo.Entity.Utente;
+import com.example.demo.Entity.UtenteRuolo;
+import com.example.demo.Entity.idRuolo;
 import com.example.demo.Repository.UserRepository;
+import com.example.demo.Repository.UtenteRuoloRepository;
 import com.example.demo.Service.UserService;
+import com.example.demo.Service.UtenteRuoloService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.security.SecureRandom;
+import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -44,9 +42,7 @@ public class UserController {
     @Autowired
     EmailService email;
 
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    public class UnauthorizedException extends RuntimeException {
-    }
+
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -56,6 +52,17 @@ public class UserController {
 
     @Autowired
     UserRepository users;
+
+    @Autowired
+    UtenteRuoloService utenteRuoloService;
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public class UnauthorizedException extends RuntimeException {
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public class NotFoundException extends RuntimeException {
+    }
 
 
     /*
@@ -77,15 +84,46 @@ public class UserController {
     }*/
 
 
-
+    /***
+     * Lab 3 Punto 1
+     * @param data
+     * @return
+     *
+     * Funzione di Login    riceve un JSON con le credenziali di Accesso
+     *                      restituisce il JWT o HttpStatus.UNAUTHORIZED
+     */
 
     @PostMapping(path= "/login")
     public ResponseEntity signin(@RequestBody LoginDTO data) {
+        String token;
 
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            String token = jwtTokenProvider.createToken(username, this.users.findById(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
+
+            Optional<Utente> u=users.findById(username);
+            if(u.isPresent()==true){
+                Utente utente=u.get();
+
+                UtenteRuolo ruoli=utenteRuoloService.getUtenteRuolo(username, "Santa_Rita-Politecnico");
+
+
+                if((utente.getEnabled()==true) && (utente.getExpiredAccount()==true) && (utente.getExpiredCredential()==true) && (utente.getLocked()==true)) {
+
+                     token= jwtTokenProvider.createToken(username, ruoli.getRuolo());
+
+                }
+                else{
+                    token=null;
+                }
+
+            }
+            else{
+                throw new UsernameNotFoundException("Username " + username + "not found");
+            }
+
+
+            //String token = jwtTokenProvider.createToken(username, this.users.findById(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
 
 
             /*HttpHeaders h=new HttpHeaders();
@@ -99,13 +137,16 @@ public class UserController {
 
             return ok(model);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+            throw new UnauthorizedException();
         }
     }
 
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+
+
 
     @PostMapping(path = "/register")
     public @ResponseBody
@@ -119,22 +160,59 @@ public class UserController {
 
     }
 
+    String UUID=generateUUID();
     Utente u= Utente.builder()
             .UserName(registerDTO.getUsername())
             //.Password(new BCryptPasswordEncoder(11).encode(registerDTO.getPassword()))
             .Password(passwordEncoder.encode(registerDTO.getPassword()))
-            .Status("active")//andrebbe "waiting"
+            .token(UUID)
+            .enabled(false)
+            .expiredAccount(true)//logica inversa
+            .expiredCredential(true)//logica inversa
+            .locked(true)//logica inversa
             .build();
 
-    System.out.println("ci sono");
+
     userService.save(u);
 
-    email.sendSimpleMessage(registerDTO.getUsername(), "Convocazione partita del cuore-Città di Torino", "Gentilissimo, siccome sbagli tutti i cross sei stato convocato per la partita del cuore! confermi di essere malato?  GREIT");
+        idRuolo id= idRuolo.builder()
+                .Username(registerDTO.getUsername())
+                .NomeLinea("Santa_Rita-Politecnico")
+                .build();
+
+    UtenteRuolo ur=UtenteRuolo.builder()
+                    .id(id)
+                    .Ruolo("user")
+                    .build();
+    utenteRuoloService.save(ur);
+
+String body="Gentilissimo, confermi di esseri registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/demo/confirm/"+UUID;
+    email.sendSimpleMessage(registerDTO.getUsername(), "Benvenuto!", body);
 
     return "ok";
     }
 
 
+    @GetMapping(path = "/confirm/{randomUUID}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody
+    void confirmNuovoUser(@PathVariable("randomUUID") String randomUUID) {
+        Utente u=userService.getToken(randomUUID);
+        if(u==null){
+            throw new NotFoundException();
+        }
+        u.setEnabled(true);
+        userRepository.save(u);
+    }
 
+
+    public String generateUUID() {
+        Random r=new Random();
+        StringBuilder generatedString = new StringBuilder();
+        for(int i=0; i<5; i++)
+        generatedString.append(r.nextInt());
+
+        return generatedString.toString();
+    }
 
 }

@@ -4,4 +4,6 @@ import com.example.demo.Entity.Utente;
 
 public interface UserService {
     public void save(Utente u);
+
+    public Utente getToken(String randomUUID);
 }

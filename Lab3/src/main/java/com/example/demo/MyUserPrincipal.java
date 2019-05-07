@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.Entity.Utente;
+import com.example.demo.Entity.UtenteRuolo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public class MyUserPrincipal implements UserDetails {
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("User"));
+            final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("user"));
             return authorities;
         }
 
@@ -37,21 +38,21 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return user.getExpiredAccount();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return user.getLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return user.getExpiredCredential();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getEnabled();
     }
 }

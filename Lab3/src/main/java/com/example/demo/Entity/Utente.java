@@ -23,8 +23,15 @@ public class Utente {
     private String UserName;
 
     private String Password;
+    private String token;
 
-    private String Status;
+    private Boolean expiredAccount;
+
+    private Boolean locked;
+
+    private Boolean expiredCredential;
+
+    private Boolean enabled;
 
     public List<String> getRoles() {
         List<String> ruoli=new ArrayList<>();
