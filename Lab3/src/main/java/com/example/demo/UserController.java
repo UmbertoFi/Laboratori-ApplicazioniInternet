@@ -227,7 +227,7 @@ String body="Gentilissimo, confermi di esserti registrato al servizio?, se sì c
      * Lab 3 Punto 4
      * @param usernameDTO
      *
-     * funzione che innesca il cambio password
+     * funzione che innesca il cambio password, dopo aver verificato che l'utente esiste correttamente.
      */
 
 
@@ -235,21 +235,29 @@ String body="Gentilissimo, confermi di esserti registrato al servizio?, se sì c
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     void recoverPassword(@RequestBody UsernameDTO usernameDTO) {
-        Utente u=userService.getUserById(usernameDTO.getUsername());
-        if(u!=null){
-            String UUID=generateUUID();
-            u.setExpiredCredential(false);
-            u.setToken(UUID);
-            String body="Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì clicca il seguente link per modificare la tua password http://localhost:8080/demo/recover/"+UUID;
-            email.sendSimpleMessage(usernameDTO.getUsername(), "Password Recovery!", body);
+        Utente utente=userService.getUserById(usernameDTO.getUsername());
+        if(utente!=null){
+            if((utente.getEnabled()==true) && (utente.getExpiredAccount()==true) && (utente.getExpiredCredential()==true) && (utente.getLocked()==true)) {
 
+                String UUID = generateUUID();
+                utente.setExpiredCredential(false);
+                utente.setToken(UUID);
+                String body = "Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì clicca il seguente link per modificare la tua password http://localhost:8080/demo/recover/" + UUID;
+                email.sendSimpleMessage(usernameDTO.getUsername(), "Password Recovery!", body);
+            }
         }
     }
 
-    /***
-     * funzione per generare un numero di conferma random
-     * @return
-     */
+    /*GET /recover/{randomUUID} – Restituisce una pagina HTML contente una form per la
+    sostituzione della password*/
+
+    @GetMapping("/recover/{randomUUID}")
+    public String register(@PathVariable("randomUUID") String randomUUID) { return "recover";}
+
+        /***
+         * funzione per generare un numero di conferma random
+         * @return
+         */
     public String generateUUID() {
         Random r=new Random();
         StringBuilder generatedString = new StringBuilder();
