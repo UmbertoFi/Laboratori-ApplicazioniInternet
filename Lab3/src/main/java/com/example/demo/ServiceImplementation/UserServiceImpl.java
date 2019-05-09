@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,5 +52,18 @@ public class UserServiceImpl implements UserService {
             return u.get();
         }
         return null;
+    }
+
+    public List<Utente> getAllUsers(){
+        Iterable<Utente> users = userRepository.findAll();
+
+        List<Utente> usersList = new ArrayList<Utente>();
+
+        for(Utente u : users) {
+            if(u.getEnabled()==true)
+            usersList.add(u);
+        }
+
+        return usersList;
     }
 }

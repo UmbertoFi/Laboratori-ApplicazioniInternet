@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.DTO.LoginDTO;
+import com.example.demo.DTO.ModificaRuoloDTO;
 import com.example.demo.DTO.RegisterDTO;
 import com.example.demo.DTO.UsernameDTO;
 import com.example.demo.Entity.Utente;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.*;
@@ -106,7 +108,7 @@ public class UserController {
             if(u.isPresent()==true){
                 Utente utente=u.get();
 
-                UtenteRuolo ruoli=utenteRuoloService.getUtenteRuolo(username, "Santa_Rita-Politecnico");
+                UtenteRuolo ruoli=utenteRuoloService.getUtenteRuolo(username, "*");
 
 
                 if((utente.getEnabled()==true) && (utente.getExpiredAccount()==true) && (utente.getExpiredCredential()==true) && (utente.getLocked()==true)) {
@@ -182,16 +184,6 @@ public class UserController {
 
     userService.save(u);
 
-        idRuolo id= idRuolo.builder()
-                .Username(registerDTO.getUsername())
-                .NomeLinea("Santa_Rita-Politecnico")
-                .build();
-
-    UtenteRuolo ur=UtenteRuolo.builder()
-                    .id(id)
-                    .Ruolo("user")
-                    .build();
-    utenteRuoloService.save(ur);
 
 String body="Gentilissimo, confermi di esserti registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/demo/confirm/"+UUID;
     email.sendSimpleMessage(registerDTO.getUsername(), "Benvenuto!", body);
@@ -219,7 +211,27 @@ String body="Gentilissimo, confermi di esserti registrato al servizio?, se sì c
         if(diff>3600000)                         // Tempo entro il quale poter confermare la registrazione
             throw new NotFoundException();
         u.setEnabled(true);
-        userRepository.save(u);
+        userService.save(u);
+
+        idRuolo id= idRuolo.builder()
+                .Username(u.getUserName())
+                .NomeLinea("*")
+                .build();
+
+        UtenteRuolo ur;
+        if(utenteRuoloService.getByRuoloSystemAdmin()==false){
+            ur = UtenteRuolo.builder()
+                    .id(id)
+                    .ruolo("system-admin")
+                    .build();
+        }
+        else {
+            ur = UtenteRuolo.builder()
+                    .id(id)
+                    .ruolo("user")
+                    .build();
+        }
+        utenteRuoloService.save(ur);
     }
 
 
@@ -259,12 +271,103 @@ String body="Gentilissimo, confermi di esserti registrato al servizio?, se sì c
          * @return
          */
     public String generateUUID() {
-        Random r=new Random();
+        Random r = new Random();
         StringBuilder generatedString = new StringBuilder();
-        for(int i=0; i<5; i++)
-        generatedString.append(r.nextInt());
+        for (int i = 0; i < 5; i++)
+            generatedString.append(r.nextInt());
 
         return generatedString.toString();
+    }
+
+
+    @GetMapping(path="/users")
+    public List<UsernameDTO> listUsers(HttpServletRequest req){
+
+        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+
+        List<UtenteRuolo> ruoli = utenteRuoloService.getAll();
+        for(UtenteRuolo ur : ruoli){
+            if(ur.getId().getUsername().compareTo(username)==0){
+                if(ur.getRuolo().compareTo("admin")==0 || ur.getRuolo().compareTo("system-admin")==0){
+                    List<Utente> users = userService.getAllUsers();
+
+                    List<UsernameDTO> usersList = new ArrayList<UsernameDTO>();
+
+                    for(Utente u : users)
+                        usersList.add(new UsernameDTO(u.getUserName()));
+
+                    return usersList;
+                }
+            }
+        }
+        throw new UnauthorizedException();
+    }
+
+
+    @PutMapping(path="/users/{userID}")
+    @ResponseStatus(HttpStatus.OK)
+    public void modifyRole(HttpServletRequest req, @PathVariable("userID") String userID, @RequestBody ModificaRuoloDTO modificaRuoloDTO){
+        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+
+        List<UtenteRuolo> ruoli = utenteRuoloService.getAll();
+        for(UtenteRuolo ur : ruoli){
+            if(ur.getId().getUsername().compareTo(username)==0){
+                if(ur.getRuolo().compareTo("system-admin")==0){
+                    if(modificaRuoloDTO.getAzione().compareTo("promuovi")==0){
+                        for(UtenteRuolo ur2 : ruoli){
+                            if(ur2.getId().getUsername().compareTo(userID)==0){
+                                idRuolo nuovoIdRuolo = idRuolo.builder()
+                                                        .NomeLinea(modificaRuoloDTO.getLinea())
+                                                        .Username(userID)
+                                                        .build();
+                                UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
+                                                        .id(nuovoIdRuolo)
+                                                        .ruolo("admin")
+                                                        .build();
+                                utenteRuoloService.save(nuovoRuolo);
+                                return;
+
+                            }
+                        }
+                    }
+                    else {
+                        for(UtenteRuolo ur2 : ruoli){
+                            if(ur2.getId().getUsername().compareTo(userID)==0 && ur2.getId().getNomeLinea().compareTo(modificaRuoloDTO.getLinea())==0 && ur2.getRuolo().compareTo("admin")==0){
+                                utenteRuoloService.deleteOne(ur2);
+                                return;
+                            }
+                        }
+                    }
+
+                } else if (ur.getRuolo().compareTo("admin")==0 || ur.getId().getNomeLinea().compareTo(modificaRuoloDTO.getLinea())==0){
+                    if(modificaRuoloDTO.getAzione().compareTo("promuovi")==0){
+                        for(UtenteRuolo ur2 : ruoli){
+                            if(ur2.getId().getUsername().compareTo(userID)==0){
+                                idRuolo nuovoIdRuolo = idRuolo.builder()
+                                        .NomeLinea(modificaRuoloDTO.getLinea())
+                                        .Username(userID)
+                                        .build();
+                                UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
+                                        .id(nuovoIdRuolo)
+                                        .ruolo("admin")
+                                        .build();
+                                utenteRuoloService.save(nuovoRuolo);
+                                return;
+                            }
+                        }
+                    }
+                    else {
+                        for(UtenteRuolo ur2 : ruoli){
+                            if(ur2.getId().getUsername().compareTo(userID)==0 && ur2.getId().getNomeLinea().compareTo(modificaRuoloDTO.getLinea())==0 && ur2.getRuolo().compareTo("admin")==0){
+                                utenteRuoloService.deleteOne(ur2);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        throw new UnauthorizedException();
     }
 
 }

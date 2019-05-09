@@ -35,7 +35,7 @@ public class HtmlController {
         Utente u = userService.getTokenForRecovery(randomUUID);
         Date now = new Date();
         long diff = now.getTime()-u.getExpiredToken().getTime();
-        if(diff>30000)                         // Tempo entro il quale poter confermare la registrazione
+        if(diff>3600000)                         // Tempo entro il quale poter confermare la registrazione
             throw new NotFoundException();
         return "recover";
     }

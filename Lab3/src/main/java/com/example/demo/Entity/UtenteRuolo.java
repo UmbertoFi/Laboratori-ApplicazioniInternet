@@ -18,7 +18,7 @@ public class UtenteRuolo {
     @EmbeddedId
     private idRuolo id;
 
-    private String Ruolo;
+    private String ruolo;
 
     @Override
     public boolean equals(Object o) {
@@ -26,11 +26,11 @@ public class UtenteRuolo {
         if (o == null || getClass() != o.getClass()) return false;
         UtenteRuolo that = (UtenteRuolo) o;
         return id.equals(that.id) &&
-                Ruolo.equals(that.Ruolo);
+                ruolo.equals(that.ruolo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, Ruolo);
+        return Objects.hash(id, ruolo);
     }
 }
