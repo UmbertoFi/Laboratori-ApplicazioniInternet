@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Builder(toBuilder = true)
@@ -24,6 +25,7 @@ public class Utente {
 
     private String Password;
     private String token;
+    private Date expiredToken;
 
     private Boolean expiredAccount;
 

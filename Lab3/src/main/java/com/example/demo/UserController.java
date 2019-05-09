@@ -127,9 +127,6 @@ public class UserController {
             //String token = jwtTokenProvider.createToken(username, this.users.findById(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
 
 
-            /*HttpHeaders h=new HttpHeaders();
-            h.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            h.add("Authorization", "Bearer "+token);*/
 
 
             Map<Object, Object> model = new HashMap<>();
@@ -175,6 +172,7 @@ public class UserController {
             //.Password(new BCryptPasswordEncoder(11).encode(registerDTO.getPassword()))
             .Password(passwordEncoder.encode(registerDTO.getPassword()))
             .token(UUID)
+            .expiredToken(new Date())
             .enabled(false)
             .expiredAccount(true)//logica inversa
             .expiredCredential(true)//logica inversa
@@ -216,6 +214,10 @@ String body="Gentilissimo, confermi di esserti registrato al servizio?, se sì c
         if(u==null){
             throw new NotFoundException();
         }
+        Date now = new Date();
+        long diff = now.getTime()-u.getExpiredToken().getTime();
+        if(diff>3600000)                         // Tempo entro il quale poter confermare la registrazione
+            throw new NotFoundException();
         u.setEnabled(true);
         userRepository.save(u);
     }
@@ -242,17 +244,15 @@ String body="Gentilissimo, confermi di esserti registrato al servizio?, se sì c
                 String UUID = generateUUID();
                 utente.setExpiredCredential(false);
                 utente.setToken(UUID);
+                utente.setExpiredToken(new Date());
+                userService.save(utente);
                 String body = "Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì clicca il seguente link per modificare la tua password http://localhost:8080/demo/recover/" + UUID;
                 email.sendSimpleMessage(usernameDTO.getUsername(), "Password Recovery!", body);
             }
         }
     }
 
-    /*GET /recover/{randomUUID} – Restituisce una pagina HTML contente una form per la
-    sostituzione della password*/
 
-    @GetMapping("/recover/{randomUUID}")
-    public String register(@PathVariable("randomUUID") String randomUUID) { return "recover";}
 
         /***
          * funzione per generare un numero di conferma random

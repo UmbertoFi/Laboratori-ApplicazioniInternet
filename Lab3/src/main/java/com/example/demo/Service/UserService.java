@@ -8,4 +8,6 @@ public interface UserService {
     public Utente getToken(String randomUUID);
 
     public Utente getUserById(String username);
+
+    public Utente getTokenForRecovery(String randomUUID);
 }

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http:/>/www.thymeleaf.org"
->
+      xmlns:th="http:/>/www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Recovery</title>
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
@@ -13,29 +12,42 @@
           href="stile.css">
 </head>
 <body>
-
 <div class="container-fluid p-5">
-    <h1>Login</h1><br>
-    <div class="row">
-        <div th:text="${messageLogin}"></div>
+    <h1>Recovery</h1><br>
+    <div>
+        <div th:text="${messageRegister}"></div>
     </div>
-    <div id="menuLogin">
-        <form method="post">
+
+    <div id="menuRegistrazione">
+        <form method="post" onsubmit="return check(this)">
+            <br>
             <div class="form-group">
-                <br><label for="e">E-mail</label>
-                <input name="mail" id="e" type="email" placeholder="e-mail" th:value="${mailLogin}" minlength="10" maxlength="20" required>
-                <div th:text="${msgEmailLogin}" class="errors"></div>
+                <label for="p1">Nuova Password</label>
+                <input name="pass1" id="p1" type="password" placeholder="password" th:value="${pass1}" minlength="7" maxlength="20" required>
+                <div th:text="${msgPass1}" class="errors"></div>
             </div>
             <div class="form-group">
-                <label for="p1">Password</label>
-                <input name="pass1" id="p1" type="password" placeholder="password" th:value="${passLogin}" minlength="7" maxlength="20" required>
-                <div th:text="${msgPass1Login}" class="errors"></div>
+                <label for="p2">Conferma Nuova Password</label>
+                <input name="pass2" id="p2" type="password" placeholder="conferma password" th:value="${pass2}" minlength="7" maxlength="20" required>
+                <div th:text="${msgPass2}" class="errors" id="errorPass2"></div>
             </div>
             <div>
-                <input type="submit" value="Login" id="l">
+                <input type="submit" value="Recovery" id="r">
             </div>
         </form>
     </div>
+    <br>
 </div>
 </body>
+
+<script>
+    function check(form){
+        if(form.pass1.value != form.pass2.value){
+            document.getElementById("errorPass2").innerHTML="Le password non corrispondono!";
+            return false;
+        } else {
+            return true;
+        }
+    }
+</script>
 </html>
