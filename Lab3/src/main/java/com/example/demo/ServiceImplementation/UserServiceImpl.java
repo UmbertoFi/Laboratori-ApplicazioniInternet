@@ -22,46 +22,46 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
-    public void save(Utente u){
+    public void save(Utente u) {
         em.persist(u);
     }
 
 
-    public Utente getToken(String randomUUID){
-        Optional<Utente> u=userRepository.findByToken(randomUUID);
+    public Utente getToken(String randomUUID) {
+        Optional<Utente> u = userRepository.findByToken(randomUUID);
 
-        if(u.isPresent()==true){
-            return u.get();
-        }
-            return null;
-    }
-
-    public Utente getTokenForRecovery(String randomUUID){
-        Optional<Utente> u=userRepository.findByTokenAndExpiredCredential(randomUUID);
-
-        if(u.isPresent()==true){
+        if (u.isPresent() == true) {
             return u.get();
         }
         return null;
     }
 
-    public Utente getUserById(String username){
-        Optional<Utente> u=userRepository.findById(username);
+    public Utente getTokenForRecovery(String randomUUID) {
+        Optional<Utente> u = userRepository.findByTokenAndExpiredCredential(randomUUID);
 
-        if(u.isPresent()==true){
+        if (u.isPresent() == true) {
             return u.get();
         }
         return null;
     }
 
-    public List<Utente> getAllUsers(){
+    public Utente getUserById(String username) {
+        Optional<Utente> u = userRepository.findById(username);
+
+        if (u.isPresent() == true) {
+            return u.get();
+        }
+        return null;
+    }
+
+    public List<Utente> getAllUsers() {
         Iterable<Utente> users = userRepository.findAll();
 
         List<Utente> usersList = new ArrayList<Utente>();
 
-        for(Utente u : users) {
-            if(u.getEnabled()==true)
-            usersList.add(u);
+        for (Utente u : users) {
+            if (u.getEnabled() == true)
+                usersList.add(u);
         }
 
         return usersList;

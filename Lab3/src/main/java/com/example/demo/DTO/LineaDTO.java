@@ -10,7 +10,6 @@ import java.util.List;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-/*@Setter(value = AccessLevel.PACKAGE)*/
 @Setter
 @Getter
 public class LineaDTO {
@@ -29,7 +28,7 @@ public class LineaDTO {
                 .build();
 
         List<Fermata> fermate = new ArrayList<Fermata>();
-        for(FermataDTO f : this.fermate)
+        for (FermataDTO f : this.fermate)
             fermate.add(f.convertToEntity(l));
 
         l.setFermate(fermate);

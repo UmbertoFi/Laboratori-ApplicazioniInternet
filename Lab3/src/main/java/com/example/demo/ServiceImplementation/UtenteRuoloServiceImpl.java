@@ -18,48 +18,48 @@ import java.util.Optional;
 
 @Service
 @Transactional
-    public class UtenteRuoloServiceImpl implements UtenteRuoloService {
+public class UtenteRuoloServiceImpl implements UtenteRuoloService {
 
-        @PersistenceContext
-        private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-        @Autowired
-        UtenteRuoloRepository utenteRuoloRepository;
+    @Autowired
+    UtenteRuoloRepository utenteRuoloRepository;
 
-        public void save(UtenteRuolo ur){
-            em.persist(ur);
+    public void save(UtenteRuolo ur) {
+        em.persist(ur);
+    }
+
+    public UtenteRuolo getUtenteRuolo(String username, String linea) {
+
+        idRuolo id = idRuolo.builder().Username(username).NomeLinea(linea).build();
+        Optional<UtenteRuolo> ur = utenteRuoloRepository.findById(id);
+        if (ur.isPresent()) {
+            return ur.get();
         }
+        return null;
+    }
 
-        public UtenteRuolo getUtenteRuolo(String username, String linea){
-
-            idRuolo id=idRuolo.builder().Username(username).NomeLinea(linea).build();
-            Optional<UtenteRuolo> ur=utenteRuoloRepository.findById(id);
-            if(ur.isPresent()){
-                return ur.get();
-            }
-            return null;
-        }
-
-    public boolean getByRuoloSystemAdmin(){
-        if(utenteRuoloRepository.findSystemAdmin().isPresent())
+    public boolean getByRuoloSystemAdmin() {
+        if (utenteRuoloRepository.findSystemAdmin().isPresent())
             return true;
         else
             return false;
     }
 
-    public List<UtenteRuolo> getAll(){
-            List<UtenteRuolo> ruoli = new ArrayList<UtenteRuolo>();
+    public List<UtenteRuolo> getAll() {
+        List<UtenteRuolo> ruoli = new ArrayList<UtenteRuolo>();
 
-            Iterable<UtenteRuolo> roles = utenteRuoloRepository.findAll();
+        Iterable<UtenteRuolo> roles = utenteRuoloRepository.findAll();
 
-            for(UtenteRuolo r : roles)
-                ruoli.add(r);
+        for (UtenteRuolo r : roles)
+            ruoli.add(r);
 
-            return ruoli;
+        return ruoli;
     }
 
-    public void deleteOne(UtenteRuolo ur){
-            utenteRuoloRepository.delete(ur);
+    public void deleteOne(UtenteRuolo ur) {
+        utenteRuoloRepository.delete(ur);
     }
 
 

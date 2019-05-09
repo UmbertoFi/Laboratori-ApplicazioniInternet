@@ -31,18 +31,18 @@ public class FermataServiceImpl implements FermataService {
         em.persist(f);
     }
 
-    public Iterable<Fermata> getFermate(){
+    public Iterable<Fermata> getFermate() {
 
         return fermataRepository.findAll();
     }
 
-    public List<Fermata> getFermateList(String nomeLinea){
+    public List<Fermata> getFermateList(String nomeLinea) {
 
-        Linea l=lineaRepository.findByNome(nomeLinea);
+        Linea l = lineaRepository.findByNome(nomeLinea);
         return fermataRepository.findByLinea(l);
     }
 
-    public Optional<Fermata> getFermata(int parseInt){
+    public Optional<Fermata> getFermata(int parseInt) {
         return fermataRepository.findById(parseInt);
     }
 }

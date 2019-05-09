@@ -22,12 +22,12 @@ public class PrenotazioneServiceImpl implements PrenotazioneService {
     @Autowired
     private PrenotazioneRepository prenotazioneRepository;
 
-    public void save(Prenotazione p){
+    public void save(Prenotazione p) {
         em.persist(p);
 
     }
 
-    public Iterable<Prenotazione> getPrenotazioni(){
+    public Iterable<Prenotazione> getPrenotazioni() {
 
         return prenotazioneRepository.findAll();
     }
@@ -37,7 +37,7 @@ public class PrenotazioneServiceImpl implements PrenotazioneService {
         return prenotazioneRepository.findById(ip);
     }
 
-    public void deleteOne(Prenotazione prenotazione){
+    public void deleteOne(Prenotazione prenotazione) {
 
         prenotazioneRepository.delete(prenotazione);
     }

@@ -28,7 +28,7 @@ public class LineaServiceImpl implements LineaService {
         em.persist(linea);
     }
 
-    public Iterable<Linea> getLines(){
+    public Iterable<Linea> getLines() {
         return lineaRepository.findAll();
     }
 

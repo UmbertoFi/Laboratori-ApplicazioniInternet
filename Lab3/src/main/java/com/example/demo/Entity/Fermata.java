@@ -15,7 +15,6 @@ import java.util.Set;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-/*@Setter(value = AccessLevel.PACKAGE)*/
 @Setter
 @Getter
 public class Fermata {
@@ -71,7 +70,6 @@ public class Fermata {
         return dtl;
 
     }
-
 
 
 }

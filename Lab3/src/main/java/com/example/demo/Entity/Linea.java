@@ -17,10 +17,10 @@ import java.util.List;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-// @Setter(value = AccessLevel.PACKAGE)
 @Setter
 @Getter
 public class Linea {
+
     @Id
     private int id;
     private String nome;
@@ -29,12 +29,10 @@ public class Linea {
     @OneToMany(mappedBy = "linea", cascade = CascadeType.ALL)
     private List<Fermata> fermate = new ArrayList<Fermata>();
 
-
-
     public LineaDTO convertToDTO() {
 
         List<FermataDTO> fermate = new ArrayList<FermataDTO>();
-        for(Fermata f : this.fermate)
+        for (Fermata f : this.fermate)
             fermate.add(f.convertToDTO());
 
         LineaDTO l = LineaDTO.builder()
@@ -43,11 +41,10 @@ public class Linea {
                 .amministratore(this.amministratore)
                 .fermate(fermate)
                 .build();
-
         return l;
     }
 
-    public NomeLineaDTO convertToNomeLineaDTO(){
+    public NomeLineaDTO convertToNomeLineaDTO() {
         NomeLineaDTO l = NomeLineaDTO.builder()
                 .nome(this.nome)
                 .build();

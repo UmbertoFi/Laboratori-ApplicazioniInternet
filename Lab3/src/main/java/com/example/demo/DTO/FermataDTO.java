@@ -7,7 +7,6 @@ import lombok.*;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-/*@Setter(value = AccessLevel.PACKAGE)*/
 @Setter
 @Getter
 public class FermataDTO {
@@ -30,5 +29,4 @@ public class FermataDTO {
 
         return f;
     }
-    /* private List<Prenotazione> prenotazioni = new ArrayList<Prenotazione>(); */
 }

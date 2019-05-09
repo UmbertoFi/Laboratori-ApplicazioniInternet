@@ -14,12 +14,11 @@ import java.util.Objects;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-/*@Setter(value = AccessLevel.PACKAGE)*/
 @Setter
 @Getter
 public class Prenotazione {
     @EmbeddedId
-    private idPrenotazione id;// Id multiplo: Persona_Data_Verso
+    private idPrenotazione id;
     @ManyToOne
     @JoinColumn(name = "id_fermata")
     private Fermata fermata;

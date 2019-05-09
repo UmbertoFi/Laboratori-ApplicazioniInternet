@@ -13,7 +13,6 @@ import java.util.Date;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-//@Setter(value = AccessLevel.PACKAGE)
 @Setter
 @Getter
 public class idPrenotazione implements Serializable {
@@ -25,7 +24,7 @@ public class idPrenotazione implements Serializable {
     @Override
     public String toString() {
 
-        return persona + '_' + data.getYear()+"-"+data.getMonthValue()+"-"+data.getDayOfMonth()+ '_' + verso;
+        return persona + '_' + data.getYear() + "-" + data.getMonthValue() + "-" + data.getDayOfMonth() + '_' + verso;
     }
 
     @Override

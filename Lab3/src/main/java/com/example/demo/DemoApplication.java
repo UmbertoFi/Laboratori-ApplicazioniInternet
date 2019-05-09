@@ -39,7 +39,8 @@ public class DemoApplication {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-//
+
+    //
     @Bean
     CommandLineRunner runner(LineaService ls) {
         return args -> {
@@ -48,8 +49,8 @@ public class DemoApplication {
                 ClassLoader cl = this.getClass().getClassLoader();
                 ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
                 Resource[] resources = resolver.getResources("classpath*:/json/*.json");
-                for(Resource r : resources) {
-                    LineaDTO linea = mapper.readValue(ResourceUtils.getFile("classpath:json/"+r.getFilename()), LineaDTO.class);
+                for (Resource r : resources) {
+                    LineaDTO linea = mapper.readValue(ResourceUtils.getFile("classpath:json/" + r.getFilename()), LineaDTO.class);
                     ls.save(linea);
                 }
             } catch (Exception e) {

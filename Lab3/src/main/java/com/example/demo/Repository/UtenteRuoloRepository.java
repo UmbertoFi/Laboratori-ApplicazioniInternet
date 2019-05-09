@@ -1,6 +1,5 @@
 package com.example.demo.Repository;
 
-import com.example.demo.Entity.Utente;
 import com.example.demo.Entity.UtenteRuolo;
 import com.example.demo.Entity.idRuolo;
 import org.springframework.data.jpa.repository.Query;

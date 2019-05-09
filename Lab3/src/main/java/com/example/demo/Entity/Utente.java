@@ -36,7 +36,7 @@ public class Utente {
     private Boolean enabled;
 
     public List<String> getRoles() {
-        List<String> ruoli=new ArrayList<>();
+        List<String> ruoli = new ArrayList<>();
         ruoli.add("User");
         return ruoli;
     }

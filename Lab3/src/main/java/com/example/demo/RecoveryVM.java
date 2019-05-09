@@ -13,10 +13,10 @@ import javax.validation.constraints.Size;
 public class RecoveryVM {
 
     @NotNull
-    @Size(min=7, max=20)
+    @Size(min = 7, max = 20)
     private String pass1;
     @NotNull
-    @Size(min=7, max=20)
+    @Size(min = 7, max = 20)
     private String pass2;
 
 
