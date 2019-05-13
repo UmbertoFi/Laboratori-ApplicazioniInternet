@@ -48,7 +48,7 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user.getExpiredCredential();
+        return user.getExpiredcredential();
     }
 
     @Override

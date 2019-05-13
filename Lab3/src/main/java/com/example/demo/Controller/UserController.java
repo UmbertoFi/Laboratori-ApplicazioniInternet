@@ -79,7 +79,7 @@ public class UserController {
                 UtenteRuolo ruoli = utenteRuoloService.getUtenteRuolo(username, "*");
 
 
-                if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredCredential() == true) && (utente.getLocked() == true)) {
+                if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
 
                     token = jwtTokenProvider.createToken(username, ruoli.getRuolo());
 
@@ -131,7 +131,7 @@ public class UserController {
                 .expiredToken(new Date())
                 .enabled(false)
                 .expiredAccount(true)//logica inversa
-                .expiredCredential(true)//logica inversa
+                .expiredcredential(true)//logica inversa
                 .locked(true)//logica inversa
                 .build();
 
@@ -188,10 +188,10 @@ public class UserController {
     void recoverPassword(@RequestBody UsernameDTO usernameDTO) {
         Utente utente = userService.getUserById(usernameDTO.getUsername());
         if (utente != null) {
-            if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredCredential() == true) && (utente.getLocked() == true)) {
+            if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
 
                 String UUID = generateUUID();
-                utente.setExpiredCredential(false);
+                utente.setExpiredcredential(false);
                 utente.setToken(UUID);
                 utente.setExpiredToken(new Date());
                 userService.save(utente);

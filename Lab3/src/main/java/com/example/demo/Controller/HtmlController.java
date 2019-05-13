@@ -52,7 +52,7 @@ public class HtmlController {
         long diff = now.getTime() - u.getExpiredToken().getTime();
         if (diff > 30000)                         // Tempo entro il quale poter confermare la registrazione
             throw new NotFoundException();
-        u.setExpiredCredential(true);
+        u.setExpiredcredential(true);
         u.setPassword(passwordEncoder.encode(vm.getPass1()));
         userService.save(u);
     }

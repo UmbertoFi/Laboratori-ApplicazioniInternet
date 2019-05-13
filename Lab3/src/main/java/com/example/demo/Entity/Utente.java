@@ -31,7 +31,7 @@ public class Utente {
 
     private Boolean locked;
 
-    private Boolean expiredCredential;
+    private Boolean expiredcredential;
 
     private Boolean enabled;
 
