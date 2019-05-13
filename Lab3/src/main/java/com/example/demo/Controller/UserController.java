@@ -7,6 +7,8 @@ import com.example.demo.DTO.UsernameDTO;
 import com.example.demo.Entity.Utente;
 import com.example.demo.Entity.UtenteRuolo;
 import com.example.demo.Entity.idRuolo;
+import com.example.demo.Exception.NotFoundException;
+import com.example.demo.Exception.UnauthorizedException;
 import com.example.demo.JWT.JwtTokenProvider;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.EmailService;
@@ -55,13 +57,10 @@ public class UserController {
     @Autowired
     UtenteRuoloService utenteRuoloService;
 
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    public class UnauthorizedException extends RuntimeException {
-    }
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public class NotFoundException extends RuntimeException {
-    }
+
 
 
     @PostMapping(path = "/login")
@@ -106,8 +105,7 @@ public class UserController {
     }
 
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+
 
 
     @PostMapping(path = "/register")

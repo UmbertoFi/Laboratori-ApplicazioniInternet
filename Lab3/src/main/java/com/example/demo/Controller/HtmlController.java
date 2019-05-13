@@ -1,7 +1,8 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.Utente;
-import com.example.demo.RecoveryVM;
+import com.example.demo.Exception.NotFoundException;
+import com.example.demo.ViewModel.RecoveryVM;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,6 @@ public class HtmlController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public class NotFoundException extends RuntimeException {
-    }
-
 
     @GetMapping("recover/{randomUUID}")
     public String register(@PathVariable("randomUUID") String randomUUID) {

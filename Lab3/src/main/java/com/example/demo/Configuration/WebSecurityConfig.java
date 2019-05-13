@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Configuration;
 
 import com.example.demo.JWT.JwtConfigurer;
 import com.example.demo.JWT.JwtTokenProvider;
