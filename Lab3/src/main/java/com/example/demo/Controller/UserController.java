@@ -7,6 +7,8 @@ import com.example.demo.DTO.UsernameDTO;
 import com.example.demo.Entity.Utente;
 import com.example.demo.Entity.UtenteRuolo;
 import com.example.demo.Entity.idRuolo;
+import com.example.demo.Exception.NotFoundException;
+import com.example.demo.Exception.UnauthorizedException;
 import com.example.demo.JWT.JwtTokenProvider;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.EmailService;
@@ -55,13 +57,10 @@ public class UserController {
     @Autowired
     UtenteRuoloService utenteRuoloService;
 
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    public class UnauthorizedException extends RuntimeException {
-    }
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public class NotFoundException extends RuntimeException {
-    }
+
 
 
     @PostMapping(path = "/login")
@@ -106,10 +105,6 @@ public class UserController {
     }
 
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-
     @PostMapping(path = "/register")
     public @ResponseBody
     String postNuovoUser(@RequestBody RegisterDTO registerDTO) {
@@ -119,7 +114,10 @@ public class UserController {
         }
         if (registerDTO.getPassword().compareTo(registerDTO.getPassword2()) != 0) {
             return "password diverse";
+        }
 
+        if(checkValidPass(registerDTO.getPassword(), registerDTO.getPassword2())==false){
+            return "password invalide";
         }
 
         String UUID = generateUUID();
@@ -213,6 +211,16 @@ public class UserController {
             generatedString.append(r.nextInt());
 
         return generatedString.toString();
+    }
+
+    private boolean checkValidPass(String pass1, String pass2) {
+        int l1=pass1.length();
+        int l2=pass2.length();
+
+        if(l1>7 && l1<20 && l2>7 && l2<20){
+            return true;
+        }
+        return false;
     }
 
 

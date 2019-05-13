@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.ViewModel;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
