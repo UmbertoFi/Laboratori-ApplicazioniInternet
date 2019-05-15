@@ -19,7 +19,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests().antMatchers("/demo/login", "/demo/register", "/demo/confirm/**", "/demo/recover/**").permitAll()
+                .authorizeRequests().antMatchers("/login", "/register", "/confirm/**", "/recover/**").permitAll()
+                /*.and()
+                .csrf().disable()
+                .authorizeRequests().antMatchers("/users/**").hasRole("system-admin")*/
+
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

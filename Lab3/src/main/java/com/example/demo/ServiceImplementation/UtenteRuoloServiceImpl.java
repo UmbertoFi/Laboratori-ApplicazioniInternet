@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 
 @Service
@@ -30,9 +31,20 @@ public class UtenteRuoloServiceImpl implements UtenteRuoloService {
         em.persist(ur);
     }
 
+
+    public List<UtenteRuolo> getRuoli(String username) {
+
+        //idRuolo id = idRuolo.builder().Username(username).NomeLinea(linea).build();
+        Iterable<UtenteRuolo> ur = utenteRuoloRepository.findByUsername(username);
+        List<UtenteRuolo> listUr=new ArrayList<>();
+        for(UtenteRuolo u : ur)
+            listUr.add(u);
+        return listUr;
+    }
+
     public UtenteRuolo getUtenteRuolo(String username, String linea) {
 
-        idRuolo id = idRuolo.builder().Username(username).NomeLinea(linea).build();
+        idRuolo id = idRuolo.builder().username(username).NomeLinea(linea).build();
         Optional<UtenteRuolo> ur = utenteRuoloRepository.findById(id);
         if (ur.isPresent()) {
             return ur.get();

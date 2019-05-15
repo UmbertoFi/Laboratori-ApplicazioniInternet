@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.Date;
 
 @Controller
-@RequestMapping(path = "demo")
+//@RequestMapping(path = "demo")
 public class HtmlController {
 
     @Autowired

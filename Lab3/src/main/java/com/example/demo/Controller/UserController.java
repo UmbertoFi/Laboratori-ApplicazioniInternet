@@ -27,38 +27,32 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
 
 @RestController
-@RequestMapping(path = "demo")
+//@RequestMapping(path = "demo")
 public class UserController {
 
 
     @Autowired
-    UserRepository userRepository;
+    EmailService email;
+
+    @Autowired
+    UtenteRuoloService utenteRuoloService;
 
     @Autowired
     UserService userService;
 
     @Autowired
-    EmailService email;
-
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    UserRepository users;
-
-    @Autowired
-    UtenteRuoloService utenteRuoloService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
 
 
@@ -71,16 +65,18 @@ public class UserController {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
 
-            Optional<Utente> u = users.findById(username);
-            if (u.isPresent() == true) {
-                Utente utente = u.get();
+            Utente utente =userService.getUserById(username);
+            if(utente!=null){
 
-                UtenteRuolo ruoli = utenteRuoloService.getUtenteRuolo(username, "*");
+                //UtenteRuolo ruoli = utenteRuoloService.getUtenteRuolo(username, "*");
 
+                List<UtenteRuolo> u=utenteRuoloService.getRuoli(username);
+                List<String> ruoli=u.stream().map(UtenteRuolo::getRuolo).collect(toList());
+                List<String>linee=u.stream().filter(x->x.getUsername().equals(username)).map(UtenteRuolo::getNomeLinea).collect(toList());
 
                 if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
 
-                    token = jwtTokenProvider.createToken(username, ruoli.getRuolo());
+                    token = jwtTokenProvider.createToken(username, ruoli, linee);
 
                 } else {
                     token = null;
@@ -109,7 +105,7 @@ public class UserController {
     public @ResponseBody
     String postNuovoUser(@RequestBody RegisterDTO registerDTO) {
 
-        if (userRepository.findById(registerDTO.getUsername()).isPresent()) {
+        if (userService.getUserById(registerDTO.getUsername())!=null) {
             return "utente già esistente";
         }
         if (registerDTO.getPassword().compareTo(registerDTO.getPassword2()) != 0) {
@@ -137,7 +133,7 @@ public class UserController {
         userService.save(u);
 
 
-        String body = "Gentilissimo, confermi di esserti registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/demo/confirm/" + UUID;
+        String body = "Gentilissimo, confermi di esserti registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/confirm/" + UUID;
         email.sendSimpleMessage(registerDTO.getUsername(), "Benvenuto!", body);
 
         return "ok";
@@ -160,7 +156,7 @@ public class UserController {
         userService.save(u);
 
         idRuolo id = idRuolo.builder()
-                .Username(u.getUserName())
+                .username(u.getUserName())
                 .NomeLinea("*")
                 .build();
 
@@ -193,7 +189,7 @@ public class UserController {
                 utente.setToken(UUID);
                 utente.setExpiredToken(new Date());
                 userService.save(utente);
-                String body = "Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì clicca il seguente link per modificare la tua password http://localhost:8080/demo/recover/" + UUID;
+                String body = "Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì clicca il seguente link per modificare la tua password http://localhost:8080/recover/" + UUID;
                 email.sendSimpleMessage(usernameDTO.getUsername(), "Password Recovery!", body);
             }
         }
@@ -223,7 +219,7 @@ public class UserController {
         return false;
     }
 
-
+/*
     @GetMapping(path = "/users")
     public List<UsernameDTO> listUsers(HttpServletRequest req) {
 
@@ -246,8 +242,100 @@ public class UserController {
         }
         throw new UnauthorizedException();
     }
+*/
+    @GetMapping(path = "/users")
+    public List<UsernameDTO> altlistUsers(HttpServletRequest req) {
+
+        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+        List<String> ru = jwtTokenProvider.getRole(jwtTokenProvider.resolveToken(req));
+
+        if (ru.contains("admin") || ru.contains("system-admin") ) {
+            List<Utente> users = userService.getAllUsers();
+
+            List<UsernameDTO> usersList = new ArrayList<UsernameDTO>();
+
+            for (Utente u : users)
+                usersList.add(new UsernameDTO(u.getUserName()));
+
+            return usersList;
+
+        }
+        throw new UnauthorizedException();
+    }
 
 
+    @PutMapping(path = "/users/{userID}")
+    @ResponseStatus(HttpStatus.OK)
+    public void altmodifyRole(HttpServletRequest req, @PathVariable("userID") String userID, @RequestBody ModificaRuoloDTO modificaRuoloDTO) {
+
+        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+        List<String> ru = jwtTokenProvider.getRole(jwtTokenProvider.resolveToken(req));
+
+        if(ru.contains("system-admin")) {
+            if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
+
+                UtenteRuolo utenteRuolo = utenteRuoloService.getUtenteRuolo(userID, "*");
+
+                if (utenteRuolo != null) {
+                    idRuolo nuovoIdRuolo = idRuolo.builder()
+                            .NomeLinea(modificaRuoloDTO.getLinea())
+                            .username(userID)
+                            .build();
+                    UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
+                            .id(nuovoIdRuolo)
+                            .ruolo("admin")
+                            .build();
+                    utenteRuoloService.save(nuovoRuolo);
+                    return;
+                }
+                throw  new NotFoundException();
+            } else {
+                UtenteRuolo utenteRuolo = utenteRuoloService.getUtenteRuolo(userID, modificaRuoloDTO.getLinea());
+                if (utenteRuolo != null) {
+                    utenteRuoloService.deleteOne(utenteRuolo);
+                    return;
+                }
+                throw  new NotFoundException();
+            }
+        }else if(ru.contains("admin") ){
+
+            List<String> linee = jwtTokenProvider.getLinee(jwtTokenProvider.resolveToken(req));
+            if(linee.contains(modificaRuoloDTO.getLinea())==true) {
+
+                if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
+
+                    UtenteRuolo utenteRuolo2 = utenteRuoloService.getUtenteRuolo(userID, "*");
+
+                    if (utenteRuolo2 != null) {
+                        idRuolo nuovoIdRuolo = idRuolo.builder()
+                                .NomeLinea(modificaRuoloDTO.getLinea())
+                                .username(userID)
+                                .build();
+                        UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
+                                .id(nuovoIdRuolo)
+                                .ruolo("admin")
+                                .build();
+                        utenteRuoloService.save(nuovoRuolo);
+                        return;
+                    }
+                    throw  new NotFoundException();
+                } else {
+                    UtenteRuolo utenteRuolo2 = utenteRuoloService.getUtenteRuolo(userID, modificaRuoloDTO.getLinea());
+                    if (utenteRuolo2 != null) {
+                        utenteRuoloService.deleteOne(utenteRuolo2);
+                        return;
+                    }
+                    throw  new NotFoundException();
+                }
+
+            }
+        }
+        throw  new UnauthorizedException();
+
+}
+
+
+/*
     @PutMapping(path = "/users/{userID}")
     @ResponseStatus(HttpStatus.OK)
     public void modifyRole(HttpServletRequest req, @PathVariable("userID") String userID, @RequestBody ModificaRuoloDTO modificaRuoloDTO) {
@@ -310,6 +398,6 @@ public class UserController {
             }
         }
         throw new UnauthorizedException();
-    }
+    }*/
 
 }

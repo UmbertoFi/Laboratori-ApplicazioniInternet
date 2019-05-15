@@ -16,6 +16,7 @@ import java.util.Objects;
 public class UtenteRuolo {
 
     @EmbeddedId
+
     private idRuolo id;
 
     private String ruolo;
@@ -32,5 +33,12 @@ public class UtenteRuolo {
     @Override
     public int hashCode() {
         return Objects.hash(id, ruolo);
+    }
+
+    public String getUsername(){
+        return id.getUsername();
+    }
+    public String getNomeLinea(){
+        return id.getNomeLinea();
     }
 }

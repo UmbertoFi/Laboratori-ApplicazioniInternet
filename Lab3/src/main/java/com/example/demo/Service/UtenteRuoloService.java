@@ -14,4 +14,6 @@ public interface UtenteRuoloService {
     public List<UtenteRuolo> getAll();
 
     public void deleteOne(UtenteRuolo ur);
+
+    public List<UtenteRuolo> getRuoli(String username);
 }
