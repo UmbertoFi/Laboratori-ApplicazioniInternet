@@ -15,35 +15,35 @@ export class AppComponent {
       nome: 'Piazza Mellano',
       ora : '07.35',
       persone : [
-        {nome : 'Benedetta'},
-        {nome : 'Aurora'},
-        {nome : 'Chanel'},
-        {nome : 'Matteo'},
-        {nome : 'Sara'},
-        {nome : 'Simone'},
-        {nome : 'Claudia'}
+        {nome : 'Benedetta', selected: false},
+        {nome : 'Aurora', selected: false},
+        {nome : 'Chanel', selected: false},
+        {nome : 'Matteo', selected: false},
+        {nome : 'Sara', selected: false},
+        {nome : 'Simone', selected: false},
+        {nome : 'Claudia', selected: false}
       ]},
       {
         nome: 'Via Primo Alpini',
         ora : '07.40',
         persone : [
-          {nome : 'Giacomo'},
-          {nome : 'Emma'}
+          {nome : 'Giacomo', selected: false},
+          {nome : 'Emma', selected: false}
         ]},
       {
         nome: 'Via Vigo',
         ora : '07.50',
         persone : [
-          {nome : 'Isabel'},
-          {nome : 'Mohammed'},
-          {nome : 'Iaia'}
+          {nome : 'Isabel', selected: false},
+          {nome : 'Mohammed', selected: false},
+          {nome : 'Iaia', selected: false}
         ]},
       {
         nome: 'Piazza XXV Aprile',
         ora : '07.55',
         persone : [
-          {nome : 'Shibo'},
-          {nome : 'Vittoria'}
+          {nome : 'Shibo', selected: false},
+          {nome : 'Vittoria', selected: false}
         ]},
       {
         nome: 'Scuola',
@@ -52,17 +52,17 @@ export class AppComponent {
         ]}]
   };
 
-  personaStile: boolean;
-
-  constructor() {
-    this.personaStile = false;
+  clickPersona($event: MouseEvent, idFermata, idPersona) {
+    if (this.linea.fermate[idFermata].persone[idPersona].selected === false) {
+      this.linea.fermate[idFermata].persone[idPersona].selected = true;
+    } else {
+      this.linea.fermate[idFermata].persone[idPersona].selected = false;
+    }
   }
 
-  selezionaPersona($event: MouseEvent) {
-    if (this.personaStile === false) {
-      this.personaStile = true;
-    } else {
-      this.personaStile = false;
+  selezionaPersona(idFermata: number, idPersona: number) {
+    if (this.linea.fermate[idFermata].persone[idPersona].selected === true) {
+      return 'personaSelezionata';
     }
   }
 }

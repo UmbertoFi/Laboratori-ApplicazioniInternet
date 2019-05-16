@@ -8,14 +8,14 @@
 </div>
 
 
-<h2>Linea: {{linea.nome}}</h2>
-<h3>{{linea.data}}</h3>
+<h1>Linea: {{linea.nome}}</h1>
+<h2>{{linea.data}}</h2>
 <mat-list>
-  <mat-list-item *ngFor="let fermata of linea.fermate">
-    <p mat-line>{{fermata.ora}} {{fermata.nome}}</p>
+  <mat-list-item *ngFor="let fermata of linea.fermate; let i = index">
+    <h3 mat-line>{{i+1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}</h3>
     <ul mat-line>
-      <li *ngFor="let persona of fermata.persone">
-        <p (click)="selezionaPersona($event)" [class.personaSelezionata]="personaStile">{{persona.nome}} &nbsp;</p>
+      <li *ngFor="let persona of fermata.persone; let j=index">
+        <p (click)="clickPersona($event,i,j)" [ngClass]="selezionaPersona(i,j)">{{persona.nome}}&nbsp;</p>
       </li>
     </ul>
   </mat-list-item>
