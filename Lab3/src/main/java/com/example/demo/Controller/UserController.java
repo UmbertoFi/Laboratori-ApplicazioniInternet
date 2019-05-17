@@ -196,53 +196,9 @@ public class UserController {
     }
 
 
-    /***
-     * funzione per generare un numero di conferma random
-     * @return
-     */
-    public String generateUUID() {
-        Random r = new Random();
-        StringBuilder generatedString = new StringBuilder();
-        for (int i = 0; i < 5; i++)
-            generatedString.append(r.nextInt());
 
-        return generatedString.toString();
-    }
 
-    private boolean checkValidPass(String pass1, String pass2) {
-        int l1=pass1.length();
-        int l2=pass2.length();
 
-        if(l1>7 && l1<20 && l2>7 && l2<20){
-            return true;
-        }
-        return false;
-    }
-
-/*
-    @GetMapping(path = "/users")
-    public List<UsernameDTO> listUsers(HttpServletRequest req) {
-
-        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
-
-        List<UtenteRuolo> ruoli = utenteRuoloService.getAll();
-        for (UtenteRuolo ur : ruoli) {
-            if (ur.getId().getUsername().compareTo(username) == 0) {
-                if (ur.getRuolo().compareTo("admin") == 0 || ur.getRuolo().compareTo("system-admin") == 0) {
-                    List<Utente> users = userService.getAllUsers();
-
-                    List<UsernameDTO> usersList = new ArrayList<UsernameDTO>();
-
-                    for (Utente u : users)
-                        usersList.add(new UsernameDTO(u.getUserName()));
-
-                    return usersList;
-                }
-            }
-        }
-        throw new UnauthorizedException();
-    }
-*/
     @GetMapping(path = "/users")
     public List<UsernameDTO> altlistUsers(HttpServletRequest req) {
 
@@ -334,70 +290,29 @@ public class UserController {
 
 }
 
+    /***
+     * funzione per generare un numero di conferma random
+     * @return
+     */
+    public String generateUUID() {
+        Random r = new Random();
+        StringBuilder generatedString = new StringBuilder();
+        for (int i = 0; i < 5; i++)
+            generatedString.append(r.nextInt());
 
-/*
-    @PutMapping(path = "/users/{userID}")
-    @ResponseStatus(HttpStatus.OK)
-    public void modifyRole(HttpServletRequest req, @PathVariable("userID") String userID, @RequestBody ModificaRuoloDTO modificaRuoloDTO) {
-        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+        return generatedString.toString();
+    }
 
-        List<UtenteRuolo> ruoli = utenteRuoloService.getAll();
-        for (UtenteRuolo ur : ruoli) {
-            if (ur.getId().getUsername().compareTo(username) == 0) {
-                if (ur.getRuolo().compareTo("system-admin") == 0) {
-                    if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
-                        for (UtenteRuolo ur2 : ruoli) {
-                            if (ur2.getId().getUsername().compareTo(userID) == 0) {
-                                idRuolo nuovoIdRuolo = idRuolo.builder()
-                                        .NomeLinea(modificaRuoloDTO.getLinea())
-                                        .Username(userID)
-                                        .build();
-                                UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
-                                        .id(nuovoIdRuolo)
-                                        .ruolo("admin")
-                                        .build();
-                                utenteRuoloService.save(nuovoRuolo);
-                                return;
+    private boolean checkValidPass(String pass1, String pass2) {
+        int l1=pass1.length();
+        int l2=pass2.length();
 
-                            }
-                        }
-                    } else {
-                        for (UtenteRuolo ur2 : ruoli) {
-                            if (ur2.getId().getUsername().compareTo(userID) == 0 && ur2.getId().getNomeLinea().compareTo(modificaRuoloDTO.getLinea()) == 0 && ur2.getRuolo().compareTo("admin") == 0) {
-                                utenteRuoloService.deleteOne(ur2);
-                                return;
-                            }
-                        }
-                    }
-
-                } else if (ur.getRuolo().compareTo("admin") == 0 || ur.getId().getNomeLinea().compareTo(modificaRuoloDTO.getLinea()) == 0) {
-                    if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
-                        for (UtenteRuolo ur2 : ruoli) {
-                            if (ur2.getId().getUsername().compareTo(userID) == 0) {
-                                idRuolo nuovoIdRuolo = idRuolo.builder()
-                                        .NomeLinea(modificaRuoloDTO.getLinea())
-                                        .Username(userID)
-                                        .build();
-                                UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
-                                        .id(nuovoIdRuolo)
-                                        .ruolo("admin")
-                                        .build();
-                                utenteRuoloService.save(nuovoRuolo);
-                                return;
-                            }
-                        }
-                    } else {
-                        for (UtenteRuolo ur2 : ruoli) {
-                            if (ur2.getId().getUsername().compareTo(userID) == 0 && ur2.getId().getNomeLinea().compareTo(modificaRuoloDTO.getLinea()) == 0 && ur2.getRuolo().compareTo("admin") == 0) {
-                                utenteRuoloService.deleteOne(ur2);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
+        if(l1>7 && l1<20 && l2>7 && l2<20){
+            return true;
         }
-        throw new UnauthorizedException();
-    }*/
+        return false;
+    }
+
+
 
 }
