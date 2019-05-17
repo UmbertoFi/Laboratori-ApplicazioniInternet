@@ -2,8 +2,13 @@ li {
   display: inline-block;
 }
 
+.clickable:hover{
+  cursor: pointer;
+  color: cornflowerblue;
+}
+
 .personaSelezionata {
-  color : blue;
+  color: blue;
   font-weight: bold;
 }
 

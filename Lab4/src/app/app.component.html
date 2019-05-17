@@ -36,7 +36,7 @@
       <h3 mat-line>
         <mat-icon>my_location</mat-icon>&#9;{{i + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}</h3>
       <ul mat-line>
-        <li *ngFor="let persona of fermata.persone; let j=index">
+        <li class="clickable" *ngFor="let persona of fermata.persone; let j=index">
           <p (click)="clickPersona($event,i,j)" [ngClass]="selezionaPersona(i,j)">{{persona.nome}}&nbsp;</p>
         </li>
       </ul>
