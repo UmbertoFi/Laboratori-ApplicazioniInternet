@@ -12,25 +12,12 @@ li {
   font-weight: bold;
 }
 
-table{
-  border-collapse: collapse;
+mat-card{
   width: fit-content;
   margin: auto;
 }
 
-td, th{
-  text-align: center;
-  border: 1px solid #ddd;
-  padding: 8px;
+button mat-icon-button:hover{
+  cursor: pointer;
 }
 
-#Linea{
-  margin-bottom: 0px;
-  margin-top: 0px;
-}
-
-#Percorsi{
-  border: 1px solid #ddd;
-  width: fit-content;
-  margin: auto;
-}
