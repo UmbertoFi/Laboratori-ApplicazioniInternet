@@ -8,7 +8,7 @@ import {PageEvent} from '@angular/material';
 })
 export class AppComponent implements OnInit {
   title = 'Lab4';
-  /* linee = [
+  linee = [
     {
       nome: '12',
       corse: [
@@ -89,15 +89,15 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                nome: 'Piazza Mellano',
-                ora: '13.50',
-                persone: [
-                  {nome: 'Rebecca', selected: false},
-                  {nome: 'Mario', selected: false},
-                  {nome: 'Salvatore', selected: false},
-                  {nome: 'Filippo', selected: false}
-                ]
-              }]
+                  nome: 'Piazza Mellano',
+                  ora: '13.50',
+                  persone: [
+                    {nome: 'Rebecca', selected: false},
+                    {nome: 'Mario', selected: false},
+                    {nome: 'Salvatore', selected: false},
+                    {nome: 'Filippo', selected: false}
+                  ]
+                }]
             }
           ]
         },
@@ -204,7 +204,7 @@ export class AppComponent implements OnInit {
       nome: '58',
       corse: [
         {
-          data: '2019/06/10',
+          data: '2019/05/22',
           tratte: [
             {
               verso: 'andata',
@@ -212,7 +212,9 @@ export class AppComponent implements OnInit {
                 nome: 'Piazza Pitagora',
                 ora: '07.40',
                 persone: [
-                  {nome: 'Maurizio', selected: false}
+                  {nome: 'Maurizio', selected: false},
+                  {nome: 'Mimmo', selected: false},
+                  {nome: 'Laura', selected: false}
                 ]
               },
                 {
@@ -222,7 +224,6 @@ export class AppComponent implements OnInit {
                     {nome: 'Carlo', selected: false},
                     {nome: 'Giovanni', selected: false},
                     {nome: 'Zaira', selected: false},
-                    {nome: 'Antonio', selected: false}
                   ]
                 },
                 {
@@ -230,7 +231,8 @@ export class AppComponent implements OnInit {
                   ora: '07.45',
                   persone: [
                     {nome: 'Teresa', selected: false},
-                    {nome: 'Francesco', selected: false}
+                    {nome: 'Francesco', selected: false},
+                    {nome: 'Cristina', selected: false}
                   ]
                 },
                 {
@@ -273,7 +275,8 @@ export class AppComponent implements OnInit {
                   ora: '13.50',
                   persone: [
                     {nome: 'Teresa', selected: false},
-                    {nome: 'Francesco', selected: false}
+                    {nome: 'Francesco', selected: false},
+                    {nome: 'Cristina', selected: false}
                   ]
                 },
                 {
@@ -282,15 +285,16 @@ export class AppComponent implements OnInit {
                   persone: [
                     {nome: 'Carlo', selected: false},
                     {nome: 'Giovanni', selected: false},
-                    {nome: 'Zaira', selected: false},
-                    {nome: 'Antonio', selected: false}
+                    {nome: 'Zaira', selected: false}
                   ]
                 },
                 {
                   nome: 'Piazza Pitagora',
                   ora: '14.00',
                   persone: [
-                    {nome: 'Maurizio', selected: false}
+                    {nome: 'Maurizio', selected: false},
+                    {nome: 'Mimmo', selected: false},
+                    {nome: 'Laura', selected: false}
                   ]
                 }]
             }
@@ -395,307 +399,23 @@ export class AppComponent implements OnInit {
         }
       ]
     }
-  ]; */
-  linea = [{
-    nome: '12',
-    data: '2019/04/30',
-    verso: 'Andata',
-    fermate: [{
-      nome: 'Piazza Mellano',
-      ora: '07.35',
-      persone: [
-        {nome: 'Benedetta', selected: false},
-        {nome: 'Aurora', selected: false},
-        {nome: 'Chanel', selected: false},
-        {nome: 'Matteo', selected: false},
-        {nome: 'Sara', selected: false},
-        {nome: 'Simone', selected: false},
-        {nome: 'Claudia', selected: false}
-      ]
-    },
-      {
-        nome: 'Via Primo Alpini',
-        ora: '07.40',
-        persone: [
-          {nome: 'Giacomo', selected: false},
-          {nome: 'Emma', selected: false}
-        ]
-      },
-      {
-        nome: 'Via Vigo',
-        ora: '07.50',
-        persone: [
-          {nome: 'Isabel', selected: false},
-          {nome: 'Mohammed', selected: false},
-          {nome: 'Iaia', selected: false}
-        ]
-      },
-      {
-        nome: 'Piazza XXV Aprile',
-        ora: '07.55',
-        persone: [
-          {nome: 'Shibo', selected: false},
-          {nome: 'Vittoria', selected: false}
-        ]
-      },
-      {
-        nome: 'Scuola',
-        ora: '08.00',
-        persone: []
-      }]
-  },
-    {
-      nome: '12',
-      data: '2019/05/22',
-      verso: 'Andata',
-      fermate: [{
-        nome: 'Piazza Mellano',
-        ora: '07.35',
-        persone: [
-          {nome: 'Benedetta', selected: false},
-          {nome: 'Aurora', selected: false},
-          {nome: 'Chanel', selected: false},
-          {nome: 'Matteo', selected: false},
-          {nome: 'Sara', selected: false},
-          {nome: 'Simone', selected: false},
-          {nome: 'Claudia', selected: false}
-        ]
-      },
-        {
-          nome: 'Via Primo Alpini',
-          ora: '07.40',
-          persone: [
-            {nome: 'Giacomo', selected: false},
-            {nome: 'Emma', selected: false}
-          ]
-        },
-        {
-          nome: 'Via Vigo',
-          ora: '07.50',
-          persone: [
-            {nome: 'Isabel', selected: false},
-            {nome: 'Mohammed', selected: false},
-            {nome: 'Iaia', selected: false}
-          ]
-        },
-        {
-          nome: 'Piazza XXV Aprile',
-          ora: '07.55',
-          persone: [
-            {nome: 'Shibo', selected: false},
-            {nome: 'Vittoria', selected: false}
-          ]
-        },
-        {
-          nome: 'Scuola',
-          ora: '08.00',
-          persone: []
-        }]
-    },
+  ];
 
-    {
-      nome: '12',
-      data: '2019/05/19',
-      verso: 'Andata',
-      fermate: [{
-        nome: 'Piazza Mellano',
-        ora: '07.35',
-        persone: [
-          {nome: 'Benedetta', selected: false},
-          {nome: 'Aurora', selected: false},
-          {nome: 'Chanel', selected: false},
-          {nome: 'Matteo', selected: false},
-          {nome: 'Sara', selected: false},
-          {nome: 'Simone', selected: false},
-          {nome: 'Claudia', selected: false}
-        ]
-      },
-        {
-          nome: 'Via Primo Alpini',
-          ora: '07.40',
-          persone: [
-            {nome: 'Giacomo', selected: false},
-            {nome: 'Emma', selected: false}
-          ]
-        },
-        {
-          nome: 'Via Vigo',
-          ora: '07.50',
-          persone: [
-            {nome: 'Isabel', selected: false},
-            {nome: 'Mohammed', selected: false},
-            {nome: 'Iaia', selected: false}
-          ]
-        },
-        {
-          nome: 'Piazza XXV Aprile',
-          ora: '07.55',
-          persone: [
-            {nome: 'Shibo', selected: false},
-            {nome: 'Vittoria', selected: false}
-          ]
-        },
-        {
-          nome: 'Scuola',
-          ora: '08.00',
-          persone: []
-        }]
-    },
-    {
-      nome: '12',
-      data: '2019/05/23',
-      verso: 'Andata',
-      fermate: [{
-        nome: 'Piazza Mellano',
-        ora: '07.35',
-        persone: [
-          {nome: 'Benedetta', selected: false},
-          {nome: 'Aurora', selected: false},
-          {nome: 'Chanel', selected: false},
-          {nome: 'Matteo', selected: false},
-          {nome: 'Sara', selected: false},
-          {nome: 'Simone', selected: false},
-          {nome: 'Claudia', selected: false}
-        ]
-      },
-        {
-          nome: 'Via Primo Alpini',
-          ora: '07.40',
-          persone: [
-            {nome: 'Giacomo', selected: false},
-            {nome: 'Emma', selected: false}
-          ]
-        },
-        {
-          nome: 'Via Vigo',
-          ora: '07.50',
-          persone: [
-            {nome: 'Isabel', selected: false},
-            {nome: 'Mohammed', selected: false},
-            {nome: 'Iaia', selected: false}
-          ]
-        },
-        {
-          nome: 'Piazza XXV Aprile',
-          ora: '07.55',
-          persone: [
-            {nome: 'Shibo', selected: false},
-            {nome: 'Vittoria', selected: false}
-          ]
-        },
-        {
-          nome: 'Scuola',
-          ora: '08.00',
-          persone: []
-        }]
-    },
-    {
-      nome: '12',
-      data: '2019/05/27',
-      verso: 'Andata',
-      fermate: [{
-        nome: 'Piazza Mellano',
-        ora: '07.35',
-        persone: [
-          {nome: 'Benedetta', selected: false},
-          {nome: 'Aurora', selected: false},
-          {nome: 'Chanel', selected: false},
-          {nome: 'Matteo', selected: false},
-          {nome: 'Sara', selected: false},
-          {nome: 'Simone', selected: false},
-          {nome: 'Claudia', selected: false}
-        ]
-      },
-        {
-          nome: 'Via Primo Alpini',
-          ora: '07.40',
-          persone: [
-            {nome: 'Giacomo', selected: false},
-            {nome: 'Emma', selected: false}
-          ]
-        },
-        {
-          nome: 'Via Vigo',
-          ora: '07.50',
-          persone: [
-            {nome: 'Isabel', selected: false},
-            {nome: 'Mohammed', selected: false},
-            {nome: 'Iaia', selected: false}
-          ]
-        },
-        {
-          nome: 'Piazza XXV Aprile',
-          ora: '07.55',
-          persone: [
-            {nome: 'Shibo', selected: false},
-            {nome: 'Vittoria', selected: false}
-          ]
-        },
-        {
-          nome: 'Scuola',
-          ora: '08.00',
-          persone: []
-        }]
-    },
-    {
-      nome: '12',
-      data: '2018/05/28',
-      verso: 'Andata',
-      fermate: [{
-        nome: 'Piazza Mellano',
-        ora: '07.35',
-        persone: [
-          {nome: 'Benedetta', selected: false},
-          {nome: 'Aurora', selected: false},
-          {nome: 'Chanel', selected: false},
-          {nome: 'Matteo', selected: false},
-          {nome: 'Sara', selected: false},
-          {nome: 'Simone', selected: false},
-          {nome: 'Claudia', selected: false}
-        ]
-      },
-        {
-          nome: 'Via Primo Alpini',
-          ora: '07.40',
-          persone: [
-            {nome: 'Giacomo', selected: false},
-            {nome: 'Emma', selected: false}
-          ]
-        },
-        {
-          nome: 'Via Vigo',
-          ora: '07.50',
-          persone: [
-            {nome: 'Isabel', selected: false},
-            {nome: 'Mohammed', selected: false},
-            {nome: 'Iaia', selected: false}
-          ]
-        },
-        {
-          nome: 'Piazza XXV Aprile',
-          ora: '07.55',
-          persone: [
-            {nome: 'Shibo', selected: false},
-            {nome: 'Vittoria', selected: false}
-          ]
-        },
-        {
-          nome: 'Scuola',
-          ora: '08.00',
-          persone: []
-        }]
-    }];
   pageEvent: PageEvent;
-  length = this.linea.length;
+  length: number;
   pageSize = 1;
-  pageIndex = 0;
+  pageIndex: number;
+  lineaSelezionataMenu = 0;
 
   ngOnInit(): void {
-    this.linea.sort((a, b) => a.data.localeCompare(b.data));
-  }
+    this.length = this.linee[this.lineaSelezionataMenu].corse.length;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.linee.length; i++) {
+      this.linee[i].corse.sort((a, b) => a.data.localeCompare(b.data));
+    }
 
-  clickPersona($event: MouseEvent, idFermata, idPersona, idLinea) {
-    const date = new Date(this.linea[idLinea].data).getTime();
+    let j;
+    let date;
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
     const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -703,40 +423,83 @@ export class AppComponent implements OnInit {
     const cur = yyyy + '/' + mm + '/' + dd;
     const curdate = new Date(cur).getTime();
 
-    if (this.linea[idLinea].fermate[idFermata].persone[idPersona].selected === false && (date - curdate) === 0) {
-      this.linea[idLinea].fermate[idFermata].persone[idPersona].selected = true;
+    // tslint:disable-next-line:prefer-for-of
+    for (j = 0; j < this.linee[this.lineaSelezionataMenu].corse.length; j++) {
+      date = new Date(this.linee[this.lineaSelezionataMenu].corse[j].data).getTime();
+      if (date - curdate >= 0) {
+        break;
+      }
+    }
+    this.pageIndex = j;
+  }
+
+  clickPersona($event: MouseEvent, verso, idFermata, idPersona) {
+    const date = new Date(this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].data).getTime();
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = today.getFullYear();
+    const cur = yyyy + '/' + mm + '/' + dd;
+    const curdate = new Date(cur).getTime();
+
+    // tslint:disable-next-line:max-line-length
+    if (this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone[idPersona].selected === false && (date - curdate) === 0) {
+      this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone[idPersona].selected = true;
     } else {
-      this.linea[idLinea].fermate[idFermata].persone[idPersona].selected = false;
+      this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone[idPersona].selected = false;
     }
   }
 
-  selezionaPersona(idFermata: number, idPersona: number, idLinea: number) {
-    if (this.linea[idLinea].fermate[idFermata].persone[idPersona].selected === true) {
+  selezionaPersona(verso: number, idFermata: number, idPersona: number) {
+    if (this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone[idPersona].selected === true) {
       return 'personaSelezionata';
     }
   }
 
-  personeOrdinateByNome(i: number, idLinea: number) {
-    return this.linea[idLinea].fermate[i].persone.sort((a, b) => a.nome.localeCompare(b.nome));
+  personeOrdinateByNome(verso: number, idFermata: number) {
+    // tslint:disable-next-line:max-line-length
+    return this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone.sort((a, b) => a.nome.localeCompare(b.nome));
   }
 
-  fermateOrdinateByOra(idLinea: number) {
-    return this.linea[idLinea].fermate.sort((a, b) => a.ora.localeCompare(b.ora));
+  fermateOrdinateByOra(verso: number) {
+    return this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate.sort((a, b) => a.ora.localeCompare(b.ora));
   }
 
-  a(pageEvent: PageEvent) {
+  selezionaLineaMenu($event: MouseEvent, idLinea: number) {
+    this.lineaSelezionataMenu = idLinea;
+    this.length = this.linee[idLinea].corse.length;
+    let j;
+    let date;
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = today.getFullYear();
+    const cur = yyyy + '/' + mm + '/' + dd;
+    const curdate = new Date(cur).getTime();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (j = 0; j < this.linee[this.lineaSelezionataMenu].corse.length; j++) {
+      date = new Date(this.linee[this.lineaSelezionataMenu].corse[j].data).getTime();
+      if (date - curdate >= 0) {
+        break;
+      }
+    }
+    this.pageIndex = j;
+  }
+
+  selezionaCorsaPaginator(pageEvent: PageEvent) {
     let i;
     let date;
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
     const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
     const yyyy = today.getFullYear();
-
     const cur = yyyy + '/' + mm + '/' + dd;
     const curdate = new Date(cur).getTime();
+
     if (pageEvent === undefined) {
-      for (i = 0; i < this.linea.length; i++) {
-        date = new Date(this.linea[i].data).getTime();
+      for (i = 0; i < this.linee[this.lineaSelezionataMenu].corse.length; i++) {
+        date = new Date(this.linee[this.lineaSelezionataMenu].corse[i].data).getTime();
         if (date - curdate >= 0) {
           break;
         }
