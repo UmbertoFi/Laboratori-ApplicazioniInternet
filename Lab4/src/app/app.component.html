@@ -3,24 +3,23 @@
   <h1>
     {{ title }}
   </h1>
-  <img width="150" alt="Angular Logo"
-       src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
 </div>
 
-
-
-
+<br>
 <mat-card id="Percorsi">
   <mat-card-header>
-  <button mat-icon-button style="margin-right: auto;">
-    <mat-icon>menu</mat-icon>
-  </button>
+    <button mat-icon-button [matMenuTriggerFor]="menu" style="margin-right: auto;">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngFor="let l of linea">{{l.nome}}</button>
+    </mat-menu>
     <mat-card-title-group>
-  <mat-card-title id="Linea">Linea: {{linea[a(pageEvent)].nome}}</mat-card-title>
-  <mat-card-subtitle>{{linea[a(pageEvent)].data}}</mat-card-subtitle>
+      <mat-card-title id="Linea">Linea: {{linea[a(pageEvent)].nome}}</mat-card-title>
+      <mat-card-subtitle>{{linea[a(pageEvent)].data}}</mat-card-subtitle>
     </mat-card-title-group>
     <mat-paginator style="margin-left: auto;"
-                    [length]="length"
+                   [length]="length"
                    [pageSize]="pageSize"
                    [hidePageSize]="true"
                    [pageIndex]="pageIndex"
@@ -28,17 +27,36 @@
     </mat-paginator>
   </mat-card-header>
   <mat-card-content>
-  <mat-list>
-    <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(a(pageEvent)); let i = index">
-      <h3 mat-line>
-        <mat-icon>my_location</mat-icon>&#9;{{i + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}</h3>
-      <ul mat-line>
-        <li class="clickable" *ngFor="let persona of personeOrdinateByNome(i,a(pageEvent)); let j=index">
-          <p (click)="clickPersona($event,i,j,a(pageEvent))" [ngClass]="selezionaPersona(i,j,a(pageEvent))">{{persona.nome}}&nbsp;</p>
-        </li>
-      </ul>
-    </mat-list-item>
-  </mat-list>
+    <mat-tab-group>
+      <mat-tab label="Andata">
+        <mat-list>
+          <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(a(pageEvent)); let i = index">
+            <h3 mat-line>
+              <mat-icon>my_location</mat-icon>&#9;{{i + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}</h3>
+            <ul mat-line>
+              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(i,a(pageEvent)); let j=index">
+                <p (click)="clickPersona($event,i,j,a(pageEvent))"
+                   [ngClass]="selezionaPersona(i,j,a(pageEvent))">{{persona.nome}}&nbsp;</p>
+              </li>
+            </ul>
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+      <mat-tab label="Ritorno">
+        <mat-list>
+          <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(a(pageEvent)); let i = index">
+            <h3 mat-line>
+              <mat-icon>my_location</mat-icon>&#9;{{i + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}</h3>
+            <ul mat-line>
+              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(i,a(pageEvent)); let j=index">
+                <p (click)="clickPersona($event,i,j,a(pageEvent))"
+                   [ngClass]="selezionaPersona(i,j,a(pageEvent))">{{persona.nome}}&nbsp;</p>
+              </li>
+            </ul>
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+    </mat-tab-group>
   </mat-card-content>
 </mat-card>
 

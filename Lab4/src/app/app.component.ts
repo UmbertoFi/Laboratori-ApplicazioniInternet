@@ -307,8 +307,15 @@ export class AppComponent implements OnInit {
   }
 
   clickPersona($event: MouseEvent, idFermata, idPersona, idLinea) {
-    console.log(this.pageEvent);
-    if (this.linea[idLinea].fermate[idFermata].persone[idPersona].selected === false) {
+    const date = new Date(this.linea[idLinea].data).getTime();
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = today.getFullYear();
+    const cur = yyyy + '/' + mm + '/' + dd;
+    const curdate = new Date(cur).getTime();
+
+    if (this.linea[idLinea].fermate[idFermata].persone[idPersona].selected === false && (date - curdate) === 0) {
       this.linea[idLinea].fermate[idFermata].persone[idPersona].selected = true;
     } else {
       this.linea[idLinea].fermate[idFermata].persone[idPersona].selected = false;

@@ -1,10 +1,18 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatListModule, MatIconModule, MatCardModule, MatPaginatorModule, MatFormFieldModule} from '@angular/material';
+import {
+  MatListModule,
+  MatIconModule,
+  MatCardModule,
+  MatPaginatorModule,
+  MatFormFieldModule,
+  MatTabsModule,
+  MatButtonModule, MatMenuModule
+} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 
 @NgModule({
@@ -19,11 +27,15 @@ import {FormsModule} from '@angular/forms';
     MatCardModule,
     MatPaginatorModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
+    MatTabsModule,
+    MatButtonModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
 
 
