@@ -8,6 +8,406 @@ import {PageEvent} from '@angular/material';
 })
 export class AppComponent implements OnInit {
   title = 'Lab4';
+  /* linee = [
+    {
+      nome: '12',
+      corse: [
+        {
+          data: '2019/04/30',
+          tratte: [
+            {
+              verso: 'andata',
+              fermate: [{
+                nome: 'Piazza Mellano',
+                ora: '07.35',
+                persone: [
+                  {nome: 'Benedetta', selected: false},
+                  {nome: 'Aurora', selected: false},
+                  {nome: 'Chanel', selected: false},
+                  {nome: 'Matteo', selected: false},
+                  {nome: 'Sara', selected: false},
+                  {nome: 'Simone', selected: false},
+                  {nome: 'Claudia', selected: false}
+                ]
+              },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '07.40',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Emma', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '07.50',
+                  persone: [
+                    {nome: 'Isabel', selected: false},
+                    {nome: 'Mohammed', selected: false},
+                    {nome: 'Iaia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '07.55',
+                  persone: [
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Scuola',
+                  ora: '08.00',
+                  persone: []
+                }]
+            },
+            {
+              verso: 'ritorno',
+              fermate: [{
+                nome: 'Scuola',
+                ora: '13.30',
+                persone: []
+              },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '13.35',
+                  persone: [
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '13.40',
+                  persone: [
+                    {nome: 'Isabel', selected: false},
+                    {nome: 'Mohammed', selected: false},
+                    {nome: 'Iaia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '13.45',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Emma', selected: false}
+                  ]
+                },
+                {
+                nome: 'Piazza Mellano',
+                ora: '13.50',
+                persone: [
+                  {nome: 'Benedetta', selected: false},
+                  {nome: 'Aurora', selected: false},
+                  {nome: 'Chanel', selected: false},
+                  {nome: 'Matteo', selected: false},
+                  {nome: 'Sara', selected: false},
+                  {nome: 'Simone', selected: false},
+                  {nome: 'Claudia', selected: false}
+                ]
+              }]
+            }
+          ]
+        },
+        {
+          data: '2019/05/30',
+          tratte: [
+            {
+              verso: 'andata',
+              fermate: [{
+                nome: 'Piazza Mellano',
+                ora: '07.35',
+                persone: [
+                  {nome: 'Benedetta', selected: false},
+                  {nome: 'Aurora', selected: false},
+                  {nome: 'Chanel', selected: false},
+                  {nome: 'Matteo', selected: false},
+                  {nome: 'Sara', selected: false},
+                  {nome: 'Simone', selected: false},
+                  {nome: 'Claudia', selected: false}
+                ]
+              },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '07.40',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Emma', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '07.50',
+                  persone: [
+                    {nome: 'Isabel', selected: false},
+                    {nome: 'Mohammed', selected: false},
+                    {nome: 'Iaia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '07.55',
+                  persone: [
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Scuola',
+                  ora: '08.00',
+                  persone: []
+                }]
+            },
+            {
+              verso: 'ritorno',
+              fermate: [{
+                nome: 'Scuola',
+                ora: '13.30',
+                persone: []
+              },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '13.35',
+                  persone: [
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '13.40',
+                  persone: [
+                    {nome: 'Isabel', selected: false},
+                    {nome: 'Mohammed', selected: false},
+                    {nome: 'Iaia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '13.45',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Emma', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza Mellano',
+                  ora: '13.50',
+                  persone: [
+                    {nome: 'Benedetta', selected: false},
+                    {nome: 'Aurora', selected: false},
+                    {nome: 'Chanel', selected: false},
+                    {nome: 'Matteo', selected: false},
+                    {nome: 'Sara', selected: false},
+                    {nome: 'Simone', selected: false},
+                    {nome: 'Claudia', selected: false}
+                  ]
+                }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      nome: '58',
+      corse: [
+        {
+          data: '2019/04/30',
+          tratte: [
+            {
+              verso: 'andata',
+              fermate: [{
+                nome: 'Piazza Mellano',
+                ora: '07.35',
+                persone: [
+                  {nome: 'Benedetta', selected: false},
+                  {nome: 'Aurora', selected: false},
+                  {nome: 'Chanel', selected: false},
+                  {nome: 'Matteo', selected: false},
+                  {nome: 'Sara', selected: false},
+                  {nome: 'Simone', selected: false},
+                  {nome: 'Claudia', selected: false}
+                ]
+              },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '07.40',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Emma', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '07.50',
+                  persone: [
+                    {nome: 'Isabel', selected: false},
+                    {nome: 'Mohammed', selected: false},
+                    {nome: 'Iaia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '07.55',
+                  persone: [
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Scuola',
+                  ora: '08.00',
+                  persone: []
+                }]
+            },
+            {
+              verso: 'ritorno',
+              fermate: [{
+                nome: 'Scuola',
+                ora: '13.30',
+                persone: []
+              },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '13.35',
+                  persone: [
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '13.40',
+                  persone: [
+                    {nome: 'Isabel', selected: false},
+                    {nome: 'Mohammed', selected: false},
+                    {nome: 'Iaia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '13.45',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Emma', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza Mellano',
+                  ora: '13.50',
+                  persone: [
+                    {nome: 'Benedetta', selected: false},
+                    {nome: 'Aurora', selected: false},
+                    {nome: 'Chanel', selected: false},
+                    {nome: 'Matteo', selected: false},
+                    {nome: 'Sara', selected: false},
+                    {nome: 'Simone', selected: false},
+                    {nome: 'Claudia', selected: false}
+                  ]
+                }]
+            }
+          ]
+        },
+        {
+          data: '2019/05/30',
+          tratte: [
+            {
+              verso: 'andata',
+              fermate: [{
+                nome: 'Piazza Mellano',
+                ora: '07.35',
+                persone: [
+                  {nome: 'Benedetta', selected: false},
+                  {nome: 'Aurora', selected: false},
+                  {nome: 'Chanel', selected: false},
+                  {nome: 'Matteo', selected: false},
+                  {nome: 'Sara', selected: false},
+                  {nome: 'Simone', selected: false},
+                  {nome: 'Claudia', selected: false}
+                ]
+              },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '07.40',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Emma', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '07.50',
+                  persone: [
+                    {nome: 'Isabel', selected: false},
+                    {nome: 'Mohammed', selected: false},
+                    {nome: 'Iaia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '07.55',
+                  persone: [
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Scuola',
+                  ora: '08.00',
+                  persone: []
+                }]
+            },
+            {
+              verso: 'ritorno',
+              fermate: [{
+                nome: 'Scuola',
+                ora: '13.30',
+                persone: []
+              },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '13.35',
+                  persone: [
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '13.40',
+                  persone: [
+                    {nome: 'Isabel', selected: false},
+                    {nome: 'Mohammed', selected: false},
+                    {nome: 'Iaia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '13.45',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Emma', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza Mellano',
+                  ora: '13.50',
+                  persone: [
+                    {nome: 'Benedetta', selected: false},
+                    {nome: 'Aurora', selected: false},
+                    {nome: 'Chanel', selected: false},
+                    {nome: 'Matteo', selected: false},
+                    {nome: 'Sara', selected: false},
+                    {nome: 'Simone', selected: false},
+                    {nome: 'Claudia', selected: false}
+                  ]
+                }]
+            }
+          ]
+        }
+      ]
+    }
+  ]; */
   linea = [{
     nome: '12',
     data: '2019/04/30',
