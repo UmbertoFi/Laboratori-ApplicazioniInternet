@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title = 'Lab4';
   linea = [{
     nome: '12',
-    data: '2019/05/21',
+    data: '2019/04/30',
     verso: 'Andata',
     fermate: [{
       nome: 'Piazza Mellano',
@@ -58,7 +58,200 @@ export class AppComponent implements OnInit {
   },
     {
       nome: '12',
+      data: '2019/05/22',
+      verso: 'Andata',
+      fermate: [{
+        nome: 'Piazza Mellano',
+        ora: '07.35',
+        persone: [
+          {nome: 'Benedetta', selected: false},
+          {nome: 'Aurora', selected: false},
+          {nome: 'Chanel', selected: false},
+          {nome: 'Matteo', selected: false},
+          {nome: 'Sara', selected: false},
+          {nome: 'Simone', selected: false},
+          {nome: 'Claudia', selected: false}
+        ]
+      },
+        {
+          nome: 'Via Primo Alpini',
+          ora: '07.40',
+          persone: [
+            {nome: 'Giacomo', selected: false},
+            {nome: 'Emma', selected: false}
+          ]
+        },
+        {
+          nome: 'Via Vigo',
+          ora: '07.50',
+          persone: [
+            {nome: 'Isabel', selected: false},
+            {nome: 'Mohammed', selected: false},
+            {nome: 'Iaia', selected: false}
+          ]
+        },
+        {
+          nome: 'Piazza XXV Aprile',
+          ora: '07.55',
+          persone: [
+            {nome: 'Shibo', selected: false},
+            {nome: 'Vittoria', selected: false}
+          ]
+        },
+        {
+          nome: 'Scuola',
+          ora: '08.00',
+          persone: []
+        }]
+    },
+
+    {
+      nome: '12',
       data: '2019/05/19',
+      verso: 'Andata',
+      fermate: [{
+        nome: 'Piazza Mellano',
+        ora: '07.35',
+        persone: [
+          {nome: 'Benedetta', selected: false},
+          {nome: 'Aurora', selected: false},
+          {nome: 'Chanel', selected: false},
+          {nome: 'Matteo', selected: false},
+          {nome: 'Sara', selected: false},
+          {nome: 'Simone', selected: false},
+          {nome: 'Claudia', selected: false}
+        ]
+      },
+        {
+          nome: 'Via Primo Alpini',
+          ora: '07.40',
+          persone: [
+            {nome: 'Giacomo', selected: false},
+            {nome: 'Emma', selected: false}
+          ]
+        },
+        {
+          nome: 'Via Vigo',
+          ora: '07.50',
+          persone: [
+            {nome: 'Isabel', selected: false},
+            {nome: 'Mohammed', selected: false},
+            {nome: 'Iaia', selected: false}
+          ]
+        },
+        {
+          nome: 'Piazza XXV Aprile',
+          ora: '07.55',
+          persone: [
+            {nome: 'Shibo', selected: false},
+            {nome: 'Vittoria', selected: false}
+          ]
+        },
+        {
+          nome: 'Scuola',
+          ora: '08.00',
+          persone: []
+        }]
+    },
+    {
+      nome: '12',
+      data: '2019/05/23',
+      verso: 'Andata',
+      fermate: [{
+        nome: 'Piazza Mellano',
+        ora: '07.35',
+        persone: [
+          {nome: 'Benedetta', selected: false},
+          {nome: 'Aurora', selected: false},
+          {nome: 'Chanel', selected: false},
+          {nome: 'Matteo', selected: false},
+          {nome: 'Sara', selected: false},
+          {nome: 'Simone', selected: false},
+          {nome: 'Claudia', selected: false}
+        ]
+      },
+        {
+          nome: 'Via Primo Alpini',
+          ora: '07.40',
+          persone: [
+            {nome: 'Giacomo', selected: false},
+            {nome: 'Emma', selected: false}
+          ]
+        },
+        {
+          nome: 'Via Vigo',
+          ora: '07.50',
+          persone: [
+            {nome: 'Isabel', selected: false},
+            {nome: 'Mohammed', selected: false},
+            {nome: 'Iaia', selected: false}
+          ]
+        },
+        {
+          nome: 'Piazza XXV Aprile',
+          ora: '07.55',
+          persone: [
+            {nome: 'Shibo', selected: false},
+            {nome: 'Vittoria', selected: false}
+          ]
+        },
+        {
+          nome: 'Scuola',
+          ora: '08.00',
+          persone: []
+        }]
+    },
+    {
+      nome: '12',
+      data: '2019/05/27',
+      verso: 'Andata',
+      fermate: [{
+        nome: 'Piazza Mellano',
+        ora: '07.35',
+        persone: [
+          {nome: 'Benedetta', selected: false},
+          {nome: 'Aurora', selected: false},
+          {nome: 'Chanel', selected: false},
+          {nome: 'Matteo', selected: false},
+          {nome: 'Sara', selected: false},
+          {nome: 'Simone', selected: false},
+          {nome: 'Claudia', selected: false}
+        ]
+      },
+        {
+          nome: 'Via Primo Alpini',
+          ora: '07.40',
+          persone: [
+            {nome: 'Giacomo', selected: false},
+            {nome: 'Emma', selected: false}
+          ]
+        },
+        {
+          nome: 'Via Vigo',
+          ora: '07.50',
+          persone: [
+            {nome: 'Isabel', selected: false},
+            {nome: 'Mohammed', selected: false},
+            {nome: 'Iaia', selected: false}
+          ]
+        },
+        {
+          nome: 'Piazza XXV Aprile',
+          ora: '07.55',
+          persone: [
+            {nome: 'Shibo', selected: false},
+            {nome: 'Vittoria', selected: false}
+          ]
+        },
+        {
+          nome: 'Scuola',
+          ora: '08.00',
+          persone: []
+        }]
+    },
+    {
+      nome: '12',
+      data: '2018/05/28',
       verso: 'Andata',
       fermate: [{
         nome: 'Piazza Mellano',
@@ -139,12 +332,17 @@ export class AppComponent implements OnInit {
   a(pageEvent: PageEvent) {
     let i;
     let date;
-    const cur = new Date().getTime();
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = today.getFullYear();
+
+    const cur = yyyy + '/' + mm + '/' + dd;
+    const curdate = new Date(cur).getTime();
     if (pageEvent === undefined) {
       for (i = 0; i < this.linea.length; i++) {
         date = new Date(this.linea[i].data).getTime();
-        if (date - cur > 0) {
-          console.log(date - cur);
+        if (date - curdate >= 0) {
           break;
         }
       }
