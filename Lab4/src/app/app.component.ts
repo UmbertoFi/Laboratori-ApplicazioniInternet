@@ -204,7 +204,7 @@ export class AppComponent implements OnInit {
       nome: '58',
       corse: [
         {
-          data: '2019/05/22',
+          data: '2019/05/23',
           tratte: [
             {
               verso: 'andata',
@@ -417,7 +417,7 @@ export class AppComponent implements OnInit {
                 ]
               },
                 {
-                  nome: 'Vittorio_Emanuele_II',
+                  nome: 'Vittorio EmanueleII',
                   ora: '08.10',
                   persone: [
                     {nome: 'Christian', selected: false},
@@ -482,7 +482,7 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                  nome: 'Vittorio_Emanuele_II',
+                  nome: 'Vittorio Emanuele II',
                   ora: '13.50',
                   persone: [
                     {nome: 'Diana', selected: false},
@@ -491,7 +491,7 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                  nome: 'Porta_Nuova',
+                  nome: 'Porta Nuova',
                   ora: '13.55',
                   persone: [
                     {nome: 'Maura', selected: false},
@@ -517,7 +517,7 @@ export class AppComponent implements OnInit {
                 ]
               },
                 {
-                  nome: 'Vittorio_Emanuele_II',
+                  nome: 'Vittorio Emanuele II',
                   ora: '08.10',
                   persone: [
                     {nome: 'Alessandro', selected: false},
@@ -581,7 +581,7 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                  nome: 'Vittorio_Emanuele_II',
+                  nome: 'Vittorio Emanuele II',
                   ora: '13.50',
                   persone: [
                     {nome: 'Debora', selected: false},
@@ -590,7 +590,7 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                  nome: 'Porta_Nuova',
+                  nome: 'Porta Nuova',
                   ora: '13.55',
                   persone: [
                     {nome: 'Alessio', selected: false},
@@ -617,7 +617,7 @@ export class AppComponent implements OnInit {
                 ]
               },
                 {
-                  nome: 'Vittorio_Emanuele_II',
+                  nome: 'Vittorio Emanuele II',
                   ora: '08.10',
                   persone: [
                     {nome: 'Leonardo', selected: false},
@@ -681,7 +681,7 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                  nome: 'Vittorio_Emanuele_II',
+                  nome: 'Vittorio Emanuele II',
                   ora: '13.50',
                   persone: [
                     {nome: 'Diana', selected: false},
@@ -693,7 +693,7 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                  nome: 'Porta_Nuova',
+                  nome: 'Porta Nuova',
                   ora: '13.55',
                   persone: [
                     {nome: 'Anna', selected: false},
@@ -711,7 +711,7 @@ export class AppComponent implements OnInit {
   pageEvent: PageEvent;
   length: number;
   pageSize = 1;
-  pageIndex: number;
+  pageIndex = 0;
   lineaSelezionataMenu = 0;
 
   ngOnInit(): void {
@@ -763,16 +763,16 @@ export class AppComponent implements OnInit {
     }
   }
 
-  personeOrdinateByNome(verso: number, idFermata: number) {
+  personeOrdinateByNome(verso: number, idFermata: number, idCorsa: void) {
     // tslint:disable-next-line:max-line-length
     return this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone.sort((a, b) => a.nome.localeCompare(b.nome));
   }
 
-  fermateOrdinateByOra(verso: number) {
+  fermateOrdinateByOra(verso: number, idCorsa: void) {
     return this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate.sort((a, b) => a.ora.localeCompare(b.ora));
   }
 
-  selezionaLineaMenu($event: MouseEvent, idLinea: number) {
+  selezionaLineaMenu(idLinea: number) {
     this.lineaSelezionataMenu = idLinea;
     this.length = this.linee[idLinea].corse.length;
     let j;
@@ -795,26 +795,9 @@ export class AppComponent implements OnInit {
   }
 
   selezionaCorsaPaginator(pageEvent: PageEvent) {
-    let i;
-    let date;
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const yyyy = today.getFullYear();
-    const cur = yyyy + '/' + mm + '/' + dd;
-    const curdate = new Date(cur).getTime();
-
-    if (pageEvent === undefined) {
-      for (i = 0; i < this.linee[this.lineaSelezionataMenu].corse.length; i++) {
-        date = new Date(this.linee[this.lineaSelezionataMenu].corse[i].data).getTime();
-        if (date - curdate >= 0) {
-          break;
-        }
-      }
-      this.pageIndex = i;
-      return i;
-    } else {
-      return pageEvent.pageIndex;
+    if (pageEvent !== undefined) {
+      console.log(this.pageIndex + '--->' + pageEvent.pageIndex);
+      this.pageIndex = pageEvent.pageIndex;
     }
   }
 }
