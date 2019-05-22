@@ -21,20 +21,17 @@ export class AppComponent implements OnInit {
                 nome: 'Piazza Mellano',
                 ora: '07.35',
                 persone: [
-                  {nome: 'Benedetta', selected: false},
-                  {nome: 'Aurora', selected: false},
-                  {nome: 'Chanel', selected: false},
-                  {nome: 'Matteo', selected: false},
-                  {nome: 'Sara', selected: false},
-                  {nome: 'Simone', selected: false},
-                  {nome: 'Claudia', selected: false}
+                  {nome: 'Rebecca', selected: false},
+                  {nome: 'Mario', selected: false},
+                  {nome: 'Salvatore', selected: false},
+                  {nome: 'Filippo', selected: false}
                 ]
               },
                 {
                   nome: 'Via Primo Alpini',
                   ora: '07.40',
                   persone: [
-                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Giuseppe', selected: false},
                     {nome: 'Emma', selected: false}
                   ]
                 },
@@ -42,17 +39,16 @@ export class AppComponent implements OnInit {
                   nome: 'Via Vigo',
                   ora: '07.50',
                   persone: [
-                    {nome: 'Isabel', selected: false},
-                    {nome: 'Mohammed', selected: false},
-                    {nome: 'Iaia', selected: false}
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Enzo', selected: false},
+                    {nome: 'Maria', selected: false}
                   ]
                 },
                 {
                   nome: 'Piazza XXV Aprile',
                   ora: '07.55',
                   persone: [
-                    {nome: 'Shibo', selected: false},
-                    {nome: 'Vittoria', selected: false}
+                    {nome: 'Angelo', selected: false}
                   ]
                 },
                 {
@@ -72,24 +68,23 @@ export class AppComponent implements OnInit {
                   nome: 'Piazza XXV Aprile',
                   ora: '13.35',
                   persone: [
-                    {nome: 'Shibo', selected: false},
-                    {nome: 'Vittoria', selected: false}
+                    {nome: 'Angelo', selected: false}
                   ]
                 },
                 {
                   nome: 'Via Vigo',
                   ora: '13.40',
                   persone: [
-                    {nome: 'Isabel', selected: false},
-                    {nome: 'Mohammed', selected: false},
-                    {nome: 'Iaia', selected: false}
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Enzo', selected: false},
+                    {nome: 'Maria', selected: false}
                   ]
                 },
                 {
                   nome: 'Via Primo Alpini',
                   ora: '13.45',
                   persone: [
-                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Giuseppe', selected: false},
                     {nome: 'Emma', selected: false}
                   ]
                 },
@@ -97,13 +92,10 @@ export class AppComponent implements OnInit {
                 nome: 'Piazza Mellano',
                 ora: '13.50',
                 persone: [
-                  {nome: 'Benedetta', selected: false},
-                  {nome: 'Aurora', selected: false},
-                  {nome: 'Chanel', selected: false},
-                  {nome: 'Matteo', selected: false},
-                  {nome: 'Sara', selected: false},
-                  {nome: 'Simone', selected: false},
-                  {nome: 'Claudia', selected: false}
+                  {nome: 'Rebecca', selected: false},
+                  {nome: 'Mario', selected: false},
+                  {nome: 'Salvatore', selected: false},
+                  {nome: 'Filippo', selected: false}
                 ]
               }]
             }
@@ -212,46 +204,44 @@ export class AppComponent implements OnInit {
       nome: '58',
       corse: [
         {
-          data: '2019/04/30',
+          data: '2019/06/10',
           tratte: [
             {
               verso: 'andata',
               fermate: [{
-                nome: 'Piazza Mellano',
-                ora: '07.35',
+                nome: 'Piazza Pitagora',
+                ora: '07.40',
                 persone: [
-                  {nome: 'Benedetta', selected: false},
-                  {nome: 'Aurora', selected: false},
-                  {nome: 'Chanel', selected: false},
-                  {nome: 'Matteo', selected: false},
-                  {nome: 'Sara', selected: false},
-                  {nome: 'Simone', selected: false},
-                  {nome: 'Claudia', selected: false}
+                  {nome: 'Maurizio', selected: false}
                 ]
               },
                 {
-                  nome: 'Via Primo Alpini',
+                  nome: 'Piazza Castello',
                   ora: '07.40',
                   persone: [
-                    {nome: 'Giacomo', selected: false},
-                    {nome: 'Emma', selected: false}
+                    {nome: 'Carlo', selected: false},
+                    {nome: 'Giovanni', selected: false},
+                    {nome: 'Zaira', selected: false},
+                    {nome: 'Antonio', selected: false}
                   ]
                 },
                 {
-                  nome: 'Via Vigo',
-                  ora: '07.50',
+                  nome: 'Via Milano',
+                  ora: '07.45',
                   persone: [
-                    {nome: 'Isabel', selected: false},
-                    {nome: 'Mohammed', selected: false},
-                    {nome: 'Iaia', selected: false}
+                    {nome: 'Teresa', selected: false},
+                    {nome: 'Francesco', selected: false}
                   ]
                 },
                 {
-                  nome: 'Piazza XXV Aprile',
+                  nome: 'Via Vigone',
                   ora: '07.55',
                   persone: [
                     {nome: 'Shibo', selected: false},
-                    {nome: 'Vittoria', selected: false}
+                    {nome: 'Vittoria', selected: false},
+                    {nome: 'Tito', selected: false},
+                    {nome: 'Tiberio', selected: false},
+                    {nome: 'Carlo', selected: false}
                   ]
                 },
                 {
@@ -264,58 +254,56 @@ export class AppComponent implements OnInit {
               verso: 'ritorno',
               fermate: [{
                 nome: 'Scuola',
-                ora: '13.30',
+                ora: '13.40',
                 persone: []
               },
                 {
-                  nome: 'Piazza XXV Aprile',
-                  ora: '13.35',
-                  persone: [
-                    {nome: 'Shibo', selected: false},
-                    {nome: 'Vittoria', selected: false}
-                  ]
-                },
-                {
-                  nome: 'Via Vigo',
-                  ora: '13.40',
-                  persone: [
-                    {nome: 'Isabel', selected: false},
-                    {nome: 'Mohammed', selected: false},
-                    {nome: 'Iaia', selected: false}
-                  ]
-                },
-                {
-                  nome: 'Via Primo Alpini',
+                  nome: 'Via Vigone',
                   ora: '13.45',
                   persone: [
-                    {nome: 'Giacomo', selected: false},
-                    {nome: 'Emma', selected: false}
+                    {nome: 'Shibo', selected: false},
+                    {nome: 'Vittoria', selected: false},
+                    {nome: 'Tito', selected: false},
+                    {nome: 'Tiberio', selected: false},
+                    {nome: 'Carlo', selected: false}
                   ]
                 },
                 {
-                  nome: 'Piazza Mellano',
+                  nome: 'Via Milano',
                   ora: '13.50',
                   persone: [
-                    {nome: 'Benedetta', selected: false},
-                    {nome: 'Aurora', selected: false},
-                    {nome: 'Chanel', selected: false},
-                    {nome: 'Matteo', selected: false},
-                    {nome: 'Sara', selected: false},
-                    {nome: 'Simone', selected: false},
-                    {nome: 'Claudia', selected: false}
+                    {nome: 'Teresa', selected: false},
+                    {nome: 'Francesco', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza Castello',
+                  ora: '13.55',
+                  persone: [
+                    {nome: 'Carlo', selected: false},
+                    {nome: 'Giovanni', selected: false},
+                    {nome: 'Zaira', selected: false},
+                    {nome: 'Antonio', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza Pitagora',
+                  ora: '14.00',
+                  persone: [
+                    {nome: 'Maurizio', selected: false}
                   ]
                 }]
             }
           ]
         },
         {
-          data: '2019/05/30',
+          data: '2019/07/20',
           tratte: [
             {
               verso: 'andata',
               fermate: [{
-                nome: 'Piazza Mellano',
-                ora: '07.35',
+                nome: 'Piazza Pitagora',
+                ora: '07.40',
                 persone: [
                   {nome: 'Benedetta', selected: false},
                   {nome: 'Aurora', selected: false},
@@ -327,15 +315,15 @@ export class AppComponent implements OnInit {
                 ]
               },
                 {
-                  nome: 'Via Primo Alpini',
-                  ora: '07.40',
+                  nome: 'Piazza Castello',
+                  ora: '07.45',
                   persone: [
                     {nome: 'Giacomo', selected: false},
                     {nome: 'Emma', selected: false}
                   ]
                 },
                 {
-                  nome: 'Via Vigo',
+                  nome: 'Via Milano',
                   ora: '07.50',
                   persone: [
                     {nome: 'Isabel', selected: false},
@@ -344,7 +332,7 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                  nome: 'Piazza XXV Aprile',
+                  nome: 'Via Vigone',
                   ora: '07.55',
                   persone: [
                     {nome: 'Shibo', selected: false},
@@ -361,20 +349,20 @@ export class AppComponent implements OnInit {
               verso: 'ritorno',
               fermate: [{
                 nome: 'Scuola',
-                ora: '13.30',
+                ora: '13.40',
                 persone: []
               },
                 {
-                  nome: 'Piazza XXV Aprile',
-                  ora: '13.35',
+                  nome: 'Via Vigone',
+                  ora: '13.45',
                   persone: [
                     {nome: 'Shibo', selected: false},
                     {nome: 'Vittoria', selected: false}
                   ]
                 },
                 {
-                  nome: 'Via Vigo',
-                  ora: '13.40',
+                  nome: 'Via Milano',
+                  ora: '13.50',
                   persone: [
                     {nome: 'Isabel', selected: false},
                     {nome: 'Mohammed', selected: false},
@@ -382,16 +370,16 @@ export class AppComponent implements OnInit {
                   ]
                 },
                 {
-                  nome: 'Via Primo Alpini',
-                  ora: '13.45',
+                  nome: 'Piazza Castello',
+                  ora: '13.55',
                   persone: [
                     {nome: 'Giacomo', selected: false},
                     {nome: 'Emma', selected: false}
                   ]
                 },
                 {
-                  nome: 'Piazza Mellano',
-                  ora: '13.50',
+                  nome: 'Piazza Pitagora',
+                  ora: '14.00',
                   persone: [
                     {nome: 'Benedetta', selected: false},
                     {nome: 'Aurora', selected: false},
