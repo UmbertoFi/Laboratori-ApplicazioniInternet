@@ -109,9 +109,7 @@ export class AppComponent implements OnInit {
   }
 
   selezionaCorsaPaginator(pageEvent: PageEvent) {
-    if (pageEvent !== undefined) {
-      this.pageIndex = pageEvent.pageIndex;
-    }
+    this.pageIndex = pageEvent.pageIndex;
     return this.pageEvent;
   }
 }
