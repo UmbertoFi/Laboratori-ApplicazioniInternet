@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   pageSize = 1;
   pageIndex = 0;
   lineaSelezionataMenu = 0;
+
   constructor(private lineaService: LineaService) {
     this.getLinee();
   }
@@ -50,7 +51,7 @@ export class AppComponent implements OnInit {
   }
 
   getLinee(): void {
-    this.linee = this.lineaService.getLinee();
+    this.linee = LineaService.getLinee();
   }
 
   clickPersona($event: MouseEvent, verso, idFermata, idPersona) {

@@ -33,7 +33,7 @@ import {LineaService} from './linea.service';
     MatButtonModule,
     MatMenuModule
   ],
-  providers: [ LineaService ],
+  providers: [LineaService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

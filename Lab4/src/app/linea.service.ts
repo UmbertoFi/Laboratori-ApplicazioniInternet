@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Linea} from './linea';
-import {LINE} from './dati-linea';
-import {Corsa} from './corsa';
+import {LINE} from './dati';
 
 @Injectable()
 export class LineaService {
@@ -10,7 +9,7 @@ export class LineaService {
   constructor() {
   }
 
-  getLinee(): Linea[] {
+  static getLinee(): Linea[] {
     return LINE;
   }
 /*

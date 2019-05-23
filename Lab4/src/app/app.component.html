@@ -11,7 +11,8 @@
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item *ngFor="let linea of linee; let l = index" (click)="selezionaLineaMenu(l)">{{linee[l].nome}}</button>
+      <button mat-menu-item *ngFor="let linea of linee; let l = index"
+              (click)="selezionaLineaMenu(l)">{{linee[l].nome}}</button>
     </mat-menu>
     <mat-card-title-group>
       <mat-card-title>Linea:  {{linee[lineaSelezionataMenu].nome}}</mat-card-title>
@@ -29,14 +30,14 @@
     <mat-tab-group>
       <mat-tab label="Andata">
         <mat-list>
-          <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(0); let f = index">
+          <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(0); let f = index; let last = last">
             <h3 mat-line>
               <mat-icon>my_location</mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}
             </h3>
             <ul mat-line>
-              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(0,f); let p=index">
+              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(0,f); let p=index, let last = last">
                 <p (click)="clickPersona($event,0,f,p)"
-                   [ngClass]="selezionaPersona(0,f,p)">{{persona.nome}}&nbsp;</p>
+                   [ngClass]="selezionaPersona(0,f,p)">{{persona.nome}}{{last ? '' : ',&nbsp;'}}</p>
               </li>
             </ul>
           </mat-list-item>
@@ -49,9 +50,9 @@
               <mat-icon>my_location</mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}
             </h3>
             <ul mat-line>
-              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(1,f); let p=index">
+              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(1,f); let p=index; let last = last">
                 <p (click)="clickPersona($event,1,f,p)"
-                   [ngClass]="selezionaPersona(1,f,p)">{{persona.nome}}&nbsp;</p>
+                   [ngClass]="selezionaPersona(1,f,p)">{{persona.nome}}{{last ? '' : ',&nbsp;'}}</p>
               </li>
             </ul>
           </mat-list-item>
