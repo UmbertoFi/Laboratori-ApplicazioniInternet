@@ -14,6 +14,7 @@ import {
   MatButtonModule, MatMenuModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
+import {LineaService} from './linea.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import {FormsModule} from '@angular/forms';
     MatButtonModule,
     MatMenuModule
   ],
-  providers: [],
+  providers: [ LineaService ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
