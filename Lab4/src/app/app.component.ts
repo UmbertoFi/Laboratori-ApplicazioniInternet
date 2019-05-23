@@ -76,12 +76,12 @@ export class AppComponent implements OnInit {
     }
   }
 
-  personeOrdinateByNome(verso: number, idFermata: number, idCorsa: void) {
+  personeOrdinateByNome(verso: number, idFermata: number) {
     // tslint:disable-next-line:max-line-length
     return this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone.sort((a, b) => a.nome.localeCompare(b.nome));
   }
 
-  fermateOrdinateByOra(verso: number, idCorsa: void) {
+  fermateOrdinateByOra(verso: number) {
     return this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate.sort((a, b) => a.ora.localeCompare(b.ora));
   }
 
@@ -109,9 +109,9 @@ export class AppComponent implements OnInit {
 
   selezionaCorsaPaginator(pageEvent: PageEvent) {
     if (pageEvent !== undefined) {
-      console.log(this.pageIndex + '--->' + pageEvent.pageIndex);
       this.pageIndex = pageEvent.pageIndex;
     }
+    return this.pageEvent;
   }
 }
 

@@ -22,19 +22,19 @@
                    [pageSize]="pageSize"
                    [hidePageSize]="true"
                    [pageIndex]="pageIndex"
-                   (page)="pageEvent = $event">
+                   (page)="selezionaCorsaPaginator($event)">
     </mat-paginator>
   </mat-card-header>
   <mat-card-content>
     <mat-tab-group>
       <mat-tab label="Andata">
         <mat-list>
-          <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(0, selezionaCorsaPaginator(pageEvent)); let f = index">
+          <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(0); let f = index">
             <h3 mat-line>
               <mat-icon>my_location</mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}
             </h3>
             <ul mat-line>
-              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(0,f, selezionaCorsaPaginator(pageEvent)); let p=index">
+              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(0,f); let p=index">
                 <p (click)="clickPersona($event,0,f,p)"
                    [ngClass]="selezionaPersona(0,f,p)">{{persona.nome}}&nbsp;</p>
               </li>
@@ -44,12 +44,12 @@
       </mat-tab>
       <mat-tab label="Ritorno">
         <mat-list>
-          <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(1, selezionaCorsaPaginator(pageEvent)); let f = index">
+          <mat-list-item *ngFor="let fermata of fermateOrdinateByOra(1); let f = index">
             <h3 mat-line>
               <mat-icon>my_location</mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;{{fermata.nome}}
             </h3>
             <ul mat-line>
-              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(1,f, selezionaCorsaPaginator(pageEvent)); let p=index">
+              <li class="clickable" *ngFor="let persona of personeOrdinateByNome(1,f); let p=index">
                 <p (click)="clickPersona($event,1,f,p)"
                    [ngClass]="selezionaPersona(1,f,p)">{{persona.nome}}&nbsp;</p>
               </li>
