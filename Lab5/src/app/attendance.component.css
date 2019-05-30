@@ -1,0 +1,23 @@
+li {
+  display: inline-block;
+}
+
+.clickable:hover{
+  cursor: pointer;
+  color: cornflowerblue;
+}
+
+.personaSelezionata {
+  color: blue;
+  font-weight: bold;
+}
+
+mat-card{
+  width: fit-content;
+  margin: auto;
+}
+
+button mat-icon-button:hover{
+  cursor: pointer;
+}
+
