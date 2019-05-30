@@ -13,7 +13,7 @@ import {
   MatTabsModule,
   MatButtonModule, MatMenuModule
 } from '@angular/material';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LineaService} from './linea.service';
 
 import {LoginComponent} from './login.component';
@@ -45,7 +45,8 @@ const routes: Routes = [
     MatTabsModule,
     MatButtonModule,
     MatMenuModule,
-    RouterModule.forRoot(routes, {enableTracing: true})
+    RouterModule.forRoot(routes, {enableTracing: true}),
+    ReactiveFormsModule
   ],
   providers: [LineaService],
   bootstrap: [AppComponent]

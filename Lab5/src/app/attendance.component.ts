@@ -4,7 +4,7 @@ import {LineaService} from './linea.service';
 import {Linea} from './linea';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-attendance',
   templateUrl: './attendance.component.html',
   styleUrls: ['./attendance.component.css']
 })
