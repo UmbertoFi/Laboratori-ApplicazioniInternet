@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 
+
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatListModule,
@@ -20,6 +21,10 @@ import {LoginComponent} from './login.component';
 import {RegisterComponent} from './register.component';
 import {AttendanceComponent} from './attendance.component';
 import {RouterModule, Routes} from '@angular/router';
+import {UserService} from './_services';
+import { HttpClientModule } from '@angular/common/http';
+
+
 
 
 const routes: Routes = [
@@ -46,9 +51,10 @@ const routes: Routes = [
     MatButtonModule,
     MatMenuModule,
     RouterModule.forRoot(routes, {enableTracing: true}),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [LineaService],
+  providers: [LineaService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -94,7 +94,7 @@ export const LINE: Linea[] = [
           ]
         },
         {
-          data: '2019/05/30',
+          data: '2019/06/30',
           tratte: [
             {
               verso: 'andata',

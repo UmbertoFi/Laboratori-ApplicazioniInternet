@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from './_services';
+import { Router } from '@angular/router';
+import {first} from 'rxjs/operators';
+import {LineaService} from './linea.service';
+
 
 // import custom validator to validate that password and confirm password fields match
 
@@ -13,7 +18,9 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+              private userService: UserService,
+              private router: Router) { }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -36,7 +43,17 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value));
+    this.userService.register(this.registerForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          // this.alertService.success('Registration successful', true);
+          // this.router.navigate(['/login']);
+        },
+        error => {
+          // this.alertService.error(error);
+        });
+
   }
 }
 
