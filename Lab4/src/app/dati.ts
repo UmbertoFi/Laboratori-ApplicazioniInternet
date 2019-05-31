@@ -104,7 +104,7 @@ export const LINE: Linea[] = [
                 persone: [
                   {nome: 'Patrizia', selected: false},
                   {nome: 'Romano', selected: false},
-                  {nome: 'Massimo', selected: false},
+                  {nome: 'Marina', selected: false},
                   {nome: 'Natalia', selected: false}
                 ]
               },
