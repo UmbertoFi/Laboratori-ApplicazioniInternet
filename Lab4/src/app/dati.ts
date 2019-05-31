@@ -94,6 +94,95 @@ export const LINE: Linea[] = [
           ]
         },
         {
+          data: '2019/12/05',
+          tratte: [
+            {
+              verso: 'andata',
+              fermate: [{
+                nome: 'Piazza Mellano',
+                ora: '07.35',
+                persone: [
+                  {nome: 'Patrizia', selected: false},
+                  {nome: 'Romano', selected: false},
+                  {nome: 'Massimo', selected: false},
+                  {nome: 'Natalia', selected: false}
+                ]
+              },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '07.40',
+                  persone: [
+                    {nome: 'Giulia', selected: false},
+                    {nome: 'Francesca', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '07.50',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Irene', selected: false},
+                    {nome: 'Matteo', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '07.55',
+                  persone: [
+                    {nome: 'Federico', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Scuola',
+                  ora: '08.00',
+                  persone: []
+                }]
+            },
+            {
+              verso: 'ritorno',
+              fermate: [{
+                nome: 'Scuola',
+                ora: '13.30',
+                persone: []
+              },
+                {
+                  nome: 'Piazza XXV Aprile',
+                  ora: '13.35',
+                  persone: [
+                    {nome: 'Federico', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigo',
+                  ora: '13.40',
+                  persone: [
+                    {nome: 'Giacomo', selected: false},
+                    {nome: 'Irene', selected: false},
+                    {nome: 'Matteo', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Primo Alpini',
+                  ora: '13.45',
+                  persone: [
+                    {nome: 'Giulia', selected: false},
+                    {nome: 'Francesca', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza Mellano',
+                  ora: '13.50',
+                  persone: [
+                    {nome: 'Patrizia', selected: false},
+                    {nome: 'Romano', selected: false},
+                    {nome: 'Massimo', selected: false},
+                    {nome: 'Natalia', selected: false}
+                  ]
+                }]
+            }
+          ]
+        },
+        {
           data: '2019/05/30',
           tratte: [
             {
@@ -287,6 +376,103 @@ export const LINE: Linea[] = [
                     {nome: 'Maurizio', selected: false},
                     {nome: 'Mimmo', selected: false},
                     {nome: 'Laura', selected: false}
+                  ]
+                }]
+            }
+          ]
+        },
+        {
+          data: '2020/03/23',
+          tratte: [
+            {
+              verso: 'andata',
+              fermate: [{
+                nome: 'Piazza Pitagora',
+                ora: '07.40',
+                persone: [
+                  {nome: 'Sara', selected: false},
+                  {nome: 'Ginevra', selected: false},
+                  {nome: 'Renzo', selected: false}
+                ]
+              },
+                {
+                  nome: 'Piazza Castello',
+                  ora: '07.40',
+                  persone: [
+                    {nome: 'Luca', selected: false},
+                    {nome: 'Stefano', selected: false},
+                    {nome: 'Angelica', selected: false},
+                  ]
+                },
+                {
+                  nome: 'Via Milano',
+                  ora: '07.45',
+                  persone: [
+                    {nome: 'Marco', selected: false},
+                    {nome: 'Sergio', selected: false},
+                    {nome: 'Cristina', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Vigone',
+                  ora: '07.55',
+                  persone: [
+                    {nome: 'Kevin', selected: false},
+                    {nome: 'Christian', selected: false},
+                    {nome: 'Tommaso', selected: false},
+                    {nome: 'Andrea', selected: false},
+                    {nome: 'Rachele', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Scuola',
+                  ora: '08.00',
+                  persone: []
+                }]
+            },
+            {
+              verso: 'ritorno',
+              fermate: [{
+                nome: 'Scuola',
+                ora: '13.40',
+                persone: []
+              },
+                {
+                  nome: 'Via Vigone',
+                  ora: '13.45',
+                  persone: [
+                    {nome: 'Kevin', selected: false},
+                    {nome: 'Christian', selected: false},
+                    {nome: 'Tommaso', selected: false},
+                    {nome: 'Andrea', selected: false},
+                    {nome: 'Rachele', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Via Milano',
+                  ora: '13.50',
+                  persone: [
+                    {nome: 'Marco', selected: false},
+                    {nome: 'Sergio', selected: false},
+                    {nome: 'Cristina', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Piazza Castello',
+                  ora: '13.55',
+                  persone: [
+                    {nome: 'Luca', selected: false},
+                    {nome: 'Stefano', selected: false},
+                    {nome: 'Angelica', selected: false},
+                  ]
+                },
+                {
+                  nome: 'Piazza Pitagora',
+                  ora: '14.00',
+                  persone: [
+                    {nome: 'Sara', selected: false},
+                    {nome: 'Ginevra', selected: false},
+                    {nome: 'Renzo', selected: false}
                   ]
                 }]
             }
@@ -487,6 +673,106 @@ export const LINE: Linea[] = [
                   ora: '13.55',
                   persone: [
                     {nome: 'Maura', selected: false},
+                    {nome: 'Federico', selected: false},
+                    {nome: 'Giorgio', selected: false}
+                  ]
+                }]
+            }
+          ]
+        },
+        {
+          data: '2020/01/16',
+          tratte: [
+            {
+              verso: 'andata',
+              fermate: [{
+                nome: 'Porta Nuova',
+                ora: '08.05',
+                persone: [
+                  {nome: 'Dario', selected: false},
+                  {nome: 'Alberto', selected: false},
+                  {nome: 'Stefania', selected: false}
+                ]
+              },
+                {
+                  nome: 'Vittorio EmanueleII',
+                  ora: '08.10',
+                  persone: [
+                    {nome: 'Davide', selected: false},
+                    {nome: 'Marco', selected: false},
+                    {nome: 'Aida', selected: false},
+                    {nome: 'Luciano', selected: false},
+                    {nome: 'Valerio', selected: false},
+                  ]
+                },
+                {
+                  nome: 'Re Umberto',
+                  ora: '08.15',
+                  persone: [
+                    {nome: 'Valentina', selected: false},
+                    {nome: 'Sabrina', selected: false},
+                    {nome: 'Ivn', selected: false},
+                    {nome: 'Marilena', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Stati Uniti',
+                  ora: '08.20',
+                  persone: [
+                    {nome: 'Fabio', selected: false},
+                    {nome: 'Giovanni', selected: false},
+                    {nome: 'Piero', selected: false},
+                    {nome: 'Gino', selected: false},
+                    {nome: 'Carla', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Scuola',
+                  ora: '08.30',
+                  persone: []
+                }]
+            },
+            {
+              verso: 'ritorno',
+              fermate: [{
+                nome: 'Scuola',
+                ora: '13.35',
+                persone: []
+              },
+                {
+                  nome: 'Stati Uniti',
+                  ora: '13.40',
+                  persone: [
+                    {nome: 'Filippo', selected: false},
+                    {nome: 'Tommaso', selected: false},
+                    {nome: 'Loredana', selected: false},
+                    {nome: 'Alessia', selected: false},
+                    {nome: 'Ilaria', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Re Umberto',
+                  ora: '13.45',
+                  persone: [
+                    {nome: 'Sara', selected: false},
+                    {nome: 'Emanuele', selected: false},
+                    {nome: 'Cecilia', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Vittorio Emanuele II',
+                  ora: '13.50',
+                  persone: [
+                    {nome: 'Chiara', selected: false},
+                    {nome: 'Nicole', selected: false},
+                    {nome: 'Veronica', selected: false}
+                  ]
+                },
+                {
+                  nome: 'Porta Nuova',
+                  ora: '13.55',
+                  persone: [
+                    {nome: 'Yuri', selected: false},
                     {nome: 'Federico', selected: false},
                     {nome: 'Giorgio', selected: false}
                   ]
