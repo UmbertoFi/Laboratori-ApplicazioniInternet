@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
 
   }
 }
-
+//
 // custom validator to check that two fields match
 function MustMatch(controlName: string, matchingControlName: string) {
   return (formGroup: FormGroup) => {
