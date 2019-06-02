@@ -105,20 +105,20 @@ public class UserController {
     public @ResponseBody
     String postNuovoUser(@RequestBody RegisterDTO registerDTO) {
 
-        if (userService.getUserById(registerDTO.getUsername())!=null) {
+        if (userService.getUserById(registerDTO.getEmail())!=null) {
             return "utente già esistente";
         }
-        if (registerDTO.getPassword().compareTo(registerDTO.getPassword2()) != 0) {
+        if (registerDTO.getPassword().compareTo(registerDTO.getConfirmPassword()) != 0) {
             return "password diverse";
         }
 
-        if(checkValidPass(registerDTO.getPassword(), registerDTO.getPassword2())==false){
+        if(checkValidPass(registerDTO.getPassword(), registerDTO.getConfirmPassword())==false){
             return "password invalide";
         }
 
         String UUID = generateUUID();
         Utente u = Utente.builder()
-                .UserName(registerDTO.getUsername())
+                .UserName(registerDTO.getEmail())
                 //.Password(new BCryptPasswordEncoder(11).encode(registerDTO.getPassword()))
                 .Password(passwordEncoder.encode(registerDTO.getPassword()))
                 .token(UUID)
@@ -134,7 +134,8 @@ public class UserController {
 
 
         String body = "Gentilissimo, confermi di esserti registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/confirm/" + UUID;
-        email.sendSimpleMessage(registerDTO.getUsername(), "Benvenuto!", body);
+
+        email.sendSimpleMessage(registerDTO.getEmail(), "Benvenuto!", body);
 
         return "ok";
     }

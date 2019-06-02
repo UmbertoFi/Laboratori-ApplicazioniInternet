@@ -9,7 +9,7 @@ import {Linea} from './linea';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
-  title = 'Lab5';
+  title = 'Lab4';
 
   linee: Linea[];
 

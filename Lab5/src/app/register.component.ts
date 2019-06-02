@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-//
+    console.log('ci siamo');
     this.userService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(

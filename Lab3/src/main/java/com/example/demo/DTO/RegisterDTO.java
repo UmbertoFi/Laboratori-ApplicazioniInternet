@@ -8,11 +8,11 @@ import lombok.*;
 @Getter
 public class RegisterDTO {
 
-    private String username;
+    private String email;
 
     private String password;
 
-    private String password2;
+    private String confirmPassword;
 
 
 }
