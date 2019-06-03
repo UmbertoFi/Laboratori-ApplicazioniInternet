@@ -102,18 +102,19 @@ public class UserController {
 
 
     @PostMapping(path = "/register")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    String postNuovoUser(@RequestBody RegisterDTO registerDTO) {
+    void postNuovoUser(@RequestBody RegisterDTO registerDTO) {
 
         if (userService.getUserById(registerDTO.getEmail())!=null) {
-            return "utente già esistente";
+            throw new NotFoundException(); // "utente già esistente";
         }
         if (registerDTO.getPassword().compareTo(registerDTO.getConfirmPassword()) != 0) {
-            return "password diverse";
+            throw new NotFoundException(); // "password diverse";
         }
 
         if(checkValidPass(registerDTO.getPassword(), registerDTO.getConfirmPassword())==false){
-            return "password invalide";
+            throw new NotFoundException(); // "password invalide";
         }
 
         String UUID = generateUUID();
@@ -137,7 +138,6 @@ public class UserController {
 
         email.sendSimpleMessage(registerDTO.getEmail(), "Benvenuto!", body);
 
-        return "ok";
     }
 
 
