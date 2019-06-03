@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from './_services';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UserService, AlertService} from './_services';
+import {Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {LineaService} from './linea.service';
 
@@ -20,7 +20,9 @@ export class RegisterComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
-              private router: Router) { }
+              private alertService: AlertService,
+              private router: Router) {
+  }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -33,7 +35,9 @@ export class RegisterComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.registerForm.controls; }
+  get f() {
+    return this.registerForm.controls;
+  }
 
   onSubmit() {
     this.submitted = true;
@@ -47,15 +51,16 @@ export class RegisterComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          // this.alertService.success('Registration successful', true);
-           this.router.navigate(['/login']);
+          this.alertService.success('Registration successful', true);
+          this.router.navigate(['/login']);
         },
         error => {
-          // this.alertService.error(error);
+          this.alertService.error(error);
         });
 
   }
 }
+
 //
 // custom validator to check that two fields match
 function MustMatch(controlName: string, matchingControlName: string) {
@@ -70,7 +75,7 @@ function MustMatch(controlName: string, matchingControlName: string) {
 
     // set error on matchingControl if validation fails
     if (control.value !== matchingControl.value) {
-      matchingControl.setErrors({ mustMatch: true });
+      matchingControl.setErrors({mustMatch: true});
     } else {
       matchingControl.setErrors(null);
     }

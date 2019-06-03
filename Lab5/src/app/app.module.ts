@@ -23,6 +23,8 @@ import {AttendanceComponent} from './attendance.component';
 import {RouterModule, Routes} from '@angular/router';
 import {UserService} from './_services';
 import { HttpClientModule } from '@angular/common/http';
+import {AlertService} from './_services/alert.service';
+import {AlertComponent} from './_directives';
 
 
 
@@ -35,7 +37,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, RegisterComponent, AttendanceComponent
+    AppComponent, LoginComponent, RegisterComponent, AttendanceComponent, AlertComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +55,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [LineaService, UserService],
+  providers: [LineaService, UserService, AlertService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
