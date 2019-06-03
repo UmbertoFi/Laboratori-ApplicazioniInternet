@@ -1,5 +1,7 @@
 export class Prenotazione {
-  Persona: string;
-  fermata: string;
-  verso: string;
+  constructor(
+    public Persona: string,
+    public fermata: string,
+    public verso: string) {
+  }
 }

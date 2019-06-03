@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {PageEvent} from '@angular/material';
 import {LineaService} from './linea.service';
 import {Linea} from './linea';
+import {LINE} from './dati';
+import {UserService} from './_services';
+import {Prenotazione} from './_models';
 
 @Component({
   selector: 'app-attendance',
@@ -19,7 +22,7 @@ export class AttendanceComponent implements OnInit {
   pageIndex = 0;
   lineaSelezionataMenu = 0;
 
-  constructor(private lineaService: LineaService) {
+  constructor(private lineaService: LineaService, private userService: UserService) {
     this.getLinee();
   }
 
@@ -51,7 +54,21 @@ export class AttendanceComponent implements OnInit {
   }
 
   getLinee(): void {
-    this.linee = LineaService.getLinee();
+    // this.linee = LineaService.getLinee() e mettere static dall'altro lato
+
+    this.linee = this.lineaService.getLinee();
+    for(let l of this.linee) {
+      for(let c of l.corse){
+        for(let t of c.tratte){
+          for(let f of t.fermate){
+            for(let p of f.persone){
+              let prenotazione = new Prenotazione(p.nome,f.nome,t.verso);
+              this.userService.inserisciPrenotazione(prenotazione,l.nome,c.data).subscribe();
+            }
+          }
+        }
+      }
+    }
   }
 
   clickPersona($event: MouseEvent, verso, idFermata, idPersona) {

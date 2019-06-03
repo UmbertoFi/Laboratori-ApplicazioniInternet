@@ -32,9 +32,10 @@ export class UserService {
     return this.http.get<Linea[]>(`http://localhost:8080/lines`);
   }
 
-  inserisciPrenotazione(p : Prenotazione, ): Observable<Prenotazione>{
-    let url = 'http://localhost:8080/'+
-    return this.http.post<Prenotazione>(url);
+  inserisciPrenotazione(pren : Prenotazione, linea: string, data: string): Observable<Prenotazione>{
+    let url = 'http://localhost:8080/reservations/'+linea+'/'+data;
+    console.log(pren.Persona+' '+pren.verso+' '+pren.fermata);
+    return this.http.post<Prenotazione>(url, pren, this.httpOptions);
   }
 
 

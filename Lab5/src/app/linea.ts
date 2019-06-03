@@ -4,6 +4,7 @@ export class Linea {
 
   constructor(
     public nome: string,
-    public corse: Corsa[]) { }
+    public corse: Corsa[]) {
+  }
 
 }

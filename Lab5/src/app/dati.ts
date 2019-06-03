@@ -2,15 +2,15 @@ import {Linea} from './linea';
 
 export const LINE: Linea[] = [
     {
-      nome: '12',
+      nome: 'Santa_Rita-Politecnico',
       corse: [
         {
-          data: '2019/04/30',
+          data: '2019-04-30',
           tratte: [
             {
-              verso: 'andata',
+              verso: 'A',
               fermate: [{
-                nome: 'Piazza Mellano',
+                nome: '1',
                 ora: '07.35',
                 persone: [
                   {nome: 'Rebecca', selected: false},
@@ -20,7 +20,7 @@ export const LINE: Linea[] = [
                 ]
               },
                 {
-                  nome: 'Via Primo Alpini',
+                  nome: '2',
                   ora: '07.40',
                   persone: [
                     {nome: 'Giuseppe', selected: false},
@@ -28,7 +28,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Vigo',
+                  nome: '3',
                   ora: '07.50',
                   persone: [
                     {nome: 'Giacomo', selected: false},
@@ -37,34 +37,34 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Piazza XXV Aprile',
+                  nome: '4',
                   ora: '07.55',
                   persone: [
                     {nome: 'Angelo', selected: false}
                   ]
                 },
                 {
-                  nome: 'Scuola',
+                  nome: '5',
                   ora: '08.00',
                   persone: []
                 }]
             },
             {
-              verso: 'ritorno',
+              verso: 'R',
               fermate: [{
-                nome: 'Scuola',
+                nome: '5',
                 ora: '13.30',
                 persone: []
               },
                 {
-                  nome: 'Piazza XXV Aprile',
+                  nome: '4',
                   ora: '13.35',
                   persone: [
                     {nome: 'Angelo', selected: false}
                   ]
                 },
                 {
-                  nome: 'Via Vigo',
+                  nome: '3',
                   ora: '13.40',
                   persone: [
                     {nome: 'Giacomo', selected: false},
@@ -73,7 +73,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Primo Alpini',
+                  nome: '2',
                   ora: '13.45',
                   persone: [
                     {nome: 'Giuseppe', selected: false},
@@ -81,7 +81,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Piazza Mellano',
+                  nome: '1',
                   ora: '13.50',
                   persone: [
                     {nome: 'Rebecca', selected: false},
@@ -94,12 +94,12 @@ export const LINE: Linea[] = [
           ]
         },
         {
-          data: '2019/06/30',
+          data: '2019-06-30',
           tratte: [
             {
-              verso: 'andata',
+              verso: 'A',
               fermate: [{
-                nome: 'Piazza Mellano',
+                nome: '1',
                 ora: '07.35',
                 persone: [
                   {nome: 'Benedetta', selected: false},
@@ -112,7 +112,7 @@ export const LINE: Linea[] = [
                 ]
               },
                 {
-                  nome: 'Via Primo Alpini',
+                  nome: '2',
                   ora: '07.40',
                   persone: [
                     {nome: 'Giacomo', selected: false},
@@ -120,7 +120,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Vigo',
+                  nome: '3',
                   ora: '07.50',
                   persone: [
                     {nome: 'Isabel', selected: false},
@@ -129,7 +129,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Piazza XXV Aprile',
+                  nome: '4',
                   ora: '07.55',
                   persone: [
                     {nome: 'Shibo', selected: false},
@@ -137,20 +137,20 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Scuola',
+                  nome: '5',
                   ora: '08.00',
                   persone: []
                 }]
             },
             {
-              verso: 'ritorno',
+              verso: 'R',
               fermate: [{
-                nome: 'Scuola',
+                nome: '5',
                 ora: '13.30',
                 persone: []
               },
                 {
-                  nome: 'Piazza XXV Aprile',
+                  nome: '4',
                   ora: '13.35',
                   persone: [
                     {nome: 'Shibo', selected: false},
@@ -158,7 +158,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Vigo',
+                  nome: '3',
                   ora: '13.40',
                   persone: [
                     {nome: 'Isabel', selected: false},
@@ -167,7 +167,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Primo Alpini',
+                  nome: '2',
                   ora: '13.45',
                   persone: [
                     {nome: 'Giacomo', selected: false},
@@ -175,7 +175,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Piazza Mellano',
+                  nome: '1',
                   ora: '13.50',
                   persone: [
                     {nome: 'Benedetta', selected: false},
@@ -193,15 +193,15 @@ export const LINE: Linea[] = [
       ]
     },
     {
-      nome: '58',
+      nome: 'Marmolada-Politecnico',
       corse: [
         {
-          data: '2019/05/23',
+          data: '2019-05-23',
           tratte: [
             {
-              verso: 'andata',
+              verso: 'A',
               fermate: [{
-                nome: 'Piazza Pitagora',
+                nome: '13',
                 ora: '07.40',
                 persone: [
                   {nome: 'Maurizio', selected: false},
@@ -210,7 +210,7 @@ export const LINE: Linea[] = [
                 ]
               },
                 {
-                  nome: 'Piazza Castello',
+                  nome: '14',
                   ora: '07.40',
                   persone: [
                     {nome: 'Carlo', selected: false},
@@ -219,7 +219,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Milano',
+                  nome: '15',
                   ora: '07.45',
                   persone: [
                     {nome: 'Teresa', selected: false},
@@ -228,7 +228,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Vigone',
+                  nome: '16',
                   ora: '07.55',
                   persone: [
                     {nome: 'Shibo', selected: false},
@@ -239,20 +239,20 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Scuola',
+                  nome: '17',
                   ora: '08.00',
                   persone: []
                 }]
             },
             {
-              verso: 'ritorno',
+              verso: 'R',
               fermate: [{
-                nome: 'Scuola',
+                nome: '17',
                 ora: '13.40',
                 persone: []
               },
                 {
-                  nome: 'Via Vigone',
+                  nome: '16',
                   ora: '13.45',
                   persone: [
                     {nome: 'Shibo', selected: false},
@@ -263,7 +263,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Milano',
+                  nome: '15',
                   ora: '13.50',
                   persone: [
                     {nome: 'Teresa', selected: false},
@@ -272,7 +272,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Piazza Castello',
+                  nome: '14',
                   ora: '13.55',
                   persone: [
                     {nome: 'Carlo', selected: false},
@@ -281,7 +281,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Piazza Pitagora',
+                  nome: '13',
                   ora: '14.00',
                   persone: [
                     {nome: 'Maurizio', selected: false},
@@ -293,12 +293,12 @@ export const LINE: Linea[] = [
           ]
         },
         {
-          data: '2019/07/20',
+          data: '2019-07-20',
           tratte: [
             {
-              verso: 'andata',
+              verso: 'A',
               fermate: [{
-                nome: 'Piazza Pitagora',
+                nome: '13',
                 ora: '07.40',
                 persone: [
                   {nome: 'Benedetta', selected: false},
@@ -311,7 +311,7 @@ export const LINE: Linea[] = [
                 ]
               },
                 {
-                  nome: 'Piazza Castello',
+                  nome: '14',
                   ora: '07.45',
                   persone: [
                     {nome: 'Giacomo', selected: false},
@@ -319,7 +319,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Milano',
+                  nome: '15',
                   ora: '07.50',
                   persone: [
                     {nome: 'Isabel', selected: false},
@@ -328,7 +328,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Vigone',
+                  nome: '16',
                   ora: '07.55',
                   persone: [
                     {nome: 'Shibo', selected: false},
@@ -336,20 +336,20 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Scuola',
+                  nome: '17',
                   ora: '08.00',
                   persone: []
                 }]
             },
             {
-              verso: 'ritorno',
+              verso: 'R',
               fermate: [{
-                nome: 'Scuola',
+                nome: '17',
                 ora: '13.40',
                 persone: []
               },
                 {
-                  nome: 'Via Vigone',
+                  nome: '16',
                   ora: '13.45',
                   persone: [
                     {nome: 'Shibo', selected: false},
@@ -357,7 +357,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Via Milano',
+                  nome: '15',
                   ora: '13.50',
                   persone: [
                     {nome: 'Isabel', selected: false},
@@ -366,7 +366,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Piazza Castello',
+                  nome: '14',
                   ora: '13.55',
                   persone: [
                     {nome: 'Giacomo', selected: false},
@@ -374,7 +374,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Piazza Pitagora',
+                  nome: '13',
                   ora: '14.00',
                   persone: [
                     {nome: 'Benedetta', selected: false},
@@ -392,15 +392,15 @@ export const LINE: Linea[] = [
       ]
     },
     {
-      nome: '33',
+      nome: 'Porta_Nuova-Politecnico',
       corse: [
         {
-          data: '2019/05/27',
+          data: '2019-05-27',
           tratte: [
             {
-              verso: 'andata',
+              verso: 'A',
               fermate: [{
-                nome: 'Porta Nuova',
+                nome: '8',
                 ora: '08.05',
                 persone: [
                   {nome: 'Antonino', selected: false},
@@ -409,7 +409,7 @@ export const LINE: Linea[] = [
                 ]
               },
                 {
-                  nome: 'Vittorio EmanueleII',
+                  nome: '9',
                   ora: '08.10',
                   persone: [
                     {nome: 'Christian', selected: false},
@@ -420,7 +420,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Re Umberto',
+                  nome: '10',
                   ora: '08.15',
                   persone: [
                     {nome: 'Francesco', selected: false},
@@ -430,7 +430,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Stati Uniti',
+                  nome: '11',
                   ora: '08.20',
                   persone: [
                     {nome: 'Kevin', selected: false},
@@ -441,20 +441,20 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Scuola',
+                  nome: '12',
                   ora: '08.30',
                   persone: []
                 }]
             },
             {
-              verso: 'ritorno',
+              verso: 'R',
               fermate: [{
-                nome: 'Scuola',
+                nome: '12',
                 ora: '13.35',
                 persone: []
               },
                 {
-                  nome: 'Stati Uniti',
+                  nome: '11',
                   ora: '13.40',
                   persone: [
                     {nome: 'Filippo', selected: false},
@@ -465,7 +465,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Re Umberto',
+                  nome: '10',
                   ora: '13.45',
                   persone: [
                     {nome: 'Dario', selected: false},
@@ -474,7 +474,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Vittorio Emanuele II',
+                  nome: '9',
                   ora: '13.50',
                   persone: [
                     {nome: 'Diana', selected: false},
@@ -483,7 +483,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Porta Nuova',
+                  nome: '8',
                   ora: '13.55',
                   persone: [
                     {nome: 'Maura', selected: false},
@@ -495,12 +495,12 @@ export const LINE: Linea[] = [
           ]
         },
         {
-          data: '2019/09/29',
+          data: '2019-09-29',
           tratte: [
             {
-              verso: 'andata',
+              verso: 'A',
               fermate: [{
-                nome: 'Porta Nuova',
+                nome: '8',
                 ora: '08.05',
                 persone: [
                   {nome: 'Silvia', selected: false},
@@ -509,7 +509,7 @@ export const LINE: Linea[] = [
                 ]
               },
                 {
-                  nome: 'Vittorio Emanuele II',
+                  nome: '9',
                   ora: '08.10',
                   persone: [
                     {nome: 'Alessandro', selected: false},
@@ -520,7 +520,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Re Umberto',
+                  nome: '10',
                   ora: '08.15',
                   persone: [
                     {nome: 'Francesca', selected: false},
@@ -530,7 +530,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Stati Uniti',
+                  nome: '11',
                   ora: '08.20',
                   persone: [
                     {nome: 'Kevin', selected: false},
@@ -541,20 +541,20 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Scuola',
+                  nome: '12',
                   ora: '08.30',
                   persone: []
                 }]
             },
             {
-              verso: 'ritorno',
+              verso: 'R',
               fermate: [{
-                nome: 'Scuola',
+                nome: '12',
                 ora: '13.35',
                 persone: []
               },
                 {
-                  nome: 'Stati Uniti',
+                  nome: '11',
                   ora: '13.40',
                   persone: [
                     {nome: 'Filippo', selected: false},
@@ -564,7 +564,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Re Umberto',
+                  nome: '10',
                   ora: '13.45',
                   persone: [
                     {nome: 'Martina', selected: false},
@@ -573,7 +573,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Vittorio Emanuele II',
+                  nome: '9',
                   ora: '13.50',
                   persone: [
                     {nome: 'Debora', selected: false},
@@ -582,7 +582,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Porta Nuova',
+                  nome: '8',
                   ora: '13.55',
                   persone: [
                     {nome: 'Alessio', selected: false},
@@ -594,12 +594,12 @@ export const LINE: Linea[] = [
           ]
         },
         {
-          data: '2019/11/31',
+          data: '2019-11-21',
           tratte: [
             {
-              verso: 'andata',
+              verso: 'A',
               fermate: [{
-                nome: 'Porta Nuova',
+                nome: '8',
                 ora: '08.05',
                 persone: [
                   {nome: 'Stefano', selected: false},
@@ -609,7 +609,7 @@ export const LINE: Linea[] = [
                 ]
               },
                 {
-                  nome: 'Vittorio Emanuele II',
+                  nome: '9',
                   ora: '08.10',
                   persone: [
                     {nome: 'Leonardo', selected: false},
@@ -620,7 +620,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Re Umberto',
+                  nome: '10',
                   ora: '08.15',
                   persone: [
                     {nome: 'Manuela', selected: false},
@@ -630,7 +630,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Stati Uniti',
+                  nome: '11',
                   ora: '08.20',
                   persone: [
                     {nome: 'Kevin', selected: false},
@@ -641,20 +641,20 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Scuola',
+                  nome: '12',
                   ora: '08.30',
                   persone: []
                 }]
             },
             {
-              verso: 'ritorno',
+              verso: 'R',
               fermate: [{
-                nome: 'Scuola',
+                nome: '12',
                 ora: '13.35',
                 persone: []
               },
                 {
-                  nome: 'Stati Uniti',
+                  nome: '11',
                   ora: '13.40',
                   persone: [
                     {nome: 'Angelo', selected: false},
@@ -664,7 +664,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Re Umberto',
+                  nome: '10',
                   ora: '13.45',
                   persone: [
                     {nome: 'Davide', selected: false},
@@ -673,7 +673,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Vittorio Emanuele II',
+                  nome: '9',
                   ora: '13.50',
                   persone: [
                     {nome: 'Diana', selected: false},
@@ -685,7 +685,7 @@ export const LINE: Linea[] = [
                   ]
                 },
                 {
-                  nome: 'Porta Nuova',
+                  nome: '8',
                   ora: '13.55',
                   persone: [
                     {nome: 'Anna', selected: false},
