@@ -96,7 +96,7 @@ public class UserController {
 
             return ok(model);
         } catch (AuthenticationException e) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException("");
         }
     }
 
@@ -107,14 +107,14 @@ public class UserController {
     void postNuovoUser(@RequestBody RegisterDTO registerDTO) {
 
         if (userService.getUserById(registerDTO.getEmail())!=null) {
-            throw new NotFoundException(); // "utente già esistente";
+            throw new NotFoundException("utente già esistente");
         }
         if (registerDTO.getPassword().compareTo(registerDTO.getConfirmPassword()) != 0) {
-            throw new NotFoundException(); // "password diverse";
+            throw new NotFoundException("password diverse");
         }
 
         if(checkValidPass(registerDTO.getPassword(), registerDTO.getConfirmPassword())==false){
-            throw new NotFoundException(); // "password invalide";
+            throw new NotFoundException("password invalide");
         }
 
         String UUID = generateUUID();
@@ -147,12 +147,12 @@ public class UserController {
     void confirmNuovoUser(@PathVariable("randomUUID") String randomUUID) {
         Utente u = userService.getToken(randomUUID);
         if (u == null) {
-            throw new NotFoundException();
+            throw new NotFoundException("utente non valido");
         }
         Date now = new Date();
         long diff = now.getTime() - u.getExpiredToken().getTime();
         if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione
-            throw new NotFoundException();
+            throw new NotFoundException("token scaduto");
         u.setEnabled(true);
         userService.save(u);
 
@@ -192,7 +192,9 @@ public class UserController {
                 userService.save(utente);
                 String body = "Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì clicca il seguente link per modificare la tua password http://localhost:8080/recover/" + UUID;
                 email.sendSimpleMessage(usernameDTO.getUsername(), "Password Recovery!", body);
+                return;
             }
+            throw new NotFoundException("token scaduto o invalido");
         }
     }
 
@@ -217,7 +219,7 @@ public class UserController {
             return usersList;
 
         }
-        throw new UnauthorizedException();
+        throw new UnauthorizedException("errore");
     }
 
 
@@ -245,14 +247,14 @@ public class UserController {
                     utenteRuoloService.save(nuovoRuolo);
                     return;
                 }
-                throw  new NotFoundException();
+                throw  new NotFoundException("errore");
             } else {
                 UtenteRuolo utenteRuolo = utenteRuoloService.getUtenteRuolo(userID, modificaRuoloDTO.getLinea());
                 if (utenteRuolo != null) {
                     utenteRuoloService.deleteOne(utenteRuolo);
                     return;
                 }
-                throw  new NotFoundException();
+                throw  new NotFoundException("errore");
             }
         }else if(ru.contains("admin") ){
 
@@ -275,19 +277,19 @@ public class UserController {
                         utenteRuoloService.save(nuovoRuolo);
                         return;
                     }
-                    throw  new NotFoundException();
+                    throw  new NotFoundException("errore");
                 } else {
                     UtenteRuolo utenteRuolo2 = utenteRuoloService.getUtenteRuolo(userID, modificaRuoloDTO.getLinea());
                     if (utenteRuolo2 != null) {
                         utenteRuoloService.deleteOne(utenteRuolo2);
                         return;
                     }
-                    throw  new NotFoundException();
+                    throw  new NotFoundException("errore");
                 }
 
             }
         }
-        throw  new UnauthorizedException();
+        throw  new UnauthorizedException("non autorizzato");
 
 }
 

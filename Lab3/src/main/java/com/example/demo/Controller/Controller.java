@@ -5,10 +5,13 @@ import com.example.demo.Entity.Fermata;
 import com.example.demo.Entity.Linea;
 import com.example.demo.Entity.Prenotazione;
 import com.example.demo.Entity.idPrenotazione;
+import com.example.demo.Exception.BadRequestException;
+import com.example.demo.Exception.NotFoundException;
 import com.example.demo.Service.FermataService;
 import com.example.demo.Service.LineaService;
 import com.example.demo.Service.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.*;
@@ -153,7 +156,7 @@ public class Controller {
 
     @PostMapping(path = "/reservations/{nome_linea}/{date}")
     public @ResponseBody
-    String postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
+    IdPrenotazioneDTO postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
                                  @PathVariable("date") String date,
                                  @RequestBody PrenotazioneDTO prenotazioneDTO) {
 
@@ -178,14 +181,15 @@ public class Controller {
 
             prenotazioneService.save(p);
             f.get().getPrenotazioni().add(p);
-            return iP.toString();
+            return IdPrenotazioneDTO.builder().id(iP.toString()).build();
         }
-        return "errore";
+        throw new NotFoundException("errore nella prenotazione");
     }
 
     @PutMapping(path = "/reservations/{nome_linea}/{date}/{reservation_id}")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    String updatePrenotazione(@PathVariable("nome_linea") String nomeLinea,
+    void updatePrenotazione(@PathVariable("nome_linea") String nomeLinea,
                               @PathVariable("date") String date,
                               @PathVariable("reservation_id") String res_id,
                               @RequestBody PrenotazioneDTO prenotazioneDTO) {
@@ -208,16 +212,17 @@ public class Controller {
             if (f.isPresent()) {
                 p.get().setFermata(f.get());
                 prenotazioneService.save(p.get());
-                return "aggiornamento fatto!";
+                return;
             }
         }
 
-        return "errore!";
+        throw new BadRequestException("errore nella modifica ");
     }
 
     @DeleteMapping(path = "/reservations/{nome_linea}/{date}/{reservation_id}")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    String deletePrenotazione(@PathVariable("nome_linea") String nomeLinea,
+    void deletePrenotazione(@PathVariable("nome_linea") String nomeLinea,
                               @PathVariable("date") String date,
                               @PathVariable("reservation_id") String res_id) {
 
@@ -234,9 +239,8 @@ public class Controller {
         Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
         if (p.isPresent()) {
             prenotazioneService.deleteOne(p.get());
-            return "cancellazione fatta!";
+            return ;
         }
-
-        return "errore!";
+        throw new BadRequestException("errore nella cancellazione");
     }
 }

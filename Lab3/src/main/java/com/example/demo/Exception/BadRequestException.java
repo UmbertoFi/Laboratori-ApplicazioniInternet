@@ -3,10 +3,10 @@ package com.example.demo.Exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class NotFoundException extends RuntimeException {
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+public class BadRequestException extends RuntimeException {
 
-    public NotFoundException(String msg){
+    public BadRequestException(String msg){
         super(msg);
     }
 

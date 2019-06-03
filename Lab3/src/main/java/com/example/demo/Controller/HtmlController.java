@@ -25,32 +25,33 @@ public class HtmlController {
     PasswordEncoder passwordEncoder;
 
     @GetMapping("recover/{randomUUID}")
-    public String register(@PathVariable("randomUUID") String randomUUID) {
+    @ResponseStatus(HttpStatus.OK)
+    public void register(@PathVariable("randomUUID") String randomUUID) {
 
         Utente u = userService.getTokenForRecovery(randomUUID);
         Date now = new Date();
         long diff = now.getTime() - u.getExpiredToken().getTime();
         if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione=1 h=3600000 ms
-            throw new NotFoundException();
-        return "recover";
+            throw new NotFoundException("token di registrazione scaduto o invalido");
+        return;
     }
 
     @PostMapping("recover/{randomUUID}")
     @ResponseStatus(HttpStatus.OK)
     public void confirmRegister(@PathVariable("randomUUID") String randomUUID, @Valid RecoveryVM vm, Model m) {
         if(checkValidPass(vm.getPass1(),vm.getPass2())==false){
-            throw new NotFoundException();
+            throw new NotFoundException("errore");
         }
         if (vm.getPass1().compareTo(vm.getPass2()) != 0) {
             m.addAttribute("msgPass2", "La password non coincide con la precedente!");
-            throw new NotFoundException();
+            throw new NotFoundException("errore");
         }
 
         Utente u = userService.getTokenForRecovery(randomUUID);
         Date now = new Date();
         long diff = now.getTime() - u.getExpiredToken().getTime();
         if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione
-            throw new NotFoundException();
+            throw new NotFoundException("errore");
         u.setExpiredcredential(true);
         u.setPassword(passwordEncoder.encode(vm.getPass1()));
         userService.save(u);

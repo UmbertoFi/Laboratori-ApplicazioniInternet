@@ -28,6 +28,7 @@ public class Fermata {
     private Linea linea;
     private String ora_andata;
     private String ora_ritorno;
+    @Builder.Default
     @OneToMany(mappedBy = "fermata", cascade = CascadeType.ALL)
     private List<Prenotazione> prenotazioni = new ArrayList<Prenotazione>();
 
