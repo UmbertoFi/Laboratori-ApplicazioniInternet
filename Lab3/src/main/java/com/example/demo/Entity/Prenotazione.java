@@ -22,6 +22,7 @@ public class Prenotazione {
     @ManyToOne
     @JoinColumn(name = "id_fermata")
     private Fermata fermata;
+    private boolean presente;
 
     @Override
     public boolean equals(Object o) {

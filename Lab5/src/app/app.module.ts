@@ -22,11 +22,11 @@ import {RegisterComponent} from './register.component';
 import {AttendanceComponent} from './attendance.component';
 import {RouterModule, Routes} from '@angular/router';
 import {UserService} from './_services';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AlertService} from './_services/alert.service';
 import {AlertComponent} from './_directives';
-
-
+import {AuthenticationService} from './_services/authentication.service';
+import {JwtInterceptor} from './jwt.interceptor';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -55,7 +55,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [LineaService, UserService, AlertService],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}, LineaService, UserService, AlertService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -172,6 +172,7 @@ public class Controller {
 
             Prenotazione p = Prenotazione.builder()
                     .fermata(f.get())
+                    .presente(false)
                     .id(iP)
                     .build();
 
