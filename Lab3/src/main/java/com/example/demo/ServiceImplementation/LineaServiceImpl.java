@@ -32,4 +32,8 @@ public class LineaServiceImpl implements LineaService {
         return lineaRepository.findAll();
     }
 
+    public Linea getLinea(String line){
+        return lineaRepository.findByNome(line);
+    }
+
 }

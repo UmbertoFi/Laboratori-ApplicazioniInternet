@@ -10,4 +10,6 @@ public interface LineaService {
     public void save(LineaDTO l);
 
     public Iterable<Linea> getLines();
+
+    public Linea getLinea(String line);
 }
