@@ -13,7 +13,7 @@ import {map} from 'rxjs/operators';
 })
 export class AppComponent {
   title = 'angular-router';
-  linee: LineaDB[];
+  // linee: LineaDB[];
   constructor(
     private userService: UserService) {}
 

@@ -3,8 +3,9 @@ import {PageEvent} from '@angular/material';
 import {LineaService} from './linea.service';
 import {Linea} from './linea';
 import {LINE} from './dati';
-import {UserService} from './_services';
+import {AlertService, AuthenticationService, UserService} from './_services';
 import {Prenotazione} from './_models';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-attendance',
@@ -12,7 +13,7 @@ import {Prenotazione} from './_models';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
-  title = 'Lab4';
+  title = 'Lab5';
 
   linee: Linea[];
 
@@ -22,7 +23,7 @@ export class AttendanceComponent implements OnInit {
   pageIndex = 0;
   lineaSelezionataMenu = 0;
 
-  constructor(private lineaService: LineaService, private userService: UserService) {
+  constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
     this.getLinee();
   }
 
@@ -57,13 +58,13 @@ export class AttendanceComponent implements OnInit {
     // this.linee = LineaService.getLinee() e mettere static dall'altro lato
 
     this.linee = this.lineaService.getLinee();
-    for(let l of this.linee) {
-      for(let c of l.corse){
-        for(let t of c.tratte){
-          for(let f of t.fermate){
-            for(let p of f.persone){
-              let prenotazione = new Prenotazione(p.nome,f.nome,t.verso);
-              this.userService.inserisciPrenotazione(prenotazione,l.nome,c.data).subscribe();
+    for (let l of this.linee) {
+      for (let c of l.corse) {
+        for (let t of c.tratte) {
+          for (let f of t.fermate) {
+            for (let p of f.persone) {
+              let prenotazione = new Prenotazione(p.nome, f.nome, t.verso);
+              this.userService.inserisciPrenotazione(prenotazione, l.nome, c.data).subscribe();
             }
           }
         }
@@ -128,6 +129,12 @@ export class AttendanceComponent implements OnInit {
   selezionaCorsaPaginator(pageEvent: PageEvent) {
     this.pageIndex = pageEvent.pageIndex;
     return this.pageEvent;
+  }
+
+  logout($event: MouseEvent) {
+    this.authenticationService.logout();
+    this.alertService.success('Logout effettuato', true);
+    this.router.navigate(['/login']);
   }
 }
 

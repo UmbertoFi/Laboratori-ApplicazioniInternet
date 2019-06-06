@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Prenotazione, User} from '../_models';
 import {Observable} from 'rxjs';
 import {Linea} from '../linea';
+import {checkUsername} from '../checkUsername';
 
 @Injectable()
 export class UserService {
@@ -39,4 +40,8 @@ export class UserService {
   }
 
 
+  notPresent(controlName: string): Observable<checkUsername>{
+    let checkUsernameResponse = this.http.get<checkUsername>(`http://localhost:8080/utility/checkUsername/`+controlName);
+    return checkUsernameResponse;
+  }
 }

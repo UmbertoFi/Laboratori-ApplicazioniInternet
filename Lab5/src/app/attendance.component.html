@@ -1,4 +1,9 @@
 <!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:right">
+  <button (click)="logout($event)">
+    Logout
+  </button>
+</div>
 <div style="text-align:center">
   <h1>
     {{ title }}
@@ -60,6 +65,17 @@
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
+  <mat-card-footer id="listaBambini">
+    <mat-form-field>
+      <mat-label>Bambini</mat-label>
+      <mat-select>
+        <!-- Modificarlo ricevendo la lista dei bambini dal server -->
+        <mat-option *ngFor="let linea of linee">
+          {{linea.nome}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card-footer>
 </mat-card>
 
 

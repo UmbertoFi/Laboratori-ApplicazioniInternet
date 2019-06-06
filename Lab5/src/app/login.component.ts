@@ -21,6 +21,10 @@ export class LoginComponent implements OnInit {
     private alertService: AlertService) {}
 
   ngOnInit() {
+    if(localStorage.getItem('access_token')!=null) {
+      this.alertService.error("Utente già loggato! Premere Logout per effettuare altre operazioni!", true);
+      this.router.navigate(['/attendance']);
+    }
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]

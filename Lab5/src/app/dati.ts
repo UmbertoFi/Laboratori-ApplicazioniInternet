@@ -1,6 +1,6 @@
 import {Linea} from './linea';
 
-/* export const LINE: Linea[] = [
+export const LINE: Linea[] = [
     {
       nome: 'Santa_Rita-Politecnico',
       corse: [
@@ -698,4 +698,4 @@ import {Linea} from './linea';
         }
       ]
     }
-]; */
+];

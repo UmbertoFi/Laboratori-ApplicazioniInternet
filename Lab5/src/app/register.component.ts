@@ -4,6 +4,8 @@ import {UserService, AlertService} from './_services';
 import {Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {LineaService} from './linea.service';
+import {Linea} from './linea';
+import {User} from './_models';
 
 
 // import custom validator to validate that password and confirm password fields match
@@ -25,12 +27,16 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('access_token') != null) {
+      this.alertService.error('Utente già loggato! Premere Logout per effettuare altre operazioni!', true);
+      this.router.navigate(['/attendance']);
+    }
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, {
-      validator: MustMatch('password', 'confirmPassword')
+      validators: [MustMatch('password', 'confirmPassword')]
     });
   }
 
@@ -57,8 +63,12 @@ export class RegisterComponent implements OnInit {
         error => {
           this.alertService.error(error);
         });
-
   }
+
+  onChange() {
+    notPresent(this.userService, this.registerForm);
+  }
+
 }
 
 //
@@ -81,3 +91,16 @@ function MustMatch(controlName: string, matchingControlName: string) {
     }
   };
 }
+
+function notPresent(userService: UserService, registerForm: FormGroup) {
+  let checkUsernameResponse = userService.notPresent(registerForm.controls['email'].value)
+    .subscribe(val => {
+      if(val.available==false) {    // CAMBIARE LOGICA TRUE/FALSE
+        registerForm.controls['email'].setErrors({notPresent: true})
+      } else {
+        registerForm.controls['email'].setErrors(null);
+      }
+    });
+}
+
+
