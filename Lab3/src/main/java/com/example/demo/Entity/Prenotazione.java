@@ -42,8 +42,8 @@ public class Prenotazione {
     public PrenotatoDTO convertToDTO() {
 
         PrenotatoDTO p = PrenotatoDTO.builder()
-                .persona(this.getId().getPersona())
-                .data(this.getId().getData())
+                .id_bambino(this.getId().getId_bambino())
+                .data(this.getId().getLocalData())
                 .verso(this.getId().getVerso())
                 .id_fermata(this.getFermata().getId())
                 .build();

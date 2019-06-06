@@ -1,7 +1,10 @@
 package com.example.demo;
 
-import com.example.demo.DTO.LineaDTO;
+import com.example.demo.DTO.*;
+import com.example.demo.Repository.FermataRepository;
 import com.example.demo.Service.LineaService;
+import com.example.demo.Service.PrenotazioneService;
+import com.example.demo.Service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,6 +24,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 
 @SpringBootApplication
 @EnableTransactionManagement
@@ -51,9 +55,10 @@ public class DemoApplication {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+
     //
     @Bean
-    CommandLineRunner runner(LineaService ls) {
+    CommandLineRunner runner(LineaService ls, UserService us, PrenotazioneService ps, FermataRepository fs) {
         return args -> {
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -64,6 +69,11 @@ public class DemoApplication {
                     LineaDTO linea = mapper.readValue(ResourceUtils.getFile("classpath:json/" + r.getFilename()), LineaDTO.class);
                     ls.save(linea);
                 }
+                ListaUtentiDTO utenti = mapper.readValue(ResourceUtils.getFile("classpath:json_new/utenti.json"), ListaUtentiDTO.class);
+                for(UtenteDTO u : utenti.getUtenti())
+                    us.save(u.convertToEntity());
+                PrenotatoDTO prenotazione = mapper.readValue(ResourceUtils.getFile("classpath:json_new/prenotazioni.json"), PrenotatoDTO.class);
+                ps.save(prenotazione.convertToEntity(fs));
             } catch (Exception e) {
                 System.out.println("Impossibile salvare la linea: ");
                 e.printStackTrace();

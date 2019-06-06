@@ -1,14 +1,14 @@
 package com.example.demo.Controller;
 
 
-import com.example.demo.DTO.IdPrenotazioneDTO;
-import com.example.demo.DTO.PrenotazioneDTO;
-import com.example.demo.DTO.UsernameDTO;
+import com.example.demo.DTO.*;
 import com.example.demo.Entity.Fermata;
 import com.example.demo.Entity.Linea;
+import com.example.demo.Entity.Prenotazione;
 import com.example.demo.Entity.Utente;
 import com.example.demo.Service.FermataService;
 import com.example.demo.Service.LineaService;
+import com.example.demo.Service.PrenotazioneService;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,10 @@ public class UtilityController {
     @Autowired
     FermataService fermataService;
 
-    @PostMapping(path = "/utility/checkUsername")
+    @Autowired
+    PrenotazioneService prenotazioneService;
+
+    @GetMapping(path = "/utility/checkUsername")
     public @ResponseBody
     ResponseEntity checkUsername(@RequestBody UsernameDTO usernameDTO) {
 
@@ -57,7 +60,7 @@ public class UtilityController {
 
     }
 
-    @GetMapping(path = "/utility/{nome_linea}")
+    @GetMapping(path = "/utility/linea/{nome_linea}")
     public @ResponseBody
     ResponseEntity convertNomeLinea(@PathVariable("nome_linea") String nomeLinea) {
 
@@ -75,7 +78,7 @@ public class UtilityController {
 
     }
 
-    @GetMapping(path = "/utility/{n_fermata}")
+    @GetMapping(path = "/utility/fermata/{n_fermata}")
     public @ResponseBody
     ResponseEntity convertNumFermata(@PathVariable("n_fermata") String nfermata) {
 
@@ -92,6 +95,20 @@ public class UtilityController {
 
         return ok(model);
 
+    }
+
+    @GetMapping(path = "/utility/linea")
+    public @ResponseBody
+    PrenotazioniClientDTO getLinea() {
+       /* PrenotazioniClientDTO out=new PrenotazioniClientDTO();
+        Iterable<Prenotazione>p=prenotazioneService.getPrenotazioni();
+        while(p.iterator().hasNext()){
+            Prenotazione pre=p.iterator().next();
+            PersoneDTO personeDTO=PersoneDTO.builder().id_bambino(pre.getId().getId_bambino())
+            pre.
+            out.getPrenotazioni().
+        }*/
+        return null;
     }
 
 

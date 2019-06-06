@@ -16,7 +16,7 @@ import java.util.Date;
 @Setter
 @Getter
 public class idPrenotazione implements Serializable {
-    private String persona;
+    private int id_bambino;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate data;
     private String verso;
@@ -24,7 +24,7 @@ public class idPrenotazione implements Serializable {
     @Override
     public String toString() {
 
-        return persona + '_' + data.getYear() + "-" + data.getMonthValue() + "-" + data.getDayOfMonth() + '_' + verso;
+        return id_bambino + '_' + data.getYear() + "-" + data.getMonthValue() + "-" + data.getDayOfMonth() + '_' + verso;
     }
 
     @Override
@@ -35,5 +35,9 @@ public class idPrenotazione implements Serializable {
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+
+    public String getLocalData() {
+        return this.data.getYear()+"-"+this.data.getMonth()+"-"+this.data.getDayOfMonth();
     }
 }

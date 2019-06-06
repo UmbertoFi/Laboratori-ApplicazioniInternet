@@ -1,7 +1,12 @@
 <!--The content below is only a placeholder and can be replaced.-->
+<nav id="router">
+  <a routerLink="/login">Login</a><br>
+  <a routerLink="/register">Registrazione</a><br>
+  <a routerLink="/attendance">Presenze</a><br>
+</nav>
 <alert></alert>
 <router-outlet></router-outlet>
 
 
 <!-- Ciò che viene scritto qui, fuori da router-outlet, sarà in comune per tutti i component -->
-<li *ngFor="let linea of linee">{{linea.nome}}</li>
+<!-- <li *ngFor="let linea of linee">{{linea.nome}}</li> -->
