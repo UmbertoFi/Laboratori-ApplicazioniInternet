@@ -3,8 +3,10 @@ package com.example.demo.Entity;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -34,6 +36,9 @@ public class Utente {
     private Boolean expiredcredential;
 
     private Boolean enabled;
+    @Builder.Default
+    @OneToMany(mappedBy = "genitore", cascade = CascadeType.ALL)
+    private List<Bambino> bambini = new ArrayList<Bambino>();
 
     public List<String> getRoles() {
         List<String> ruoli = new ArrayList<>();

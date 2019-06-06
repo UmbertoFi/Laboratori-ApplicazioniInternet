@@ -1,5 +1,7 @@
 package com.example.demo.DTO;
 
+import com.example.demo.Entity.Prenotazione;
+import com.example.demo.Entity.idPrenotazione;
 import lombok.*;
 
 @Builder(toBuilder = true)
@@ -7,7 +9,7 @@ import lombok.*;
 @Getter
 public class PrenotazioneDTO {
 
-    private String Persona;
+    private int id_bambino;
     private String fermata;
     private String verso;
 }

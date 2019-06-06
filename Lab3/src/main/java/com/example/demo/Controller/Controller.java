@@ -7,6 +7,7 @@ import com.example.demo.Entity.Prenotazione;
 import com.example.demo.Entity.idPrenotazione;
 import com.example.demo.Exception.BadRequestException;
 import com.example.demo.Exception.NotFoundException;
+import com.example.demo.Service.BambinoService;
 import com.example.demo.Service.FermataService;
 import com.example.demo.Service.LineaService;
 import com.example.demo.Service.PrenotazioneService;
@@ -28,6 +29,9 @@ public class Controller {
 
     @Autowired
     private PrenotazioneService prenotazioneService;
+
+    @Autowired
+    private BambinoService bambinoService;
 
 
     @GetMapping(path = "/lines")
@@ -94,7 +98,7 @@ public class Controller {
             List<String> persone = new ArrayList<>();
             for (Prenotazione p1 : prenotazioni_A) {
                 if (p1.getFermata().getId() == f2.getId()) {
-                    persone.add(p1.getId().getPersona());
+                    persone.add(bambinoService.getNome(p1.getId().getId_bambino()));
                 }
             }
             DettagliLineaPersoneDTO dlp = f2.convertToDettagliLineaPersoneDTO(persone);
@@ -106,7 +110,7 @@ public class Controller {
             List<String> persone = new ArrayList<>();
             for (Prenotazione p1 : prenotazioni_R) {
                 if (p1.getFermata().getId() == f2.getId()) {
-                    persone.add(p1.getId().getPersona());
+                    persone.add(bambinoService.getNome(p1.getId().getId_bambino()));
                 }
             }
             DettagliLineaPersoneDTO dlp2 = f2.convertToDettagliLineaPersoneDTO(persone);
@@ -138,7 +142,7 @@ public class Controller {
         LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
         idPrenotazione iP = idPrenotazione.builder()
                 .data(data)
-                .persona(pieces[0])
+                .id_bambino(Integer.parseInt(pieces[0]))
                 .verso(pieces[2])
                 .build();
 
@@ -169,7 +173,7 @@ public class Controller {
 
             idPrenotazione iP = idPrenotazione.builder()
                     .data(data)
-                    .persona(prenotazioneDTO.getPersona())
+                    .id_bambino(prenotazioneDTO.getId_bambino())
                     .verso(prenotazioneDTO.getVerso())
                     .build();
 
@@ -201,7 +205,7 @@ public class Controller {
 
         idPrenotazione iP = idPrenotazione.builder()
                 .data(data)
-                .persona(pieces[0])
+                .id_bambino(Integer.parseInt(pieces[0]))
                 .verso(pieces[2])
                 .build();
 
@@ -232,7 +236,7 @@ public class Controller {
         LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
         idPrenotazione iP = idPrenotazione.builder()
                 .data(data)
-                .persona(pieces[0])
+                .id_bambino(Integer.parseInt(pieces[0]))
                 .verso(pieces[2])
                 .build();
 

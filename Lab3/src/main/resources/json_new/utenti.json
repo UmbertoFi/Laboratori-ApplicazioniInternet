@@ -1,0 +1,42 @@
+{
+  "utenti": [
+    {
+      "username": "barbero@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Rebecca",
+          "cognome": "Barbero"
+        },
+        {
+          "nome": "Nicola",
+          "cognome": "Barbero"
+        }
+      ]
+    },
+    {
+      "username": "bethaz@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Mario",
+          "cognome": "Bethaz"
+        },
+        {
+          "nome": "Mata",
+          "cognome": "Bethaz"
+        }
+      ]
+    }
+  ]
+}
