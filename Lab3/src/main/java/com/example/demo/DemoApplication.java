@@ -72,8 +72,9 @@ public class DemoApplication {
                 ListaUtentiDTO utenti = mapper.readValue(ResourceUtils.getFile("classpath:json_new/utenti.json"), ListaUtentiDTO.class);
                 for(UtenteDTO u : utenti.getUtenti())
                     us.save(u.convertToEntity());
-                PrenotatoDTO prenotazione = mapper.readValue(ResourceUtils.getFile("classpath:json_new/prenotazioni.json"), PrenotatoDTO.class);
-                ps.save(prenotazione.convertToEntity(fs));
+                ListaPrenotatiDTO prenotazioni = mapper.readValue(ResourceUtils.getFile("classpath:json_new/prenotazioni.json"), ListaPrenotatiDTO.class);
+                for(PrenotatoDTO p:prenotazioni.getPrenotazioni())
+                  ps.save(p.convertToEntity(fs));
             } catch (Exception e) {
                 System.out.println("Impossibile salvare la linea: ");
                 e.printStackTrace();

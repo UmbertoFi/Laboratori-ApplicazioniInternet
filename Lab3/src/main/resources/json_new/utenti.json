@@ -16,6 +16,14 @@
         {
           "nome": "Nicola",
           "cognome": "Barbero"
+        },
+        {
+          "nome": "Marco",
+          "cognome": "Barbero"
+        },
+        {
+          "nome": "Rachele",
+          "cognome": "Barbero"
         }
       ]
     },
@@ -35,6 +43,204 @@
         {
           "nome": "Mata",
           "cognome": "Bethaz"
+        },
+        {
+          "nome": "Leonardo",
+          "cognome": "Bethaz"
+        }
+      ]
+    },
+    {
+      "username": "fisichella@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Antonino",
+          "cognome": "Fisichella"
+        },
+        {
+          "nome": "Giuseppe",
+          "cognome": "Fisichella"
+        }
+      ]
+    },
+    {
+      "username": "fierro@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Umberto",
+          "cognome": "Fierro"
+        },
+        {
+          "nome": "Ginevra",
+          "cognome": "Fierro"
+        }
+      ]
+    },
+    {
+      "username": "emmolo@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Eugenio",
+          "cognome": "Emmolo"
+        },
+        {
+          "nome": "Valentina",
+          "cognome": "Emmolo"
+        }
+      ]
+    },
+    {
+      "username": "forese@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Leonardo",
+          "cognome": "Forese"
+        },
+        {
+          "nome": "Maria",
+          "cognome": "Forese"
+        },
+        {
+          "nome": "Alberto",
+          "cognome": "Forese"
+        }
+      ]
+    },
+    {
+      "username": "guabello@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Andrea",
+          "cognome": "Guabello"
+        },
+        {
+          "nome": "Agnese",
+          "cognome": "Guabello"
+        }
+      ]
+    },
+    {
+      "username": "ribotta@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Riccardo",
+          "cognome": "Ribotta"
+        },
+        {
+          "nome": "Fiorella",
+          "cognome": "Ribotta"
+        }
+      ]
+    },
+    {
+      "username": "rossi@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Mario",
+          "cognome": "Rossi"
+        },
+        {
+          "nome": "Lorenzo",
+          "cognome": "Rossi"
+        }
+      ]
+    },
+    {
+      "username": "pozzo@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Lucrezia",
+          "cognome": "Pozzo"
+        },
+        {
+          "nome": "Matilde",
+          "cognome": "Pozzo"
+        }
+      ]
+    },
+    {
+      "username": "rizzo@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Andrea",
+          "cognome": "Rizzo"
+        },
+        {
+          "nome": "Elena",
+          "cognome": "Rizzo"
+        }
+      ]
+    },
+    {
+      "username": "taragna@a.it",
+      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "enabled": "1",
+      "expired_account": "1",
+      "expiredcredential": "1",
+      "locked": "1",
+      "token": "170200164168412559011200099002076107302-596051546",
+      "bambini": [
+        {
+          "nome": "Francesco",
+          "cognome": "Taragna"
+        },
+        {
+          "nome": "Paolo",
+          "cognome": "Taragna"
         }
       ]
     }
