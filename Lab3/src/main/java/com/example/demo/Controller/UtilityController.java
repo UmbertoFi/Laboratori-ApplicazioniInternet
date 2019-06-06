@@ -36,24 +36,24 @@ public class UtilityController {
     @Autowired
     PrenotazioneService prenotazioneService;
 
-    @GetMapping(path = "/utility/checkUsername")
+    @GetMapping(path = "/utility/checkUsername/{username}")
     public @ResponseBody
-    ResponseEntity checkUsername(@RequestBody UsernameDTO usernameDTO) {
+    ResponseEntity checkUsername(@PathVariable("username") String email) {
 
         Map<Object, Object> model = new HashMap<>();
 
-        Utente utente = userService.getUserById(usernameDTO.getUsername());
+        Utente utente = userService.getUserById(email);
         if (utente != null) {
             if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
 
-                model.put("username", usernameDTO.getUsername());
+                model.put("username", email);
                 model.put("available", false);
 
                 return ok(model);
             }
         }
 
-        model.put("username", usernameDTO.getUsername());
+        model.put("username", email);
         model.put("available", true);
 
         return ok(model);
