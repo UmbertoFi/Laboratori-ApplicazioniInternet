@@ -97,20 +97,6 @@ public class UtilityController {
 
     }
 
-    @GetMapping(path = "/utility/linea")
-    public @ResponseBody
-    PrenotazioniClientDTO getLinea() {
-       /* PrenotazioniClientDTO out=new PrenotazioniClientDTO();
-        Iterable<Prenotazione>p=prenotazioneService.getPrenotazioni();
-        while(p.iterator().hasNext()){
-            Prenotazione pre=p.iterator().next();
-            PersoneDTO personeDTO=PersoneDTO.builder().id_bambino(pre.getId().getId_bambino())
-            pre.
-            out.getPrenotazioni().
-        }*/
-        return null;
-    }
-
 
 
 }

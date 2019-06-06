@@ -97,8 +97,6 @@ function notPresent(userService: UserService, registerForm: FormGroup) {
     .subscribe(val => {
       if(val.available==false) {    // CAMBIARE LOGICA TRUE/FALSE
         registerForm.controls['email'].setErrors({notPresent: true})
-      } else {
-        registerForm.controls['email'].setErrors(null);
       }
     });
 }
