@@ -19,6 +19,9 @@ import {User} from './_models';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   submitted = false;
+  email_blur = false;
+  password_blur = false;
+  confirmPassword_blur = false;
 
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
@@ -33,7 +36,7 @@ export class RegisterComponent implements OnInit {
     }
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
       confirmPassword: ['', Validators.required]
     }, {
       validators: [MustMatch('password', 'confirmPassword')]
@@ -69,6 +72,16 @@ export class RegisterComponent implements OnInit {
     notPresent(this.userService, this.registerForm);
   }
 
+  onBlur(field: number) {
+    if(field==0){
+      this.email_blur = true;
+    } else if(field==1){
+      this.password_blur = true;
+    } else if(field==2){
+      this.confirmPassword_blur = true;
+    }
+    notPresent(this.userService, this.registerForm);
+  }
 }
 
 //

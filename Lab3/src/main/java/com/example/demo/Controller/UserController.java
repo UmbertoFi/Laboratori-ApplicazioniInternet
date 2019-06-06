@@ -113,6 +113,14 @@ public class UserController {
             throw new NotFoundException("password diverse");
         }
 
+        if (registerDTO.getPassword().length() < 6){
+          throw new NotFoundException("la password deve essere di almeno 6 caratteri");
+        }
+
+      if (registerDTO.getPassword().length() > 12){
+        throw new NotFoundException("la password non deve superare i 12 caratteri");
+      }
+
         if(checkValidPass(registerDTO.getPassword(), registerDTO.getConfirmPassword())==false){
             throw new NotFoundException("password invalide");
         }
