@@ -6,6 +6,7 @@ import {LINE} from './dati';
 import {AlertService, AuthenticationService, UserService} from './_services';
 import {Prenotazione} from './_models';
 import {Router} from '@angular/router';
+import {Bambino} from './bambino';
 
 @Component({
   selector: 'app-attendance',
@@ -16,6 +17,7 @@ export class AttendanceComponent implements OnInit {
   title = 'Lab5';
 
   linee: Linea[];
+  bambini: Bambino[];
 
   pageEvent: PageEvent;
   length: number;
@@ -25,6 +27,7 @@ export class AttendanceComponent implements OnInit {
 
   constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
     this.getLinee();
+    this.getBambini();
   }
 
   ngOnInit(): void {
@@ -135,6 +138,21 @@ export class AttendanceComponent implements OnInit {
     this.authenticationService.logout();
     this.alertService.success('Logout effettuato', true);
     this.router.navigate(['/login']);
+  }
+
+  getBambini() {
+   this.userService.getbambini().subscribe(
+     val => {
+       this.bambini = val;
+     }
+   );
+  }
+
+
+  inserisciBambinoNonPrenotato($event: MouseEvent, id_bambino: number, linea: string, fermata: string, verso: number, data: string) {
+    this.userService.inserisciPrenotazioneRitardata(id_bambino, linea, fermata, verso, data).subscribe();
+  console.log('aaaaaaaaaa');
+  return;
   }
 }
 

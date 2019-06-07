@@ -2,22 +2,14 @@ package com.example.demo.Controller;
 
 
 import com.example.demo.DTO.*;
-import com.example.demo.Entity.Fermata;
-import com.example.demo.Entity.Linea;
-import com.example.demo.Entity.Prenotazione;
-import com.example.demo.Entity.Utente;
-import com.example.demo.Service.FermataService;
-import com.example.demo.Service.LineaService;
-import com.example.demo.Service.PrenotazioneService;
-import com.example.demo.Service.UserService;
+import com.example.demo.Entity.*;
+import com.example.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -35,6 +27,9 @@ public class UtilityController {
 
     @Autowired
     PrenotazioneService prenotazioneService;
+
+    @Autowired
+    BambinoService bambinoService;
 
     @GetMapping(path = "/utility/checkUsername/{username}")
     public @ResponseBody
@@ -94,7 +89,16 @@ public class UtilityController {
         model.put("nome_fermata", null);
 
         return ok(model);
+    }
 
+    @GetMapping(path = "/utility/children")
+    public @ResponseBody
+    List<BambinoDTO> getAllBambini() throws Exception {
+        Iterable<Bambino> children = bambinoService.getBambini();
+        List<BambinoDTO> nomiBambini = new ArrayList<>();
+        for (Bambino bambino : children)
+            nomiBambini.add(bambino.convertToBambinoDTO());
+        return nomiBambini;
     }
 
 

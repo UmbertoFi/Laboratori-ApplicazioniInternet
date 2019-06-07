@@ -5,6 +5,8 @@ import {Prenotazione, User} from '../_models';
 import {Observable} from 'rxjs';
 import {Linea} from '../linea';
 import {checkUsername} from '../checkUsername';
+import {Bambino} from '../bambino';
+import {NUOVAPrenotazione} from '../nuovaprenotazione';
 
 @Injectable()
 export class UserService {
@@ -43,5 +45,21 @@ export class UserService {
   notPresent(controlName: string): Observable<checkUsername>{
     let checkUsernameResponse = this.http.get<checkUsername>(`http://localhost:8080/utility/checkUsername/`+controlName);
     return checkUsernameResponse;
+  }
+
+  getbambini() {
+    return this.http.get<Bambino[]>('http://localhost:8080/utility/children');
+  }
+
+  inserisciPrenotazioneRitardata(id_bambino: number, linea: string, fermata: string, verso: number, data: string) {
+    let url = 'http://localhost:8080/reservations/'+linea+'/'+data;
+    // console.log(pren.Persona+' '+pren.verso+' '+pren.fermata);
+    let versoChar;
+    if(verso==0)
+      versoChar='A';
+    else
+      versoChar='R';
+    console.log(versoChar);
+    return this.http.post<Prenotazione>(url, new NUOVAPrenotazione(id_bambino,fermata,versoChar), this.httpOptions);
   }
 }

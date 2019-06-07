@@ -1,8 +1,6 @@
 package com.example.demo.Entity;
 
-import com.example.demo.DTO.DettagliLineaDTO;
-import com.example.demo.DTO.DettagliLineaPersoneDTO;
-import com.example.demo.DTO.FermataDTO;
+import com.example.demo.DTO.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,4 +22,15 @@ public class Bambino {
     @ManyToOne
     @JoinColumn(name = "id_genitore")
     private Utente genitore;
+
+    public BambinoDTO convertToBambinoDTO() {
+        BambinoDTO b = BambinoDTO.builder()
+                .nome(this.nome)
+                .cognome(this.cognome)
+                .id_bambino(this.id)
+                .build();
+        return b;
+    }
+
+
 }

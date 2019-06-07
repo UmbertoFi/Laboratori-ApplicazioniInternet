@@ -40,4 +40,9 @@ public class BambinoServiceImpl implements BambinoService {
         }
             return null;
     }
+
+    public Iterable<Bambino> getBambini(){
+        return bambinoRepository.findAll();
+    }
+
 }
