@@ -2,6 +2,8 @@ package com.example.demo;
 
 import com.example.demo.DTO.*;
 import com.example.demo.Repository.FermataRepository;
+import com.example.demo.Repository.LineaRepository;
+import com.example.demo.Service.CorsaService;
 import com.example.demo.Service.LineaService;
 import com.example.demo.Service.PrenotazioneService;
 import com.example.demo.Service.UserService;
@@ -58,8 +60,8 @@ public class DemoApplication {
 
     //
     @Bean
-    CommandLineRunner runner(LineaService ls, UserService us, PrenotazioneService ps, FermataRepository fs) {
-        return args -> {
+    CommandLineRunner runner(CorsaService cs, LineaService ls, UserService us, PrenotazioneService ps, LineaRepository lr, FermataRepository fs) {
+        return argss -> {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 ClassLoader cl = this.getClass().getClassLoader();
@@ -75,6 +77,9 @@ public class DemoApplication {
                 ListaPrenotatiDTO prenotazioni = mapper.readValue(ResourceUtils.getFile("classpath:json_new/prenotazioni.json"), ListaPrenotatiDTO.class);
                 for(PrenotatoDTO p:prenotazioni.getPrenotazioni())
                   ps.save(p.convertToEntity(fs));
+                ListaCorseDTO corse = mapper.readValue(ResourceUtils.getFile("classpath:json_new/corse.json"), ListaCorseDTO.class);
+                for(CorsaDTO c:corse.getCorse())
+                    cs.save(c.convertToEntity(lr));
             } catch (Exception e) {
                 System.out.println("Impossibile salvare la linea: ");
                 e.printStackTrace();

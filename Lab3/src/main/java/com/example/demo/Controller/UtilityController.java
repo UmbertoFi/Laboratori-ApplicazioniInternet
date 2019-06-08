@@ -6,7 +6,6 @@ import com.example.demo.Entity.*;
 import com.example.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -30,6 +29,9 @@ public class UtilityController {
 
     @Autowired
     BambinoService bambinoService;
+
+    @Autowired
+    CorsaService corsaService;
 
     @GetMapping(path = "/utility/checkUsername/{username}")
     public @ResponseBody
@@ -101,6 +103,28 @@ public class UtilityController {
         return nomiBambini;
     }
 
+    @GetMapping(path = "/utility/corse")
+    public @ResponseBody
+    List<CorsaSDTO> getAllCorse() throws Exception {
 
+        Iterable<Corsa> cors = corsaService.getCorse();
+        List<CorsaSDTO> corse = new ArrayList<>();
+        for (Corsa c : cors)
+            corse.add(c.convertToDTO());
+        return corse;
+    }
+
+    @GetMapping(path = "/utility/corse/{nome_linea}")
+    public @ResponseBody
+    List<CorsaSDTO> getAllCorse(@PathVariable("nome_linea") String nomeLinea) throws Exception {
+
+        Integer n_linea=lineaService.getLinea(nomeLinea).getId();
+
+        Iterable<Corsa> cors = corsaService.getCorseByIdLinea(n_linea);
+        List<CorsaSDTO> corse = new ArrayList<>();
+        for (Corsa c : cors)
+            corse.add(c.convertToDTO());
+        return corse;
+    }
 
 }
