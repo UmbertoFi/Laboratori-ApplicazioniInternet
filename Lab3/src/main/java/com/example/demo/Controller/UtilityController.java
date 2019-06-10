@@ -124,7 +124,8 @@ public class UtilityController {
         Iterable<Corsa> cors = corsaService.getCorseByIdLinea(n_linea);
         List<CorsaSDTO> corse = new ArrayList<>();
         for (Corsa c : cors)
-            corse.add(c.convertToDTO());
+            if (c.getId().getVerso().compareTo("A")==0)
+                corse.add(c.convertToDTO());
         return corse;
     }
 
