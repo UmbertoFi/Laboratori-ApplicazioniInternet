@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.DTO.*;
 import com.example.demo.Entity.*;
+import com.example.demo.Exception.NotFoundException;
 import com.example.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -124,7 +125,8 @@ public class UtilityController {
         Iterable<Corsa> cors = corsaService.getCorseByIdLinea(n_linea);
         List<CorsaSDTO> corse = new ArrayList<>();
         for (Corsa c : cors)
-            corse.add(c.convertToDTO());
+            if (c.getId().getVerso().compareTo("A")==0)
+                corse.add(c.convertToDTO());
         return corse;
     }
 
@@ -186,6 +188,38 @@ public class UtilityController {
 
         return dettagliLineaPersone;
 
+    }
+
+    @PostMapping(path = "/utility/reservations/{nome_linea}/{date}")
+    public @ResponseBody
+    IdPrenotazioneDTO postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
+                                            @PathVariable("date") String date,
+                                            @RequestBody PrenotazioneDTONew prenotazioneDTO) {
+
+
+        Optional<Fermata> f = fermataService.getFermata(prenotazioneDTO.getId_fermata());
+        if (f.isPresent()) {
+
+            String[] pieces = date.split("-");
+            LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+
+            idPrenotazione iP = idPrenotazione.builder()
+                    .data(data)
+                    .id_bambino(prenotazioneDTO.getId_bambino())
+                    .verso(prenotazioneDTO.getVerso())
+                    .build();
+
+            Prenotazione p = Prenotazione.builder()
+                    .fermata(f.get())
+                    .presente(false)
+                    .id(iP)
+                    .build();
+
+            prenotazioneService.save(p);
+            f.get().getPrenotazioni().add(p);
+            return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+        }
+        throw new NotFoundException("errore nella prenotazione");
     }
 
 }

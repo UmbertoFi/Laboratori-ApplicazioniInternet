@@ -33,7 +33,6 @@ export class AttendanceComponent implements OnInit {
   lineaSelezionataMenu = 0;
 
   constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
-    this.getLinee();
   }
 
   ngOnInit(): void {
@@ -58,7 +57,7 @@ export class AttendanceComponent implements OnInit {
             this.corse = data;
             return;
           }).then(() => {
-            this.length = this.corse.length / 2;  // Poichè corse ha Andata e Ritorno
+            this.length = this.corse.length;  // Poichè corse ha Andata e Ritorno
             this.corse.sort((a, b) => a.data.localeCompare(b.data));
             let j;
             let date;
@@ -74,7 +73,7 @@ export class AttendanceComponent implements OnInit {
                 break;
               }
             }
-            this.pageIndex = j/2;
+            this.pageIndex = j;
           })
           .then(()=>{
             let promiseTratte = fetch('http://localhost:8080/utility/reservations/'+this.nomiLinee[0].nome+'/'+this.corse[this.pageIndex].data)
@@ -82,31 +81,15 @@ export class AttendanceComponent implements OnInit {
                 return data.json();
               }).then((data)=>{
                 this.tratte = data;
+                this.tratte.fermateA.sort((a, b) => a.ora.localeCompare(b.ora));
+                this.tratte.fermateR.sort((a, b) => a.ora.localeCompare(b.ora));
             })
           });
       });
   }
 
-  getLinee(): void {
-    // this.linee = LineaService.getLinee() e mettere static dall'altro lato
-
-    this.linee = this.lineaService.getLinee();
-    for (let l of this.linee) {
-      for (let c of l.corse) {
-        for (let t of c.tratte) {
-          for (let f of t.fermate) {
-            for (let p of f.persone) {
-              let prenotazione = new Prenotazione(p.nome, f.nome, t.verso);
-              this.userService.inserisciPrenotazione(prenotazione, l.nome, c.data).subscribe();
-            }
-          }
-        }
-      }
-    }
-  }
-
   clickPersona($event: MouseEvent, verso, idFermata, idPersona) {
-    const date = new Date(this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].data).getTime();
+    const date = new Date(this.corse[this.pageIndex].data).getTime();
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
     const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -115,56 +98,95 @@ export class AttendanceComponent implements OnInit {
     const curdate = new Date(cur).getTime();
 
     // tslint:disable-next-line:max-line-length
-    if (this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone[idPersona].selected === false && (date - curdate) === 0) {
-      this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone[idPersona].selected = true;
-    } else {
-      this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone[idPersona].selected = false;
+    if(verso==0){
+      if (this.tratte.fermateA[idFermata].persone[idPersona].selected === false /* && (date - curdate) === 0 */) {
+        this.tratte.fermateA[idFermata].persone[idPersona].selected = true;
+      } else {
+        this.tratte.fermateA[idFermata].persone[idPersona].selected = false;
+      }
+    } else{
+      if (this.tratte.fermateR[idFermata].persone[idPersona].selected === false /* && (date - curdate) === 0 */) {
+        this.tratte.fermateR[idFermata].persone[idPersona].selected = true;
+      } else {
+        this.tratte.fermateR[idFermata].persone[idPersona].selected = false;
+      }
     }
+    // INSERIRE FUNZIONE PER AGGIORNARE PRESENZA LATO SERVER / DATABASE
   }
 
   selezionaPersona(verso: number, idFermata: number, idPersona: number) {
-    if (this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone[idPersona].selected === true) {
-      return 'personaSelezionata';
+    if(verso==0){
+      if (this.tratte.fermateA[idFermata].persone[idPersona].selected === true) {
+        return 'personaSelezionata';
+      }
+    } else {
+      if (this.tratte.fermateR[idFermata].persone[idPersona].selected === true) {
+        return 'personaSelezionata';
+      }
     }
   }
 
   personeOrdinateByNome(verso: number, idFermata: number) {
-    // tslint:disable-next-line:max-line-length
-    return this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate[idFermata].persone.sort((a, b) => a.nome.localeCompare(b.nome));
+    if(verso==0){
+      return this.tratte.fermateA[idFermata].persone.sort((a, b) => a.nome.localeCompare(b.nome));
+    } else{
+      return this.tratte.fermateR[idFermata].persone.sort((a, b) => a.nome.localeCompare(b.nome));
+    }
   }
 
   fermateOrdinateByOra(verso: number) {
-    return this.linee[this.lineaSelezionataMenu].corse[this.pageIndex].tratte[verso].fermate.sort((a, b) => a.ora.localeCompare(b.ora));
+    if(verso==0){
+      return this.tratte.fermateA.sort((a, b) => a.ora.localeCompare(b.ora));
+    } else{
+      return this.tratte.fermateR.sort((a, b) => a.ora.localeCompare(b.ora));
+    }
   }
 
   selezionaLineaMenu(idLinea: number) {
     this.lineaSelezionataMenu = idLinea;
-    this.length = this.linee[idLinea].corse.length;
-    let j;
-    let date;
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const yyyy = today.getFullYear();
-    const cur = yyyy + '/' + mm + '/' + dd;
-    const curdate = new Date(cur).getTime();
-
-    // tslint:disable-next-line:prefer-for-of
-    for (j = 0; j < this.linee[this.lineaSelezionataMenu].corse.length; j++) {
-      date = new Date(this.linee[this.lineaSelezionataMenu].corse[j].data).getTime();
-      if (date - curdate >= 0) {
-        break;
-      }
-    }
-    this.pageIndex = j;
+    let promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[this.lineaSelezionataMenu].nome)
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.corse = data;
+        return;
+      }).then(() => {
+        this.length = this.corse.length;  // Poichè corse ha Andata e Ritorno
+        this.corse.sort((a, b) => a.data.localeCompare(b.data));
+        let j;
+        let date;
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        const yyyy = today.getFullYear();
+        const cur = yyyy + '/' + mm + '/' + dd;
+        const curdate = new Date(cur).getTime();
+        for (j = 0; j < this.corse.length; j++) {
+          date = new Date(this.corse[j].data).getTime();
+          if (date - curdate >= 0) {
+            break;
+          }
+        }
+        this.pageIndex = j;
+      })
+      .then(()=>{
+        let promiseTratte = fetch('http://localhost:8080/utility/reservations/'+this.nomiLinee[this.lineaSelezionataMenu].nome+'/'+this.corse[this.pageIndex].data)
+          .then((data)=>{
+            return data.json();
+          }).then((data)=>{
+            this.tratte = data;
+          })
+      });
   }
 
   selezionaCorsaPaginator(pageEvent: PageEvent) {
     this.pageIndex = pageEvent.pageIndex;
-    console.log(this.bambini);
-    console.log(this.nomiLinee);
-    console.log(this.corse);
-    console.log(this.tratte);
+    let promiseTratte = fetch('http://localhost:8080/utility/reservations/'+this.nomiLinee[this.lineaSelezionataMenu].nome+'/'+this.corse[this.pageIndex].data)
+      .then((data)=>{
+        return data.json();
+      }).then((data)=>{
+        this.tratte = data;
+      });
     return this.pageEvent;
   }
 
@@ -183,10 +205,17 @@ export class AttendanceComponent implements OnInit {
   }
 
 
-  inserisciBambinoNonPrenotato($event: MouseEvent, id_bambino: number, linea: string, fermata: string, verso: number, data: string) {
-    this.userService.inserisciPrenotazioneRitardata(id_bambino, linea, fermata, verso, data).subscribe();
+  inserisciBambinoNonPrenotato($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
+    this.userService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
     console.log('aaaaaaaaaa');
     return;
+  }
+
+  mostra($event: MouseEvent) {
+    console.log(this.bambini);
+    console.log(this.nomiLinee);
+    console.log(this.corse);
+    console.log(this.tratte);
   }
 }
 
