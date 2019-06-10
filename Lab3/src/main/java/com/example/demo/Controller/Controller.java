@@ -170,6 +170,7 @@ public class Controller {
 
             String[] pieces = date.split("-");
             LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+            LocalDate curr = LocalDate.now();
 
             idPrenotazione iP = idPrenotazione.builder()
                     .data(data)
@@ -177,9 +178,15 @@ public class Controller {
                     .verso(prenotazioneDTO.getVerso())
                     .build();
 
+            boolean presente;
+            if(data.compareTo(curr)==0){
+                presente = true;
+            } else {
+                presente = false;
+            }
             Prenotazione p = Prenotazione.builder()
                     .fermata(f.get())
-                    .presente(false)
+                    .presente(presente)
                     .id(iP)
                     .build();
 

@@ -40,13 +40,12 @@
         <mat-list>
           <mat-list-item *ngFor="let fermata of tratte.fermateA; let f = index; let last = last">
             <h3 mat-line>
-              <mat-icon>my_location</mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;-&#45;&#45;&#45;&#45;&nbsp;Fermata n°
-              {{fermata.nome}}
+              <mat-icon>my_location</mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;&#45;&nbsp;{{fermata.nome}}
             </h3>
             <ul mat-line>
               <li class="clickable" *ngFor="let persona of personeOrdinateByNome(0,f); let p=index, let last = last">
                 <p (click)="clickPersona($event,0,f,p)"
-                   [ngClass]="selezionaPersona(0,f,p)">{{persona.nome}}{{last ? '' : ',&nbsp;'}}</p>
+                   [ngClass]="selezionaPersona(0,f,p)">{{persona.nome}}&nbsp;{{persona.cognome}}&nbsp;{{persona.id_bambino}}{{last ? '' : ',&nbsp;'}}</p>
               </li>
             </ul>
           </mat-list-item>
@@ -55,7 +54,7 @@
           <mat-label>Bambini</mat-label>
           <mat-select>
             &lt;!&ndash; Modificarlo ricevendo la lista dei bambini dal server &ndash;&gt;
-            <mat-option class="clickable" *ngFor="let b of bambini" (click)="inserisciBambinoNonPrenotato($event,b.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateA[0].id,0,corse[pageIndex].data)">
+            <mat-option class="clickable" *ngFor="let b of bambini" (click)="inserisciBambinoNonPrenotato($event,b.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateA[0].id_fermata,0,corse[pageIndex].data)">
               {{b.id_bambino}}&nbsp;-&nbsp;{{b.nome}}&nbsp;{{b.cognome}}
             </mat-option>
           </mat-select>
@@ -65,12 +64,12 @@
         <mat-list>
           <mat-list-item *ngFor="let fermata of tratte.fermateR; let f = index">
             <h3 mat-line>
-              <mat-icon>my_location</mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;-&#45;&#45;&#45;&#45;&nbsp;Fermata n°{{fermata.nome}}
+              <mat-icon>my_location</mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;&#45;&nbsp;{{fermata.nome}}
             </h3>
             <ul mat-line>
               <li class="clickable" *ngFor="let persona of personeOrdinateByNome(1,f); let p=index; let last = last">
                 <p (click)="clickPersona($event,1,f,p)"
-                   [ngClass]="selezionaPersona(1,f,p)">{{persona.nome}}{{last ? '' : ',&nbsp;'}}</p>
+                   [ngClass]="selezionaPersona(1,f,p)">{{persona.nome}}&nbsp;{{persona.cognome}}&nbsp;{{persona.id_bambino}}{{last ? '' : ',&nbsp;'}}</p>
               </li>
             </ul>
           </mat-list-item>
@@ -79,7 +78,7 @@
           <mat-label>Bambini</mat-label>
           <mat-select>
             &lt;!&ndash; Modificarlo ricevendo la lista dei bambini dal server &ndash;&gt;
-            <mat-option class="clickable" *ngFor="let b of bambini" (click)="inserisciBambinoNonPrenotato($event,b.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateR[0].id,1,corse[pageIndex].data)">
+            <mat-option class="clickable" *ngFor="let b of bambini" (click)="inserisciBambinoNonPrenotato($event,b.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateR[0].id_fermata,1,corse[pageIndex].data)">
               {{b.id_bambino}}&nbsp;-&nbsp;{{b.nome}}&nbsp;{{b.cognome}}
             </mat-option>
           </mat-select>

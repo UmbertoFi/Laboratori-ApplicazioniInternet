@@ -1,4 +1,4 @@
-import {Linea} from './linea';
+/*import {Linea} from './linea';
 
 export const LINE: Linea[] = [
     {
@@ -698,4 +698,4 @@ export const LINE: Linea[] = [
         }
       ]
     }
-];
+];*/

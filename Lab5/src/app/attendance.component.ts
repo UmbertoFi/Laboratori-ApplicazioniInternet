@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {PageEvent} from '@angular/material';
 import {LineaService} from './linea.service';
 import {Linea} from './linea';
-import {LINE} from './dati';
 import {AlertService, AuthenticationService, UserService} from './_services';
 import {Prenotazione} from './_models';
 import {Router} from '@angular/router';
@@ -104,14 +103,15 @@ export class AttendanceComponent implements OnInit {
       } else {
         this.tratte.fermateA[idFermata].persone[idPersona].selected = false;
       }
+      this.userService.updateprenotazione(this.tratte.fermateA[idFermata].persone[idPersona].id_bambino,this.tratte.fermateA[idFermata].id_fermata,this.corse[this.pageIndex].data,0).subscribe();
     } else{
       if (this.tratte.fermateR[idFermata].persone[idPersona].selected === false /* && (date - curdate) === 0 */) {
         this.tratte.fermateR[idFermata].persone[idPersona].selected = true;
       } else {
         this.tratte.fermateR[idFermata].persone[idPersona].selected = false;
       }
+      this.userService.updateprenotazione(this.tratte.fermateR[idFermata].persone[idPersona].id_bambino,this.tratte.fermateR[idFermata].id_fermata,this.corse[this.pageIndex].data,1).subscribe();
     }
-    // INSERIRE FUNZIONE PER AGGIORNARE PRESENZA LATO SERVER / DATABASE
   }
 
   selezionaPersona(verso: number, idFermata: number, idPersona: number) {

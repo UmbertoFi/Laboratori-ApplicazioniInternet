@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Getter
 public class DettagliLineaPersoneDTONew {
-    private int id;
+    private int id_fermata;
     private String nome;
     private String ora;
     private List<PersonaDTONew> persone = new ArrayList<>();

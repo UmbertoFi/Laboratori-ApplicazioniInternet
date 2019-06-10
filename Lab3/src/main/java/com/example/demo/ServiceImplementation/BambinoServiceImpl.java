@@ -41,6 +41,14 @@ public class BambinoServiceImpl implements BambinoService {
             return null;
     }
 
+    public String getCognome(int id_bambino){
+        Optional<Bambino> bambino = bambinoRepository.findById(id_bambino);
+        if(bambino.isPresent()){
+            return bambino.get().getCognome();
+        }
+        return null;
+    }
+
     public Iterable<Bambino> getBambini(){
         return bambinoRepository.findAll();
     }

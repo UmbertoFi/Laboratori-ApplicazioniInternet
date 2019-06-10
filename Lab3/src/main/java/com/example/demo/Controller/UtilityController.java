@@ -3,9 +3,11 @@ package com.example.demo.Controller;
 
 import com.example.demo.DTO.*;
 import com.example.demo.Entity.*;
+import com.example.demo.Exception.BadRequestException;
 import com.example.demo.Exception.NotFoundException;
 import com.example.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -162,7 +164,7 @@ public class UtilityController {
             List<PersonaDTONew> persone = new ArrayList<>();
             for (Prenotazione p1 : prenotazioni_A) {
                 if (p1.getFermata().getId() == f2.getId()) {
-                    persone.add(new PersonaDTONew(bambinoService.getNome(p1.getId().getId_bambino()),p1.isPresente()));
+                    persone.add(new PersonaDTONew(p1.getId().getId_bambino(),bambinoService.getNome(p1.getId().getId_bambino()),bambinoService.getCognome(p1.getId().getId_bambino()),p1.isPresente()));
                 }
             }
             DettagliLineaPersoneDTONew dlp = f2.convertToDettagliLineaPersoneDTONew(persone,0);
@@ -174,7 +176,7 @@ public class UtilityController {
             List<PersonaDTONew> persone = new ArrayList<>();
             for (Prenotazione p1 : prenotazioni_R) {
                 if (p1.getFermata().getId() == f2.getId()) {
-                    persone.add(new PersonaDTONew(bambinoService.getNome(p1.getId().getId_bambino()),p1.isPresente()));
+                    persone.add(new PersonaDTONew(p1.getId().getId_bambino(),bambinoService.getNome(p1.getId().getId_bambino()),bambinoService.getCognome(p1.getId().getId_bambino()),p1.isPresente()));
                 }
             }
             DettagliLineaPersoneDTONew dlp2 = f2.convertToDettagliLineaPersoneDTONew(persone,1);
@@ -202,6 +204,7 @@ public class UtilityController {
 
             String[] pieces = date.split("-");
             LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+            LocalDate curr = LocalDate.now();
 
             idPrenotazione iP = idPrenotazione.builder()
                     .data(data)
@@ -209,9 +212,15 @@ public class UtilityController {
                     .verso(prenotazioneDTO.getVerso())
                     .build();
 
+            boolean presente;
+            if(data.compareTo(curr)==0){
+                presente = true;
+            } else {
+                presente = false;
+            }
             Prenotazione p = Prenotazione.builder()
                     .fermata(f.get())
-                    .presente(false)
+                    .presente(presente)
                     .id(iP)
                     .build();
 
@@ -220,6 +229,35 @@ public class UtilityController {
             return IdPrenotazioneDTO.builder().id(iP.toString()).build();
         }
         throw new NotFoundException("errore nella prenotazione");
+    }
+
+    @PutMapping(path = "/utility/reservations/{date}")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    void updatePrenotazione(@PathVariable("date") String date,
+                            @RequestBody PrenotazioneDTONew prenotazioneDTO) {
+
+
+        String[] dataPieces = date.split("-");
+        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
+
+        idPrenotazione iP = idPrenotazione.builder()
+                .data(data)
+                .id_bambino(prenotazioneDTO.getId_bambino())
+                .verso(prenotazioneDTO.getVerso())
+                .build();
+
+        Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
+        if (p.isPresent()) {
+            if (p.get().isPresente() == true)
+                p.get().setPresente(false);
+            else
+                p.get().setPresente(true);
+            prenotazioneService.save(p.get());
+            return;
+        }
+
+        throw new BadRequestException("errore nella modifica ");
     }
 
 }

@@ -11,6 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonaDTONew {
+    private int id_bambino;
     private String nome;
+    private String cognome;
     private boolean selected;
 }

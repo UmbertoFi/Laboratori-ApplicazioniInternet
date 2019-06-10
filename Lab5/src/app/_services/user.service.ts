@@ -14,7 +14,8 @@ export class UserService {
 
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
     })
   };
 
@@ -60,6 +61,18 @@ export class UserService {
     else
       versoChar='R';
     console.log(versoChar);
-    return this.http.post<Prenotazione>(url, new NUOVAPrenotazione(id_bambino,id_fermata,versoChar), this.httpOptions);
+    return this.http.post<NUOVAPrenotazione>(url, new NUOVAPrenotazione(id_bambino,id_fermata,versoChar), this.httpOptions);
+  }
+
+  updateprenotazione(id_bambino: number, id_fermata: number, data: string, verso: number) {
+    let url = 'http://localhost:8080/utility/reservations/'+data;
+    console.log("ciaociaociaociao");
+    let versoChar;
+    if(verso==0)
+      versoChar='A';
+    else
+      versoChar='R';
+    console.log(versoChar);
+    return this.http.put<NUOVAPrenotazione>(url, new NUOVAPrenotazione(id_bambino,id_fermata,versoChar), this.httpOptions);
   }
 }

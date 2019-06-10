@@ -77,7 +77,7 @@ public class Fermata {
         else
             ora=ora_ritorno;
         DettagliLineaPersoneDTONew dtl = DettagliLineaPersoneDTONew.builder()
-                .id(this.id)
+                .id_fermata(this.id)
                 .nome(this.nome)
                 .ora(ora)
                 .persone(persone)
