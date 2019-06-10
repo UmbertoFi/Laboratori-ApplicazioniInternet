@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -125,6 +126,66 @@ public class UtilityController {
         for (Corsa c : cors)
             corse.add(c.convertToDTO());
         return corse;
+    }
+
+    @GetMapping(path = "/utility/reservations/{nome_linea}/{date}")
+    public @ResponseBody
+    PasseggeriDTONew getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
+                                               @PathVariable("date") String date) {
+
+
+        String[] pieces = date.split("-");
+        LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+
+        List<Fermata> fermate = fermataService.getFermateList(nomeLinea);
+
+        List<Prenotazione> prenotazioni_A = new ArrayList<Prenotazione>();
+        List<Prenotazione> prenotazioni_R = new ArrayList<Prenotazione>();
+
+        List<DettagliLineaPersoneDTONew> fermateAndata = new ArrayList<>();
+        List<DettagliLineaPersoneDTONew> fermateRitorno = new ArrayList<>();
+
+
+        Iterable<Prenotazione> prenotazioni = prenotazioneService.getPrenotazioni();
+        for (Prenotazione p : prenotazioni) {
+            if (p.getId().getData().equals(data)) {
+                if (p.getId().getVerso().equals("A"))
+                    prenotazioni_A.add(p);
+                else
+                    prenotazioni_R.add(p);
+            }
+        }
+
+        for (Fermata f2 : fermate) {
+            List<PersonaDTONew> persone = new ArrayList<>();
+            for (Prenotazione p1 : prenotazioni_A) {
+                if (p1.getFermata().getId() == f2.getId()) {
+                    persone.add(new PersonaDTONew(bambinoService.getNome(p1.getId().getId_bambino()),p1.isPresente()));
+                }
+            }
+            DettagliLineaPersoneDTONew dlp = f2.convertToDettagliLineaPersoneDTONew(persone,0);
+            fermateAndata.add(dlp);
+        }
+
+        Collections.reverse(fermate);
+        for (Fermata f2 : fermate) {
+            List<PersonaDTONew> persone = new ArrayList<>();
+            for (Prenotazione p1 : prenotazioni_R) {
+                if (p1.getFermata().getId() == f2.getId()) {
+                    persone.add(new PersonaDTONew(bambinoService.getNome(p1.getId().getId_bambino()),p1.isPresente()));
+                }
+            }
+            DettagliLineaPersoneDTONew dlp2 = f2.convertToDettagliLineaPersoneDTONew(persone,1);
+            fermateRitorno.add(dlp2);
+        }
+
+
+        PasseggeriDTONew dettagliLineaPersone = new PasseggeriDTONew();
+        dettagliLineaPersone.setFermateA(fermateAndata);
+        dettagliLineaPersone.setFermateR(fermateRitorno);
+
+        return dettagliLineaPersone;
+
     }
 
 }

@@ -1,8 +1,6 @@
 package com.example.demo.Entity;
 
-import com.example.demo.DTO.DettagliLineaDTO;
-import com.example.demo.DTO.DettagliLineaPersoneDTO;
-import com.example.demo.DTO.FermataDTO;
+import com.example.demo.DTO.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -67,6 +65,22 @@ public class Fermata {
                 .id(this.id)
                 .nome(this.nome)
                 .persone(strings)
+                .build();
+        return dtl;
+
+    }
+
+    public DettagliLineaPersoneDTONew convertToDettagliLineaPersoneDTONew(List<PersonaDTONew> persone, int verso) {
+        String ora;
+        if(verso==0)
+            ora=ora_andata;
+        else
+            ora=ora_ritorno;
+        DettagliLineaPersoneDTONew dtl = DettagliLineaPersoneDTONew.builder()
+                .id(this.id)
+                .nome(this.nome)
+                .ora(ora)
+                .persone(persone)
                 .build();
         return dtl;
 

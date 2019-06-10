@@ -7,6 +7,9 @@ import {AlertService, AuthenticationService, UserService} from './_services';
 import {Prenotazione} from './_models';
 import {Router} from '@angular/router';
 import {Bambino} from './bambino';
+import {nomeLinea} from './nomeLinea';
+import {CorsaNew} from './corsaNew';
+import {TrattaNew} from './trattaNew';
 
 @Component({
   selector: 'app-attendance',
@@ -18,6 +21,10 @@ export class AttendanceComponent implements OnInit {
 
   linee: Linea[];
   bambini: Bambino[];
+  nomiLinee: nomeLinea[];
+  corse: CorsaNew[];
+  tratte: TrattaNew;
+
 
   pageEvent: PageEvent;
   length: number;
@@ -27,34 +34,57 @@ export class AttendanceComponent implements OnInit {
 
   constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
     this.getLinee();
-    this.getBambini();
   }
 
   ngOnInit(): void {
-    this.length = this.linee[this.lineaSelezionataMenu].corse.length;
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.linee.length; i++) {
-      this.linee[i].corse.sort((a, b) => a.data.localeCompare(b.data));
-    }
+    let promiseBambini = fetch('http://localhost:8080/utility/children')
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.bambini = data;
+      });
 
-    let j;
-    let date;
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const yyyy = today.getFullYear();
-    const cur = yyyy + '/' + mm + '/' + dd;
-    const curdate = new Date(cur).getTime();
-
-    // tslint:disable-next-line:prefer-for-of
-    for (j = 0; j < this.linee[this.lineaSelezionataMenu].corse.length; j++) {
-      date = new Date(this.linee[this.lineaSelezionataMenu].corse[j].data).getTime();
-      if (date - curdate >= 0) {
-        break;
-      }
-    }
-    this.pageIndex = j;
-
+    let promiseLinea = fetch('http://localhost:8080/lines')
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.nomiLinee = data;
+        return;
+      }).then(() => {
+        let promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[0].nome)
+          .then((data) => {
+            return data.json();
+          }).then((data) => {
+            this.corse = data;
+            return;
+          }).then(() => {
+            this.length = this.corse.length / 2;  // Poichè corse ha Andata e Ritorno
+            this.corse.sort((a, b) => a.data.localeCompare(b.data));
+            let j;
+            let date;
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            const yyyy = today.getFullYear();
+            const cur = yyyy + '/' + mm + '/' + dd;
+            const curdate = new Date(cur).getTime();
+            for (j = 0; j < this.corse.length; j++) {
+              date = new Date(this.corse[j].data).getTime();
+              if (date - curdate >= 0) {
+                break;
+              }
+            }
+            this.pageIndex = j/2;
+          })
+          .then(()=>{
+            let promiseTratte = fetch('http://localhost:8080/utility/reservations/'+this.nomiLinee[0].nome+'/'+this.corse[this.pageIndex].data)
+              .then((data)=>{
+                return data.json();
+              }).then((data)=>{
+                this.tratte = data;
+            })
+          });
+      });
   }
 
   getLinee(): void {
@@ -131,6 +161,10 @@ export class AttendanceComponent implements OnInit {
 
   selezionaCorsaPaginator(pageEvent: PageEvent) {
     this.pageIndex = pageEvent.pageIndex;
+    console.log(this.bambini);
+    console.log(this.nomiLinee);
+    console.log(this.corse);
+    console.log(this.tratte);
     return this.pageEvent;
   }
 
@@ -141,18 +175,18 @@ export class AttendanceComponent implements OnInit {
   }
 
   getBambini() {
-   this.userService.getbambini().subscribe(
-     val => {
-       this.bambini = val;
-     }
-   );
+    this.userService.getbambini().subscribe(
+      val => {
+        this.bambini = val;
+      }
+    );
   }
 
 
   inserisciBambinoNonPrenotato($event: MouseEvent, id_bambino: number, linea: string, fermata: string, verso: number, data: string) {
     this.userService.inserisciPrenotazioneRitardata(id_bambino, linea, fermata, verso, data).subscribe();
-  console.log('aaaaaaaaaa');
-  return;
+    console.log('aaaaaaaaaa');
+    return;
   }
 }
 
