@@ -1,7 +1,7 @@
 export class NUOVAPrenotazione {
   constructor(
     public id_bambino: number,
-    public fermata: string,
+    public id_fermata: number,
     public verso: string) {
   }
 }

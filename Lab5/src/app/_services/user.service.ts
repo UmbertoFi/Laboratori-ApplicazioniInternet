@@ -51,8 +51,8 @@ export class UserService {
     return this.http.get<Bambino[]>('http://localhost:8080/utility/children');
   }
 
-  inserisciPrenotazioneRitardata(id_bambino: number, linea: string, fermata: string, verso: number, data: string) {
-    let url = 'http://localhost:8080/reservations/'+linea+'/'+data;
+  inserisciPrenotazioneRitardata(id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
+    let url = 'http://localhost:8080/utility/reservations/'+linea+'/'+data;
     // console.log(pren.Persona+' '+pren.verso+' '+pren.fermata);
     let versoChar;
     if(verso==0)
@@ -60,6 +60,6 @@ export class UserService {
     else
       versoChar='R';
     console.log(versoChar);
-    return this.http.post<Prenotazione>(url, new NUOVAPrenotazione(id_bambino,fermata,versoChar), this.httpOptions);
+    return this.http.post<Prenotazione>(url, new NUOVAPrenotazione(id_bambino,id_fermata,versoChar), this.httpOptions);
   }
 }
