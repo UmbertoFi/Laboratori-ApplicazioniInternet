@@ -3,9 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService, AlertService} from './_services';
 import {Router} from '@angular/router';
 import {first} from 'rxjs/operators';
-import {LineaService} from './linea.service';
-import {Linea} from './linea';
-import {User} from './_models';
 
 
 // import custom validator to validate that password and confirm password fields match
@@ -55,16 +52,15 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    console.log('ci siamo');
     this.userService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
         data => {
-          this.alertService.success('Registration successful', true);
+          this.alertService.success('Registrazione eseguita con successo!', true);
           this.router.navigate(['/login']);
         },
         error => {
-          this.alertService.error(error);
+          this.alertService.error("Registrazione fallita!");
         });
   }
 
