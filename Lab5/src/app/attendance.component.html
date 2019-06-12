@@ -53,7 +53,6 @@
         <mat-form-field class="listaBambini">
           <mat-label>Bambini</mat-label>
           <mat-select>
-            &lt;!&ndash; Modificarlo ricevendo la lista dei bambini dal server &ndash;&gt;
             <mat-option class="clickable" *ngFor="let b of bambini" (click)="inserisciBambinoNonPrenotato($event,b.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateA[0].id_fermata,0,corse[pageIndex].data)">
               {{b.id_bambino}}&nbsp;-&nbsp;{{b.nome}}&nbsp;{{b.cognome}}
             </mat-option>
@@ -77,7 +76,6 @@
         <mat-form-field class="listaBambini">
           <mat-label>Bambini</mat-label>
           <mat-select>
-            &lt;!&ndash; Modificarlo ricevendo la lista dei bambini dal server &ndash;&gt;
             <mat-option class="clickable" *ngFor="let b of bambini" (click)="inserisciBambinoNonPrenotato($event,b.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateR[0].id_fermata,1,corse[pageIndex].data)">
               {{b.id_bambino}}&nbsp;-&nbsp;{{b.nome}}&nbsp;{{b.cognome}}
             </mat-option>

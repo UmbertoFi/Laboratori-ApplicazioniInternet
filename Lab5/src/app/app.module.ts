@@ -15,7 +15,7 @@ import {
   MatButtonModule, MatMenuModule, MatSelectModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {LineaService} from './linea.service';
+import {LineaService} from './_services/linea.service';
 
 import {LoginComponent} from './login.component';
 import {RegisterComponent} from './register.component';

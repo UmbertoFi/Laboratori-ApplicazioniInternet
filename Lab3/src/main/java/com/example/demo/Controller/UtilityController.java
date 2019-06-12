@@ -212,8 +212,18 @@ public class UtilityController {
                     .verso(prenotazioneDTO.getVerso())
                     .build();
 
+            if (prenotazioneService.getPrenotazione(iP).isPresent()) {
+                // UPDATE
+                Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
+                f.get().getPrenotazioni().remove(p);
+                p.setFermata(fermataService.getFermata(prenotazioneDTO.getId_fermata()).get());
+                prenotazioneService.save(p);
+                f.get().getPrenotazioni().add(p);
+                return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+            } else {
+                // INSERT
             boolean presente;
-            if(data.compareTo(curr)==0){
+            if (data.compareTo(curr) == 0) {
                 presente = true;
             } else {
                 presente = false;
@@ -227,6 +237,7 @@ public class UtilityController {
             prenotazioneService.save(p);
             f.get().getPrenotazioni().add(p);
             return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+        }
         }
         throw new NotFoundException("errore nella prenotazione");
     }
