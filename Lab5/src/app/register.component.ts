@@ -71,12 +71,12 @@ export class RegisterComponent implements OnInit {
   onBlur(field: number) {
     if(field==0){
       this.email_blur = true;
+      notPresent(this.userService, this.registerForm);
     } else if(field==1){
       this.password_blur = true;
     } else if(field==2){
       this.confirmPassword_blur = true;
     }
-    notPresent(this.userService, this.registerForm);
   }
 }
 
