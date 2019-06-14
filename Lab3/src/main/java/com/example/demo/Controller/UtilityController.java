@@ -215,11 +215,13 @@ public class UtilityController {
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
                 // UPDATE
                 Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
-                f.get().getPrenotazioni().remove(p);
-                p.setFermata(fermataService.getFermata(prenotazioneDTO.getId_fermata()).get());
-                prenotazioneService.save(p);
-                f.get().getPrenotazioni().add(p);
-                return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+                if(p.getFermata().getLinea()!=fermataService.getFermata(prenotazioneDTO.getId_fermata()).get().getLinea()) {
+                    f.get().getPrenotazioni().remove(p);
+                    p.setFermata(fermataService.getFermata(prenotazioneDTO.getId_fermata()).get());
+                    prenotazioneService.save(p);
+                    f.get().getPrenotazioni().add(p);
+                    return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+                }
             } else {
                 // INSERT
             boolean presente;
