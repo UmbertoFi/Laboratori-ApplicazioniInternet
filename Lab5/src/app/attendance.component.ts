@@ -118,7 +118,7 @@ export class AttendanceComponent implements OnInit {
     const cur = yyyy + '/' + mm + '/' + dd;
     const curdate = new Date(cur).getTime();
 
-    if (date - curdate === 0) {
+    // if (date - curdate === 0) {
       if (verso == 0) {
         if (this.tratte.fermateA[idFermata].persone[idPersona].selected === false) {
           this.tratte.fermateA[idFermata].persone[idPersona].selected = true;
@@ -134,7 +134,7 @@ export class AttendanceComponent implements OnInit {
         }
         this.lineaService.updateprenotazione(this.tratte.fermateR[idFermata].persone[idPersona].id_bambino, this.tratte.fermateR[idFermata].id_fermata, this.corse[this.pageIndex].data, 1).subscribe();
       }
-    }
+    // }
   }
 
   selezionaPersona(verso: number, idFermata: number, idPersona: number) {
@@ -244,6 +244,14 @@ export class AttendanceComponent implements OnInit {
 
 
   inserisciBambinoNonPrenotato($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
+    const date = new Date(this.corse[this.pageIndex].data).getTime();
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = today.getFullYear();
+    const cur = yyyy + '/' + mm + '/' + dd;
+    const curdate = new Date(cur).getTime();
+    // if (date - curdate === 0)
     this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
     return;
   }

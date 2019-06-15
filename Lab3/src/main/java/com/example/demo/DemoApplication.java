@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -26,6 +27,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.persistence.EntityManagerFactory;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -75,16 +77,17 @@ public class DemoApplication {
                 ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
                 Resource[] resources = resolver.getResources("classpath*:/json/*.json");
                 for (Resource r : resources) {
-                    LineaDTO linea = mapper.readValue(ResourceUtils.getFile("classpath:json/" + r.getFilename()), LineaDTO.class);
+                    InputStream resource = new ClassPathResource("json/"+r.getFilename()).getInputStream();
+                    LineaDTO linea = mapper.readValue(resource, LineaDTO.class);
                     ls.save(linea);
                 }
-                ListaUtentiDTO utenti = mapper.readValue(ResourceUtils.getFile("classpath:json_new/utenti.json"), ListaUtentiDTO.class);
+                ListaUtentiDTO utenti = mapper.readValue(new ClassPathResource("json_new/utenti.json").getInputStream(), ListaUtentiDTO.class);
                 for(UtenteDTO u : utenti.getUtenti())
                     us.save(u.convertToEntity());
-                ListaPrenotatiDTO prenotazioni = mapper.readValue(ResourceUtils.getFile("classpath:json_new/prenotazioni.json"), ListaPrenotatiDTO.class);
+                ListaPrenotatiDTO prenotazioni = mapper.readValue(new ClassPathResource("json_new/prenotazioni.json").getInputStream(), ListaPrenotatiDTO.class);
                 for(PrenotatoDTO p:prenotazioni.getPrenotazioni())
                   ps.save(p.convertToEntity(fs));
-                ListaCorseDTO corse = mapper.readValue(ResourceUtils.getFile("classpath:json_new/corse.json"), ListaCorseDTO.class);
+                ListaCorseDTO corse = mapper.readValue(new ClassPathResource("json_new/corse.json").getInputStream(), ListaCorseDTO.class);
                 for(CorsaDTO c:corse.getCorse())
                     cs.save(c.convertToEntity(lr));
             } catch (Exception e) {
