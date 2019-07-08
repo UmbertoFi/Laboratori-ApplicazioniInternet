@@ -1,0 +1,43 @@
+<div class="jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <h2>Registrazione</h2>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" formControlName="email" class="form-control"
+                   [ngClass]="{ 'is-invalid': email_blur && f.email.errors}" (blur)="onBlur(0)" (ngModelChange)="onChange()"/>
+            <div *ngIf="email_blur && f.email.errors" class="invalid-feedback">
+              <div *ngIf="f.email.errors.required">Email is required</div>
+              <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+              <div *ngIf="f.email.errors.notPresent">Email già utilizzata</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" formControlName="password" class="form-control"
+                   [ngClass]="{ 'is-invalid': password_blur && f.password.errors}" (blur)="onBlur(1)"/>
+            <div *ngIf="password_blur && f.password.errors" class="invalid-feedback">
+              <div *ngIf="f.password.errors.required">Password richiesta</div>
+              <div *ngIf="f.password.errors.minlength">Inserire almeno 6 caratteri</div>
+              <div *ngIf="f.password.errors.maxlength">Inserire al massimo 12 caratteri</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" formControlName="confirmPassword" class="form-control"
+                   [ngClass]="{ 'is-invalid': confirmPassword_blur && f.confirmPassword.errors }" (blur)="onBlur(2)"/>
+            <div *ngIf="confirmPassword_blur && f.confirmPassword.errors" class="invalid-feedback">
+              <div *ngIf="f.confirmPassword.errors.required">Password richiesta</div>
+              <div *ngIf="f.confirmPassword.errors.mustMatch">Le password devono essere uguali</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+package it.polito.ai.demo.Configuration;
+
+import it.polito.ai.demo.Entity.Utente;
+import it.polito.ai.demo.Repository.UserRepository;
+import it.polito.ai.demo.Repository.UtenteRuoloRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+
+@Component
+public class MyUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    UtenteRuoloRepository utenteRuoloRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        Optional<Utente> user = userRepository.findById(username);
+        if (user.isPresent() == false) {
+            throw new UsernameNotFoundException(username);
+        }
+        return new MyUserPrincipal(user.get());
+    }
+
+}
