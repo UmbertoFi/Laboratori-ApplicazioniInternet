@@ -1,6 +1,8 @@
 package it.polito.ai.demo.Entity;
 
+import it.polito.ai.demo.DTO.DettagliLineaPersoneDTONew;
 import it.polito.ai.demo.DTO.FermataDTO;
+import it.polito.ai.demo.DTO.PersonaDTONew;
 import lombok.*;
 
 import javax.persistence.*;
@@ -74,7 +76,7 @@ public class Fermata {
                 .build();
         return dtl;
 
-    }
+    } */
 
     public DettagliLineaPersoneDTONew convertToDettagliLineaPersoneDTONew(List<PersonaDTONew> persone, int verso) {
         String ora;
@@ -90,7 +92,7 @@ public class Fermata {
                 .build();
         return dtl;
 
-    } */
+    }
 
 
 }

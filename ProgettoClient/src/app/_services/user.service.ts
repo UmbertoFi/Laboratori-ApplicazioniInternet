@@ -28,10 +28,10 @@ export class UserService {
     localStorage.setItem('access_token',data.token);
   }
 
-  inserisciPrenotazione(pren : Prenotazione, linea: string, data: string): Observable<Prenotazione>{
+  /* inserisciPrenotazione(pren : Prenotazione, linea: string, data: string): Observable<Prenotazione>{
     let url = 'http://localhost:8080/reservations/'+linea+'/'+data;
     return this.http.post<Prenotazione>(url, pren, this.httpOptions);
-  }
+  } */
 
 
   notPresent(controlName: string): Observable<checkUsername>{

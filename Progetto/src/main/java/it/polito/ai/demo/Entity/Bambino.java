@@ -1,5 +1,6 @@
 package it.polito.ai.demo.Entity;
 
+import it.polito.ai.demo.DTO.BambinoDTO;
 import lombok.*;
 import javax.persistence.*;
 
@@ -19,14 +20,14 @@ public class Bambino {
     @JoinColumn(name = "id_genitore")
     private Utente genitore;
 
-    /* public BambinoDTO convertToBambinoDTO() {
+    public BambinoDTO convertToBambinoDTO() {
         BambinoDTO b = BambinoDTO.builder()
                 .nome(this.nome)
                 .cognome(this.cognome)
                 .id_bambino(this.id)
                 .build();
         return b;
-    } */
+    }
 
 
 }

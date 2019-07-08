@@ -14,7 +14,7 @@ import {TrattaNew} from './_models/trattaNew';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
-  title = 'Lab5';
+  title = 'Pedibus';
 
   bambini: Bambino[];
   nomiLinee: nomeLinea[];

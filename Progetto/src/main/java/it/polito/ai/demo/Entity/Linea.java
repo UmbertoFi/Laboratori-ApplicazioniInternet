@@ -3,6 +3,7 @@ package it.polito.ai.demo.Entity;
 
 import it.polito.ai.demo.DTO.FermataDTO;
 import it.polito.ai.demo.DTO.LineaDTO;
+import it.polito.ai.demo.DTO.NomeLineaDTO;
 import lombok.*;
 
 import javax.persistence.CascadeType;
@@ -55,11 +56,11 @@ public class Linea {
         return l;
     }
 
-    /* public NomeLineaDTO convertToNomeLineaDTO() {
+    public NomeLineaDTO convertToNomeLineaDTO() {
         NomeLineaDTO l = NomeLineaDTO.builder()
                 .nome(this.nome)
                 .build();
 
         return l;
-    }  */
+    }
 }

@@ -1,5 +1,6 @@
 package it.polito.ai.demo.Entity;
 
+import it.polito.ai.demo.DTO.CorsaSDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,14 +31,14 @@ public class Corsa {
     @OneToMany(mappedBy = "corsa", cascade = CascadeType.ALL)
     private List<Prenotazione> prenotazioni = new ArrayList<>();
 
-    /* public CorsaSDTO convertToDTO(){
+    public CorsaSDTO convertToDTO(){
 
         CorsaSDTO c=CorsaSDTO.builder()
-                .data(id.getData().toString())
-                .nome_linea(id.getLinea().getNome())
-                .verso(id.getVerso())
+                .data(data.toString())
+                .nome_linea(linea.getNome())
+                .verso(verso)
                 .build();
 
         return c;
-    } */
+    }
 }
