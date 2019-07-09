@@ -33,10 +33,10 @@ public class Linea {
     @Builder.Default
     @OneToMany(mappedBy = "linea", cascade = CascadeType.ALL)
     private List<Fermata> fermate = new ArrayList<Fermata>();
-
+/*
     @Builder.Default
     @OneToMany(mappedBy = "id.linea", cascade = CascadeType.ALL)
-    private List<Disponibilita> disponibilita = new ArrayList<>();
+    private List<Disponibilita> disponibilita = new ArrayList<>();*/
 
     @Builder.Default
     @OneToMany(mappedBy = "linea", cascade = CascadeType.ALL)
