@@ -107,6 +107,24 @@ public class UtilityController {
         return nomiBambini;
     }
 
+    @GetMapping(path = "/utility/children/{username}")
+    public @ResponseBody
+    List<BambinoDTO> getAllBambini(@PathVariable("username") String username) throws Exception {
+
+        Utente u=userService.getUserById(username);
+        if(u!=null){
+            List<BambinoDTO> children = bambinoService.getFigli(u);
+
+            if(children==null){
+                throw new BadRequestException("bambini non trovati!");
+            }
+
+            return children;
+        }
+        throw new BadRequestException("username non valido!");
+
+    }
+
     /* @GetMapping(path = "/utility/corse")
     public @ResponseBody
     List<CorsaSDTO> getAllCorse() throws Exception {

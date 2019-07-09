@@ -1,8 +1,10 @@
 package it.polito.ai.demo.ServiceImplementation;
 
+import it.polito.ai.demo.DTO.BambinoDTO;
 import it.polito.ai.demo.DTO.LineaDTO;
 import it.polito.ai.demo.Entity.Bambino;
 import it.polito.ai.demo.Entity.Linea;
+import it.polito.ai.demo.Entity.Utente;
 import it.polito.ai.demo.Repository.BambinoRepository;
 import it.polito.ai.demo.Repository.LineaRepository;
 import it.polito.ai.demo.Service.BambinoService;
@@ -12,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,6 +55,19 @@ public class BambinoServiceImpl implements BambinoService {
 
     public Iterable<Bambino> getBambini(){
         return bambinoRepository.findAll();
+    }
+
+    public List<BambinoDTO> getFigli(Utente utente){
+        Iterable<Bambino> figli=bambinoRepository.getBambiniByUsername(utente);
+        List<BambinoDTO> b=new ArrayList<>();
+
+        for (Bambino bambino : figli)
+            b.add(bambino.convertToBambinoDTO());
+
+        if(b.size()==0){
+            return null;
+        }
+        return b;
     }
 
 }
