@@ -1,6 +1,7 @@
 package it.polito.ai.demo.Repository;
 
 import it.polito.ai.demo.Entity.Corsa;
+import it.polito.ai.demo.Entity.Linea;
 import it.polito.ai.demo.Entity.idCorsa;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

@@ -1,0 +1,135 @@
+<div style="text-align:right">
+  <button (click)="logout($event)">
+    Logout
+  </button>
+
+</div>
+<div style="text-align:center">
+  <h1>
+    {{ title }}
+  </h1>
+</div>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>card esterna</mat-card-title>
+      <mat-card-subtitle>sticazzi</mat-card-subtitle>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group>
+      <mat-tab label="Prenotazioni corse">
+        <mat-card>
+          <mat-card-header>
+            <button mat-icon-button [matMenuTriggerFor]="menu" style="margin-right: auto;">
+              <mat-icon>menu</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item *ngFor="let linea of nomiLinee; let l = index"
+                      (click)="selezionaLineaMenu(l)">{{nomiLinee[l].nome}}</button>
+            </mat-menu>
+            <mat-card-title-group>
+              <mat-card-title>Linea:  {{nomiLinee[lineaSelezionataMenu].nome}}</mat-card-title>
+              <mat-card-subtitle>{{corse[this.pageIndex].data}}</mat-card-subtitle>
+            </mat-card-title-group>
+            <mat-paginator style="margin-left: auto;"
+                           [length]="length"
+                           [pageSize]="pageSize"
+                           [hidePageSize]="true"
+                           [pageIndex]="pageIndex"
+                           (page)="selezionaCorsaPaginator($event)">
+            </mat-paginator>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-tab-group>
+              <mat-tab label="Andata">
+                <mat-list>
+                  <mat-list-item *ngFor="let fermata of tratte.fermateA; let f = index; let last = last">
+                    <h3 mat-line>
+                      <mat-icon>my_location
+                      </mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;&#45;&nbsp;{{fermata.nome}}
+                      <button mat-icon-button [matMenuTriggerFor]="listaBambini">
+                        <mat-icon>person_add</mat-icon>
+                      </button>
+                      <mat-menu #listaBambini="matMenu">
+                        <button mat-menu-item *ngFor="let figlio of figli; let b = index"
+                                (click)="inserisciFiglio($event,figlio.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateA[f].id_fermata,0,corse[pageIndex].data)">
+                          {{figlio.nome}}
+                        </button>
+                      </mat-menu>
+                    </h3>
+                    <ul mat-line>
+                      <li class="clickable"
+                          *ngFor="let persona of personeOrdinateByNome(0,f); let p=index, let last = last">
+                        <p>{{persona.nome}}&nbsp;{{persona.cognome}}&nbsp;{{persona.id_bambino}}{{last ? '' : ',&nbsp;'}}</p>
+                      </li>
+                    </ul>
+                  </mat-list-item>
+                </mat-list>
+              </mat-tab>
+              <mat-tab label="Ritorno">
+                <mat-list>
+                  <mat-list-item *ngFor="let fermata of tratte.fermateR; let f = index">
+                    <h3 mat-line>
+                      <mat-icon>my_location
+                      </mat-icon>&#9;{{f + 1}}&#176;&#8594;&#9;{{fermata.ora}}&nbsp;&#45;&nbsp;{{fermata.nome}}
+                      <button mat-icon-button [matMenuTriggerFor]="listaBambini">
+                        <mat-icon>person_add</mat-icon>
+                      </button>
+                      <mat-menu #listaBambini="matMenu">
+                        <button mat-menu-item *ngFor="let figlio of figli; let b = index"
+                                (click)="inserisciFiglio($event,figlio.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateR[f].id_fermata,1,corse[pageIndex].data)">
+                          {{figlio.nome}}
+                        </button>
+                      </mat-menu>
+                    </h3>
+                    <ul mat-line>
+                      <li class="clickable"
+                          *ngFor="let persona of personeOrdinateByNome(1,f); let p=index; let last = last">
+                        <p>{{persona.nome}}&nbsp;{{persona.cognome}}&nbsp;{{persona.id_bambino}}{{last ? '' : ',&nbsp;'}}</p>
+                      </li>
+                    </ul>
+                  </mat-list-item>
+                </mat-list>
+              </mat-tab>
+            </mat-tab-group>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Aggiungi Bambino">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Aggiungi bambino</mat-card-title>
+            <mat-card-subtitle>vedi di sbrigarti</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="col-md-6 offset-md-3">
+            <form [formGroup]="aggiungiBambinoForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label>Nome</label>
+                <input type="text" formControlName="nome" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && this.aggiungiBambinoForm.controls.nome.errors }"/>
+                <div *ngIf="submitted && this.aggiungiBambinoForm.controls.nome.errors" class="invalid-feedback">
+                  <div *ngIf="this.aggiungiBambinoForm.controls.nome.errors.required">name is required</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Cognome</label>
+                <input type="password" formControlName="cognome" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && this.aggiungiBambinoForm.controls.cognome.errors }"/>
+                <div *ngIf="submitted && this.aggiungiBambinoForm.controls.cognome.errors" class="invalid-feedback">
+                  <div *ngIf="this.aggiungiBambinoForm.controls.cognome.errors.required">cognome is required</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary">Aggiungi</button>
+              </div>
+            </form>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

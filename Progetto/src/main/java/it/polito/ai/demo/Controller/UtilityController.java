@@ -111,11 +111,11 @@ public class UtilityController {
     public @ResponseBody
     List<BambinoDTO> getAllBambini(@PathVariable("username") String username) throws Exception {
 
-        Utente u=userService.getUserById(username);
-        if(u!=null){
+        Utente u = userService.getUserById(username);
+        if (u != null) {
             List<BambinoDTO> children = bambinoService.getFigli(u);
 
-            if(children==null){
+            if (children == null) {
                 throw new BadRequestException("bambini non trovati!");
             }
 
@@ -140,12 +140,12 @@ public class UtilityController {
     public @ResponseBody
     List<CorsaSDTO> getAllCorse(@PathVariable("nome_linea") String nomeLinea) throws Exception {
 
-        Integer n_linea=lineaService.getLinea(nomeLinea).getId();
+        Integer n_linea = lineaService.getLinea(nomeLinea).getId();
 
         Iterable<Corsa> cors = corsaService.getCorseByIdLinea(n_linea);
         List<CorsaSDTO> corse = new ArrayList<>();
         for (Corsa c : cors)
-            if (c.getVerso().compareTo("A")==0)
+            if (c.getVerso().compareTo("A") == 0)
                 corse.add(c.convertToDTO());
         return corse;
     }
@@ -153,7 +153,7 @@ public class UtilityController {
     @GetMapping(path = "/utility/reservations/{nome_linea}/{date}")
     public @ResponseBody
     PasseggeriDTONew getDettagliPrenotazioniLinea(@PathVariable("nome_linea") String nomeLinea,
-                                               @PathVariable("date") String date) {
+                                                  @PathVariable("date") String date) {
 
 
         String[] pieces = date.split("-");
@@ -182,10 +182,10 @@ public class UtilityController {
             List<PersonaDTONew> persone = new ArrayList<>();
             for (Prenotazione p1 : prenotazioni_A) {
                 if (p1.getFermata().getId() == f2.getId()) {
-                    persone.add(new PersonaDTONew(p1.getId().getId_bambino(),bambinoService.getNome(p1.getId().getId_bambino()),bambinoService.getCognome(p1.getId().getId_bambino()),p1.isPresente()));
+                    persone.add(new PersonaDTONew(p1.getId().getId_bambino(), bambinoService.getNome(p1.getId().getId_bambino()), bambinoService.getCognome(p1.getId().getId_bambino()), p1.isPresente()));
                 }
             }
-            DettagliLineaPersoneDTONew dlp = f2.convertToDettagliLineaPersoneDTONew(persone,0);
+            DettagliLineaPersoneDTONew dlp = f2.convertToDettagliLineaPersoneDTONew(persone, 0);
             fermateAndata.add(dlp);
         }
 
@@ -194,10 +194,10 @@ public class UtilityController {
             List<PersonaDTONew> persone = new ArrayList<>();
             for (Prenotazione p1 : prenotazioni_R) {
                 if (p1.getFermata().getId() == f2.getId()) {
-                    persone.add(new PersonaDTONew(p1.getId().getId_bambino(),bambinoService.getNome(p1.getId().getId_bambino()),bambinoService.getCognome(p1.getId().getId_bambino()),p1.isPresente()));
+                    persone.add(new PersonaDTONew(p1.getId().getId_bambino(), bambinoService.getNome(p1.getId().getId_bambino()), bambinoService.getCognome(p1.getId().getId_bambino()), p1.isPresente()));
                 }
             }
-            DettagliLineaPersoneDTONew dlp2 = f2.convertToDettagliLineaPersoneDTONew(persone,1);
+            DettagliLineaPersoneDTONew dlp2 = f2.convertToDettagliLineaPersoneDTONew(persone, 1);
             fermateRitorno.add(dlp2);
         }
 
@@ -232,32 +232,33 @@ public class UtilityController {
 
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
                 // UPDATE
-                Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
-                if(p.getFermata().getLinea()!=fermataService.getFermata(prenotazioneDTO.getId_fermata()).get().getLinea()) {
-                    f.get().getPrenotazioni().remove(p);
-                    p.setFermata(fermataService.getFermata(prenotazioneDTO.getId_fermata()).get());
-                    prenotazioneService.save(p);
-                    f.get().getPrenotazioni().add(p);
-                    return IdPrenotazioneDTO.builder().id(iP.toString()).build();
-                }
+                Prenotazione p = prenotazioneService.getPrenotazione(iP).get();
+                // if(p.getFermata().getLinea()!=fermataService.getFermata(prenotazioneDTO.getId_fermata()).get().getLinea()) {
+                f.get().getPrenotazioni().remove(p);
+                p.setFermata(f.get());
+                prenotazioneService.save(p);
+                f.get().getPrenotazioni().add(p);
+                return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+                //}
             } else {
                 // INSERT
-            boolean presente;
-            if (data.compareTo(curr) == 0) {
-                presente = true;
-            } else {
-                presente = false;
-            }
-            Prenotazione p = Prenotazione.builder()
-                    .fermata(f.get())
-                    .presente(presente)
-                    .id(iP)
-                    .build();
+                boolean presente;
+                if (data.compareTo(curr) == 0) {
+                    presente = true;
+                } else {
+                    presente = false;
+                }
+                Prenotazione p = Prenotazione.builder()
+                        .fermata(f.get())
+                        .presente(presente)
+                        .corsa(corsaService.getCorsa(f.get().getLinea().getId(), data, prenotazioneDTO.getVerso()))
+                        .id(iP)
+                        .build();
 
-            prenotazioneService.save(p);
-            f.get().getPrenotazioni().add(p);
-            return IdPrenotazioneDTO.builder().id(iP.toString()).build();
-        }
+                prenotazioneService.save(p);
+                f.get().getPrenotazioni().add(p);
+                return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+            }
         }
         throw new NotFoundException("errore nella prenotazione");
     }

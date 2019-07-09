@@ -6,6 +6,7 @@ import {Observable} from 'rxjs';
 import {checkUsername} from '../_models/checkUsername';
 import {Bambino} from '../_models/bambino';
 import {NUOVAPrenotazione} from '../_models/nuovaprenotazione';
+import {BambinoNew} from '../_models/bambinoNew';
 
 @Injectable()
 export class UserService {
@@ -26,6 +27,7 @@ export class UserService {
   // login setItem
   login(data: any) {
     localStorage.setItem('access_token',data.token);
+    localStorage.setItem('username',data.username);
   }
 
   /* inserisciPrenotazione(pren : Prenotazione, linea: string, data: string): Observable<Prenotazione>{
@@ -37,5 +39,9 @@ export class UserService {
   notPresent(controlName: string): Observable<checkUsername>{
     let checkUsernameResponse = this.http.get<checkUsername>(`http://localhost:8080/utility/checkUsername/`+controlName);
     return checkUsernameResponse;
+  }
+
+  aggiungiBambino(bambino: BambinoNew) {
+    return this.http.post<BambinoNew>('http://localhost:8080/utility/children/'+localStorage.getItem('username'),bambino,this.httpOptions);
   }
 }

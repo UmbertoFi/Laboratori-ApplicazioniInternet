@@ -7,19 +7,24 @@ import {Bambino} from './_models/bambino';
 import {nomeLinea} from './_models/nomeLinea';
 import {CorsaNew} from './_models/corsaNew';
 import {TrattaNew} from './_models/trattaNew';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-attendance',
-  templateUrl: './attendance.component.html',
-  styleUrls: ['./attendance.component.css']
+  selector: 'app-simpleuser',
+  templateUrl: './simpleuser.component.html',
+  styleUrls: ['./simpleuser.component.css']
 })
-export class AttendanceComponent implements OnInit {
+export class SimpleuserComponent implements OnInit {
   title = 'Pedibus';
 
   bambini: Bambino[];
   nomiLinee: nomeLinea[];
   corse: CorsaNew[];
   tratte: TrattaNew;
+  figli: Bambino[];
+  aggiungiBambinoForm: FormGroup;
+  submitted: boolean = false;
 
 
   pageEvent: PageEvent;
@@ -28,7 +33,8 @@ export class AttendanceComponent implements OnInit {
   pageIndex = 0;
   lineaSelezionataMenu = 0;
 
-  constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
+
+  constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -36,6 +42,23 @@ export class AttendanceComponent implements OnInit {
       this.alertService.error('Utente non ancora loggato!', true);
       this.router.navigate(['/login']);
     }
+
+    this.aggiungiBambinoForm = this.formBuilder.group({
+      nome: ['', Validators.required],
+      cognome: ['', Validators.required]
+    });
+
+    let promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.figli = data;
+      });
 
     let promiseBambini = fetch('http://localhost:8080/utility/children', {
       headers: {
@@ -246,7 +269,7 @@ export class AttendanceComponent implements OnInit {
   }
 
 
-  inserisciBambinoNonPrenotato($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
+  inserisciFiglio($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
     const today = new Date();
     const date = new Date(this.corse[this.pageIndex].data);
     let dd = String(today.getDate()).padStart(2, '0');
@@ -258,10 +281,28 @@ export class AttendanceComponent implements OnInit {
     yyyy = date.getFullYear();
     const curdate = yyyy + '/' + mm + '/' + dd;
 
-    if (cur.localeCompare(curdate) === 0) {
+    if (cur.localeCompare(curdate) < 0) {
       this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
     }
     return;
   }
-}
 
+  onSubmit() {
+    this.submitted = true;
+
+    // stop here if form is invalid
+    if (this.aggiungiBambinoForm.invalid) {
+      return;
+    }
+    this.userService.aggiungiBambino(this.aggiungiBambinoForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Inserimento bambino eseguito con successo!', true);
+          // this.router.navigate(['/simpleuser']);
+        },
+        error => {
+          this.alertService.error("Inserimento bambino fallito!");
+        });
+  }
+}

@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BambinoRepository extends CrudRepository<Bambino, Integer> {
-    @Query("select b from Bambino b where b.user = ?1")
+    @Query("select b from Bambino b where b.genitore = ?1")
     Iterable<Bambino> getBambiniByUsername(Utente utente);
 }
