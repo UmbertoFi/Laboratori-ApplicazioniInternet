@@ -69,4 +69,9 @@ public class BambinoServiceImpl implements BambinoService {
         return b;
     }
 
+    public Optional<Bambino> getBambinoByAll(String nome, String cognome, Utente utente){
+        Optional<Bambino> bambino = bambinoRepository.findBambino(nome,cognome,utente);
+        return bambino;
+    }
+
 }

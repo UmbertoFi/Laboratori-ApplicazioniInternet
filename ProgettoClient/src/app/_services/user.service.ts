@@ -7,6 +7,7 @@ import {checkUsername} from '../_models/checkUsername';
 import {Bambino} from '../_models/bambino';
 import {NUOVAPrenotazione} from '../_models/nuovaprenotazione';
 import {BambinoNew} from '../_models/bambinoNew';
+import {CandidaturaAccompagnatore} from '../_models/candidaturaAccompagnatore';
 
 @Injectable()
 export class UserService {
@@ -43,5 +44,9 @@ export class UserService {
 
   aggiungiBambino(bambino: BambinoNew) {
     return this.http.post<BambinoNew>('http://localhost:8080/utility/children/'+localStorage.getItem('username'),bambino,this.httpOptions);
+  }
+
+  candidatiAccompagnatore(candidaturaAccompagnatore: CandidaturaAccompagnatore) {
+    return this.http.post<CandidaturaAccompagnatore>('http://localhost:8080/utility/available/'+localStorage.getItem('username'),candidaturaAccompagnatore,this.httpOptions)
   }
 }

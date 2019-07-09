@@ -12,7 +12,7 @@ import {
   MatPaginatorModule,
   MatFormFieldModule,
   MatTabsModule,
-  MatButtonModule, MatMenuModule, MatSelectModule
+  MatButtonModule, MatMenuModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LineaService} from './_services/linea.service';
@@ -56,9 +56,11 @@ const routes: Routes = [
     RouterModule.forRoot(routes, {enableTracing: true}),
     ReactiveFormsModule,
     HttpClientModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}, LineaService, UserService, AlertService, AuthenticationService],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}, LineaService, UserService, AlertService, AuthenticationService, MatDatepickerModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {

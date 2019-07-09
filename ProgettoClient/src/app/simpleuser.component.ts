@@ -25,6 +25,7 @@ export class SimpleuserComponent implements OnInit {
   figli: Bambino[];
   aggiungiBambinoForm: FormGroup;
   submitted: boolean = false;
+  candidatiAccompagnatoreForm: FormGroup;
 
 
   pageEvent: PageEvent;
@@ -46,6 +47,12 @@ export class SimpleuserComponent implements OnInit {
     this.aggiungiBambinoForm = this.formBuilder.group({
       nome: ['', Validators.required],
       cognome: ['', Validators.required]
+    });
+
+    this.candidatiAccompagnatoreForm = this.formBuilder.group({
+      linea: ['', Validators.required],
+      data: ['', Validators.required],
+      verso: ['', Validators.required]
     });
 
     let promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
@@ -305,4 +312,22 @@ export class SimpleuserComponent implements OnInit {
           this.alertService.error("Inserimento bambino fallito!");
         });
   }
+
+  onSubmitAccompagnatore() {
+
+    // stop here if form is invalid
+    /* if (this.aggiungiBambinoForm.invalid) {
+      return;
+    } */
+
+    this.userService.candidatiAccompagnatore(this.candidatiAccompagnatoreForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Candidatura come accompagnatore eseguita con successo!', true);
+          // this.router.navigate(['/simpleuser']);
+        },
+        error => {
+          this.alertService.error("Candidatura come accompagnatore fallita!");
+        });  }
 }

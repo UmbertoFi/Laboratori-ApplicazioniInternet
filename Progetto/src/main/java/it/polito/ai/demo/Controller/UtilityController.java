@@ -110,19 +110,22 @@ public class UtilityController {
     @PostMapping(path = "/utility/children/{username}")
     public @ResponseBody
     void postNuovoBambino(@PathVariable("username") String username,
-                                        @RequestBody BambinoNewDTO bambinoNewDTO){
-        Utente u=userService.getUserById(username);
-        if(u!=null){
-            Bambino b=bambinoNewDTO.convertToEntity(u);
-            bambinoService.save(b);
-            return;
+                          @RequestBody BambinoNewDTO bambinoNewDTO) {
+        Utente u = userService.getUserById(username);
+        if (u != null) {
+            if (!bambinoService.getBambinoByAll(bambinoNewDTO.getNome(), bambinoNewDTO.getCognome(), u).isPresent()) {
+                Bambino b = bambinoNewDTO.convertToEntity(u);
+                bambinoService.save(b);
+                return;
+            }
+            throw new BadRequestException("bambino già inserito");
         }
         throw new BadRequestException("username non trovato");
     }
 
     @GetMapping(path = "/utility/children/{username}")
     public @ResponseBody
-    List<BambinoDTO> getAllBambini(@PathVariable("username") String username){
+    List<BambinoDTO> getAllBambini(@PathVariable("username") String username) {
 
         Utente u = userService.getUserById(username);
         if (u != null) {
