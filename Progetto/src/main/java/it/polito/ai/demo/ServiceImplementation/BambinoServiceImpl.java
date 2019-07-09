@@ -28,9 +28,8 @@ public class BambinoServiceImpl implements BambinoService {
     @Autowired
     private BambinoRepository bambinoRepository;
 
-    public void save() {
-        /* Bambino bambino = l.convertToEntity();
-        em.persist(linea); */
+    public void save(Bambino b) {
+        em.persist(b);
     }
 
     /* public Iterable<Bambino> getLines() {

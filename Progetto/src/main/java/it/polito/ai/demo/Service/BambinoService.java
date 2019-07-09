@@ -14,4 +14,6 @@ public interface BambinoService {
     public String getCognome(int id_bambino);
 
     public List<BambinoDTO> getFigli(Utente utente);
+
+    public void save(Bambino b);
 }

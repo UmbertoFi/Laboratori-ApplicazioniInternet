@@ -107,9 +107,22 @@ public class UtilityController {
         return nomiBambini;
     }
 
+    @PostMapping(path = "/utility/children/{username}")
+    public @ResponseBody
+    void postNuovoBambino(@PathVariable("username") String username,
+                                        @RequestBody BambinoNewDTO bambinoNewDTO){
+        Utente u=userService.getUserById(username);
+        if(u!=null){
+            Bambino b=bambinoNewDTO.convertToEntity(u);
+            bambinoService.save(b);
+            return;
+        }
+        throw new BadRequestException("username non trovato");
+    }
+
     @GetMapping(path = "/utility/children/{username}")
     public @ResponseBody
-    List<BambinoDTO> getAllBambini(@PathVariable("username") String username) throws Exception {
+    List<BambinoDTO> getAllBambini(@PathVariable("username") String username){
 
         Utente u = userService.getUserById(username);
         if (u != null) {
