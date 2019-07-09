@@ -308,4 +308,45 @@ public class UtilityController {
         throw new BadRequestException("errore nella modifica ");
     }
 
+    @PostMapping(path = "/utility/available/{username}")
+    public @ResponseBody
+    void postNuovaPrenotazione(@PathVariable("username") String username,
+                                @RequestBody DisponibilitaDTO disponibilitaDTO) {
+
+        Utente u=userService.getUserById(username);
+        if(u!=null){
+            String[] pieces = disponibilitaDTO.getData().split("-");
+            LocalDate date = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+
+            Linea l =lineaService.getLinea(disponibilitaDTO.getLinea());
+           String verso;
+            if(l!=null){
+                if(disponibilitaDTO.getVerso().compareTo("Andata")==0){
+                    verso="A";
+                }
+                else{
+                    verso="R";
+                }
+
+                Corsa c=corsaService.getCorsa(l.getId(),date, verso);
+                if(c!=null){
+
+                    Disponibilita d=Disponibilita.builder()
+                                        .id(idDisponibilita.builder().corsa(c).utente(u).build())
+                           /* .fermataA()
+                            .fermataR()*/
+                            .build();
+
+                            return;
+                }
+                throw  new BadRequestException("corsa non esistente");
+            }
+            throw  new BadRequestException("linea non esistente");
+        }
+        throw  new BadRequestException("utente non esistente");
+
+    }
+
+
+
 }

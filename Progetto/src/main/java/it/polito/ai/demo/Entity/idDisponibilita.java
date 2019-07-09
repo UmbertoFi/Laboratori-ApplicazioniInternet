@@ -21,11 +21,7 @@ public class idDisponibilita implements Serializable {
     @JoinColumn(name = "username")
     private Utente utente;
     @ManyToOne
-    @JoinColumn(name = "id_linea")
-    private Linea linea;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate data;
-    private String verso;
-
+    @JoinColumn(name = "id_corsa")
+    private Corsa corsa;
 
 }

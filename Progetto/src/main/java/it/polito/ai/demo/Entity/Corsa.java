@@ -31,6 +31,10 @@ public class Corsa {
     @OneToMany(mappedBy = "corsa", cascade = CascadeType.ALL)
     private List<Prenotazione> prenotazioni = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "id.corsa", cascade = CascadeType.ALL)
+    private List<Disponibilita> disponibilita = new ArrayList<>();
+
     public CorsaSDTO convertToDTO(){
 
         CorsaSDTO c=CorsaSDTO.builder()
