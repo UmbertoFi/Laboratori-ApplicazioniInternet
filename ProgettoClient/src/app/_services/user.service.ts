@@ -59,8 +59,7 @@ export class UserService {
   }
 
   trovaDisponibilita(trovaDisponibilita: TrovaDisponibilita) {
-    // <Disponibilità> è il tipo di valore che riceviamo????
-    return this.http.post<Disponibilita>('http://localhost:8080/utility/disponibilita',trovaDisponibilita,this.httpOptions);
+    return this.http.get<Disponibilita>('http://localhost:8080/utility/disponibilita/'+trovaDisponibilita.linea+"/"+trovaDisponibilita.data+"/"+trovaDisponibilita.verso,this.httpOptions);
   }
 
   consolidaTurno(disponibilita: Disponibilita) {

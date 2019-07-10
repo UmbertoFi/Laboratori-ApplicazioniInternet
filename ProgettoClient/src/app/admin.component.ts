@@ -31,6 +31,7 @@ export class AdminComponent implements OnInit {
   trovaDisponibilitaForm: FormGroup;
   disponibilita: Disponibilita[];
   consolidaTurnoForm: FormGroup;
+  d: Disponibilita;
 
 
   pageEvent: PageEvent;
@@ -67,7 +68,7 @@ export class AdminComponent implements OnInit {
     });
 
     this.consolidaTurnoForm = this.formBuilder.group({
-      disponibilita: ['', Validators.required]
+      username: ['', Validators.required]
     });
 
     let promiseUtenti = fetch('http://localhost:8080/users', {
@@ -365,17 +366,26 @@ export class AdminComponent implements OnInit {
       return;
     } */
 
-    this.userService.trovaDisponibilita(this.trovaDisponibilitaForm.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          this.disponibilita.push(data);
-          this.alertService.success('Disponibilità aggiornate per la corsa scelta con successo!', true);
-          // this.router.navigate(['/simpleuser']);
-        },
-        error => {
-          this.alertService.error('Errore aggiornamento disponibilità per la corsa scelta!');
-        });
+    let promiseDisponibilita = fetch('http://localhost:8080/utility/disponibilita/'+this.trovaDisponibilitaForm.value.linea+"/"+this.trovaDisponibilitaForm.value.data+"/"+this.trovaDisponibilitaForm.value.verso, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.disponibilita = data;
+        this.d = new Disponibilita(this.trovaDisponibilitaForm.value.linea, this.trovaDisponibilitaForm.value.data, this.trovaDisponibilitaForm.value.verso, "");
+        this.alertService.success('Disponibilità aggiornate per la corsa scelta con successo!', true);
+        // this.router.navigate(['/simpleuser']);
+        return;
+      })
+      .catch((error) => {
+      this.alertService.error('Errore aggiornamento disponibilità per la corsa scelta!');
+    });
+
+
   }
 
   onSubmitConsolidaTurno() {
@@ -384,13 +394,9 @@ export class AdminComponent implements OnInit {
       return;
     } */
 
-    let d: Disponibilita;
-    d.username = this.trovaDisponibilitaForm.value.username;
-    d.linea = this.consolidaTurnoForm.value.linea;
-    d.data = this.consolidaTurnoForm.value.data;
-    d.verso = this.consolidaTurnoForm.value.verso;
+    this.d.username = this.consolidaTurnoForm.value.username;
 
-    this.userService.consolidaTurno(d)
+    this.userService.consolidaTurno(this.d)
       .pipe(first())
       .subscribe(
         data => {
@@ -400,5 +406,12 @@ export class AdminComponent implements OnInit {
         error => {
           this.alertService.error('Errore assegnamento per la corsa scelta!');
         });
+  }
+
+  consolidaTurnoReset() {
+    if(this.disponibilita!=undefined) {
+      this.consolidaTurnoForm.reset();
+      while (this.disponibilita.pop()) ;
+    }
   }
 }
