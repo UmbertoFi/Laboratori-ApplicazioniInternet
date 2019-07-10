@@ -365,7 +365,7 @@ public class UtilityController {
 
 
         if(ru.contains("system-admin")) {
-            if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
+            if (modificaRuoloDTO.getAzione().compareTo("Promuovi") == 0) {
 
 
                 Utente u=userService.getUserById(modificaRuoloDTO.getUsername());
@@ -402,7 +402,7 @@ public class UtilityController {
             List<String> linee = jwtTokenProvider.getLinee(jwtTokenProvider.resolveToken(req));
             if(linee.contains(modificaRuoloDTO.getLinea())==true) {
 
-                if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
+                if (modificaRuoloDTO.getAzione().compareTo("Promuovi") == 0) {
 
                     Utente u2=userService.getUserById(modificaRuoloDTO.getUsername());
 

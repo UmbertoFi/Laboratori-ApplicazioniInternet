@@ -55,7 +55,7 @@ export class UserService {
   }
 
   modificaRuolo(modificaRuolo: ModificaRuolo) {
-    return this.http.post<ModificaRuolo>('http://localhost:8080/utility/modificaRuolo',modificaRuolo,this.httpOptions);
+    return this.http.put<ModificaRuolo>('http://localhost:8080/utility/modificaRuolo',modificaRuolo,this.httpOptions);
   }
 
   trovaDisponibilita(trovaDisponibilita: TrovaDisponibilita) {

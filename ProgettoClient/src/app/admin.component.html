@@ -30,7 +30,7 @@
               <form [formGroup]="promuoviUserForm" (ngSubmit)="onSubmitPromuovi()">
                 <div class="form-group">
                   <mat-label>Utente</mat-label>
-                  <mat-select formControlName="utente" class="form-control">
+                  <mat-select formControlName="username" class="form-control">
                     <mat-option class="clickable" *ngFor="let u of utenti" value="{{u.username}}">
                       {{u.username}}
                     </mat-option>

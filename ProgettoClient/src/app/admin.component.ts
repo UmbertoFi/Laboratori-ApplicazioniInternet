@@ -55,7 +55,7 @@ export class AdminComponent implements OnInit {
     });
 
     this.promuoviUserForm = this.formBuilder.group({
-      utente: ['', Validators.required],
+      username: ['', Validators.required],
       linea: ['', Validators.required],
       azione: ['', Validators.required]
     });

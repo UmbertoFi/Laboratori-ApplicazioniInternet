@@ -11,7 +11,7 @@ import lombok.*;
 
 public class ModificaRuoloDTO {
 
-private String Username;
+private String username;
     private String azione;
     private String linea;
 }
