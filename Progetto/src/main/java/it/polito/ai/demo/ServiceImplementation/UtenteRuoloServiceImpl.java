@@ -49,11 +49,11 @@ public class UtenteRuoloServiceImpl implements UtenteRuoloService {
         return null;
     }
 
-    public UtenteRuolo getUtenteRuolo(String username, String linea) {
+    public UtenteRuolo getUtenteRuolo(String username, String linea, String ruolo) {
 
         Optional<Utente> utente = userRepository.findById(username);
         if(utente.isPresent()) {
-            idRuolo id = idRuolo.builder().utente(utente.get()).NomeLinea(linea).build();
+            idRuolo id = idRuolo.builder().utente(utente.get()).ruolo(ruolo).NomeLinea(linea).build();
             Optional<UtenteRuolo> ur = utenteRuoloRepository.findById(id);
             if (ur.isPresent()) {
                 return ur.get();
