@@ -2,6 +2,7 @@ package it.polito.ai.demo.Controller;
 
 import it.polito.ai.demo.DTO.LoginDTO;
 import it.polito.ai.demo.DTO.RegisterDTO;
+import it.polito.ai.demo.DTO.UsernameDTO;
 import it.polito.ai.demo.Entity.Utente;
 import it.polito.ai.demo.Entity.UtenteRuolo;
 import it.polito.ai.demo.Entity.idRuolo;
@@ -208,7 +209,7 @@ public class UserController {
 
 
 
-    /* @GetMapping(path = "/users")
+    @GetMapping(path = "/users")
     public List<UsernameDTO> altlistUsers(HttpServletRequest req) {
 
         String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
@@ -226,7 +227,7 @@ public class UserController {
 
         }
         throw new UnauthorizedException("errore");
-    } */
+    }
 
 
     /* @PutMapping(path = "/users/{userID}")

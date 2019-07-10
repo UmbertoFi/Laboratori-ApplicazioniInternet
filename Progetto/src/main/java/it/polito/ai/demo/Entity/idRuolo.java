@@ -23,6 +23,7 @@ public class idRuolo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "username")
     private Utente utente;
+
     private String NomeLinea;
     private String ruolo;
 

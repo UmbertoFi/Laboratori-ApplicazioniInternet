@@ -2,16 +2,11 @@ package it.polito.ai.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polito.ai.demo.DTO.*;
-import it.polito.ai.demo.Entity.Corsa;
-import it.polito.ai.demo.Entity.Prenotazione;
-import it.polito.ai.demo.Entity.idCorsa;
+import it.polito.ai.demo.Entity.*;
 import it.polito.ai.demo.Repository.CorsaRepository;
 import it.polito.ai.demo.Repository.FermataRepository;
 import it.polito.ai.demo.Repository.LineaRepository;
-import it.polito.ai.demo.Service.CorsaService;
-import it.polito.ai.demo.Service.LineaService;
-import it.polito.ai.demo.Service.PrenotazioneService;
-import it.polito.ai.demo.Service.UserService;
+import it.polito.ai.demo.Service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -74,7 +69,7 @@ public class ProgettoApplication {
 
 
     @Bean
-    CommandLineRunner runner(CorsaService cs, LineaService ls, UserService us, PrenotazioneService ps, LineaRepository lr, FermataRepository fs, CorsaRepository cr) {
+    CommandLineRunner runner(CorsaService cs, UtenteRuoloService urs, LineaService ls, UserService us, PrenotazioneService ps, LineaRepository lr, FermataRepository fs, CorsaRepository cr) {
         return argss -> {
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -95,8 +90,42 @@ public class ProgettoApplication {
                     }
                 }
                 ListaUtentiDTO utenti = mapper.readValue(new ClassPathResource("json_new/utenti.json").getInputStream(), ListaUtentiDTO.class);
-                for(UtenteDTO u : utenti.getUtenti())
-                    us.save(u.convertToEntity());
+                int i=0;
+                for(UtenteDTO u : utenti.getUtenti()) {
+                    UtenteRuolo ur;
+                    String ruolo;
+                    String nomelinea;
+                    if (urs.getByRuoloSystemAdmin() == false) {
+                        ruolo = "system-admin";
+                        nomelinea="*";
+                    } else {
+                        int resto=i%2;
+                        if(resto==0) {
+                            ruolo = "user";
+                            nomelinea = "*";
+                        }
+                        else{
+                            ruolo="admin";
+                            nomelinea="Santa_Rita-Politecnico";
+
+                        }
+                    }
+                    Utente utente=u.convertToEntity();
+                    idRuolo id = idRuolo.builder()
+                            .utente(utente)
+                            .ruolo(ruolo)
+                            .NomeLinea(nomelinea)
+                            .build();
+
+                    ur = UtenteRuolo.builder()
+                            .id(id)
+                            .build();
+
+                    us.save(utente);
+                    urs.save(ur);
+
+                    i++;
+                }
                 ListaPrenotatiDTO prenotazioni = mapper.readValue(new ClassPathResource("json_new/prenotazioni.json").getInputStream(), ListaPrenotatiDTO.class);
                 for(PrenotatoDTO p:prenotazioni.getPrenotazioni()) {
                     Prenotazione pren = p.convertToEntity(fs,cr);
