@@ -1,0 +1,113 @@
+<div style="text-align:right">
+  <button (click)="logout($event)">
+    Logout
+  </button>
+
+</div>
+<div style="text-align:center">
+  <h1>
+    {{ title }}
+  </h1>
+</div>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>card esterna</mat-card-title>
+      <mat-card-subtitle>sticazzi</mat-card-subtitle>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group>
+      <mat-tab label="Gestione admin">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Gestione admin</mat-card-title>
+            <mat-card-subtitle>vedi di sbrigarti</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="col-md-6 offset-md-3">
+              <form [formGroup]="promuoviUserForm" (ngSubmit)="onSubmitPromuovi()">
+                <div class="form-group">
+                  <mat-label>Utente</mat-label>
+                  <mat-select formControlName="utente" class="form-control">
+                    <mat-option class="clickable" *ngFor="let u of utenti" value="{{u.username}}">
+                      {{u.username}}
+                    </mat-option>
+                  </mat-select>
+                </div>
+                <div class="form-group">
+                  <mat-label>Linea</mat-label>
+                  <mat-select formControlName="linea" class="form-control">
+                    <mat-option class="clickable" *ngFor="let l of nomiLinee" value="{{l.nome}}">
+                      {{l.nome}}
+                    </mat-option>
+                  </mat-select>
+                </div>
+                <div class="form-group">
+                  <mat-label>Promuovi/Declassa</mat-label>
+                  <mat-select formControlName="azione" class="form-control">
+                    <mat-option class="clickable" value="Promuovi">Promuovi</mat-option>
+                    <mat-option class="clickable" value="Declassa">Declassa</mat-option>
+                  </mat-select>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary">Esegui</button>
+                </div>
+              </form>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Gestione accompagnatori">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Gestione accompagnatori</mat-card-title>
+            <mat-card-subtitle>vedi di sbrigarti</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="col-md-6 offset-md-3">
+              <form [formGroup]="trovaDisponibilitaForm" (ngSubmit)="onSubmitTrovaDisponibilita()">
+                <div class="form-group">
+                  <mat-label>Linea</mat-label>
+                  <mat-select formControlName="linea" class="form-control">
+                    <mat-option class="clickable" *ngFor="let l of nomiLinee" value="{{l.nome}}">
+                      {{l.nome}}
+                    </mat-option>
+                  </mat-select>
+                </div>
+                <div class="form-group">
+                  <mat-label>Data</mat-label>
+                  <input type="date" formControlName="data" class="form-control">
+                </div>
+                <div class="form-group">
+                  <mat-label>Andata/Ritorno</mat-label>
+                  <mat-select formControlName="verso" class="form-control">
+                    <mat-option class="clickable" value="Andata">Andata</mat-option>
+                    <mat-option class="clickable" value="Ritorno">Ritorno</mat-option>
+                  </mat-select>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary">Trova disponibilità</button>
+                </div>
+              </form>
+              <form [formGroup]="consolidaTurnoForm" (ngSubmit)="onSubmitConsolidaTurno()">
+              <div class="form-group">
+                <mat-label>Disponibilità</mat-label>
+                <mat-select formControlName="disponibilita" class="form-control">
+                  <mat-option class="clickable" *ngFor="let d of disponibilita" value="{{d.username}}">
+                    {{d.username}}
+                  </mat-option>
+                </mat-select>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary">Trova disponibilità</button>
+              </div>
+              </form>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

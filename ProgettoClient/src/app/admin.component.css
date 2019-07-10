@@ -1,0 +1,21 @@
+li {
+  display: inline-block;
+}
+
+mat-card{
+  width: 650px;
+  margin: auto;
+}
+
+::ng-deep .mat-line{
+  word-wrap: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+::ng-deep  .mat-list .mat-list-item{
+  height:initial!important;
+}
+
+button mat-icon-button:hover{
+  cursor: pointer;
+}

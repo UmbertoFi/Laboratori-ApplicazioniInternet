@@ -5,15 +5,12 @@ import it.polito.ai.demo.DTO.*;
 import it.polito.ai.demo.Entity.*;
 import it.polito.ai.demo.Exception.BadRequestException;
 import it.polito.ai.demo.Exception.NotFoundException;
-import it.polito.ai.demo.Exception.UnauthorizedException;
-import it.polito.ai.demo.JWT.JwtTokenProvider;
 import it.polito.ai.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -41,10 +38,7 @@ public class UtilityController {
     CorsaService corsaService;
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    UtenteRuoloService utenteRuoloService;
+    DisponibilitaService disponibilitaService;
 
     @GetMapping(path = "/utility/checkUsername/{username}")
     public @ResponseBody
@@ -346,6 +340,7 @@ public class UtilityController {
                             .fermataR()*/
                             .build();
 
+                            disponibilitaService.save(d);
                             return;
                 }
                 throw  new BadRequestException("corsa non esistente");
@@ -353,90 +348,6 @@ public class UtilityController {
             throw  new BadRequestException("linea non esistente");
         }
         throw  new BadRequestException("utente non esistente");
-
-    }
-
-    @PutMapping(path = "/utility/modificaRuolo")
-    @ResponseStatus(HttpStatus.OK)
-    public void altmodifyRole(HttpServletRequest req, @RequestBody ModificaRuoloDTO modificaRuoloDTO) {
-
-        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
-        List<String> ru = jwtTokenProvider.getRole(jwtTokenProvider.resolveToken(req));
-
-
-        if(ru.contains("system-admin")) {
-            if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
-
-
-                Utente u=userService.getUserById(modificaRuoloDTO.getUsername());
-                if(u!=null) {
-                    UtenteRuolo utenteRuolo = utenteRuoloService.getUtenteRuolo(modificaRuoloDTO.getUsername(),modificaRuoloDTO.getLinea(), "admin");
-
-
-
-                    if (utenteRuolo == null) {
-                        idRuolo nuovoIdRuolo = idRuolo.builder()
-                                .NomeLinea(modificaRuoloDTO.getLinea())
-                                .utente(u)
-                                .ruolo("admin")
-                                .build();
-                        UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
-                                .id(nuovoIdRuolo)
-                                .build();
-                        utenteRuoloService.save(nuovoRuolo);
-                        return;
-                    }
-                    throw new NotFoundException(modificaRuoloDTO.getUsername()+" già admin per la linea "+modificaRuoloDTO.getLinea());
-                }
-                throw new NotFoundException("errore nell' utente(system-admin)");
-            } else {
-                UtenteRuolo utenteRuolo = utenteRuoloService.getUtenteRuolo(modificaRuoloDTO.getUsername(), modificaRuoloDTO.getLinea(), "admin");
-                if (utenteRuolo != null) {
-                    utenteRuoloService.deleteOne(utenteRuolo);
-                    return;
-                }
-                throw  new NotFoundException(modificaRuoloDTO.getUsername()+" non è ancora admin per la linea "+modificaRuoloDTO.getLinea());
-            }
-        }else if(ru.contains("admin") ){
-
-            List<String> linee = jwtTokenProvider.getLinee(jwtTokenProvider.resolveToken(req));
-            if(linee.contains(modificaRuoloDTO.getLinea())==true) {
-
-                if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
-
-                    Utente u2=userService.getUserById(modificaRuoloDTO.getUsername());
-
-                    if(u2!=null) {
-                        UtenteRuolo utenteRuolo2 = utenteRuoloService.getUtenteRuolo(modificaRuoloDTO.getUsername(), modificaRuoloDTO.getLinea(), "admin");
-
-                        if (utenteRuolo2 == null) {
-                            idRuolo nuovoIdRuolo = idRuolo.builder()
-                                    .NomeLinea(modificaRuoloDTO.getLinea())
-                                    .utente(u2)
-                                    .ruolo("admin")
-                                    .build();
-                            UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
-                                    .id(nuovoIdRuolo)
-
-                                    .build();
-                            utenteRuoloService.save(nuovoRuolo);
-                            return;
-                        }
-                        throw new NotFoundException(modificaRuoloDTO.getUsername()+" già admin per la linea "+modificaRuoloDTO.getLinea());
-                    }
-                    throw new NotFoundException("errore nell' utente(admin)");
-                } else {
-                    UtenteRuolo utenteRuolo2 = utenteRuoloService.getUtenteRuolo(modificaRuoloDTO.getUsername(), modificaRuoloDTO.getLinea(), "admin");
-                    if (utenteRuolo2 != null) {
-                        utenteRuoloService.deleteOne(utenteRuolo2);
-                        return;
-                    }
-                    throw  new NotFoundException(modificaRuoloDTO.getUsername()+" non ancora admin per la linea "+modificaRuoloDTO.getLinea());
-                }
-
-            }
-        }
-        throw  new UnauthorizedException("non autorizzato");
 
     }
 

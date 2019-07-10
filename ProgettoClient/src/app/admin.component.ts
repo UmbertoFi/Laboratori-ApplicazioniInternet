@@ -9,13 +9,15 @@ import {CorsaNew} from './_models/corsaNew';
 import {TrattaNew} from './_models/trattaNew';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
+import {UtenteNew} from './_models/UtenteNew';
+import {Disponibilita} from './_models/disponibilita';
 
 @Component({
-  selector: 'app-simpleuser',
-  templateUrl: './simpleuser.component.html',
-  styleUrls: ['./simpleuser.component.css']
+  selector: 'app-admin',
+  templateUrl: './admin.component.html',
+  styleUrls: ['./admin.component.css']
 })
-export class SimpleuserComponent implements OnInit {
+export class AdminComponent implements OnInit {
   title = 'Pedibus';
 
   nomiLinee: nomeLinea[];
@@ -24,7 +26,11 @@ export class SimpleuserComponent implements OnInit {
   figli: Bambino[];
   aggiungiBambinoForm: FormGroup;
   submitted: boolean = false;
-  candidatiAccompagnatoreForm: FormGroup;
+  promuoviUserForm: FormGroup;
+  utenti: UtenteNew[];
+  trovaDisponibilitaForm: FormGroup;
+  disponibilita: Disponibilita[];
+  consolidaTurnoForm: FormGroup;
 
 
   pageEvent: PageEvent;
@@ -48,11 +54,33 @@ export class SimpleuserComponent implements OnInit {
       cognome: ['', Validators.required]
     });
 
-    this.candidatiAccompagnatoreForm = this.formBuilder.group({
+    this.promuoviUserForm = this.formBuilder.group({
+      utente: ['', Validators.required],
+      linea: ['', Validators.required],
+      azione: ['', Validators.required]
+    });
+
+    this.trovaDisponibilitaForm = this.formBuilder.group({
       linea: ['', Validators.required],
       data: ['', Validators.required],
       verso: ['', Validators.required]
     });
+
+    this.consolidaTurnoForm = this.formBuilder.group({
+      disponibilita: ['', Validators.required]
+    });
+
+    let promiseUtenti = fetch('http://localhost:8080/users', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.utenti = data;
+      });
 
     let promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
       headers: {
@@ -308,25 +336,69 @@ export class SimpleuserComponent implements OnInit {
           // this.router.navigate(['/simpleuser']);
         },
         error => {
-          this.alertService.error("Inserimento bambino fallito!");
+          this.alertService.error('Inserimento bambino fallito!');
         });
   }
 
-  onSubmitAccompagnatore() {
+  onSubmitPromuovi() {
 
     // stop here if form is invalid
     /* if (this.aggiungiBambinoForm.invalid) {
       return;
     } */
 
-    this.userService.candidatiAccompagnatore(this.candidatiAccompagnatoreForm.value)
+    this.userService.modificaRuolo(this.promuoviUserForm.value)
       .pipe(first())
       .subscribe(
         data => {
-          this.alertService.success('Candidatura come accompagnatore eseguita con successo!', true);
+          this.alertService.success('Utente promosso/declassato con successo!', true);
           // this.router.navigate(['/simpleuser']);
         },
         error => {
-          this.alertService.error("Candidatura come accompagnatore fallita!");
-        });  }
+          this.alertService.error('Utente non promosso/declassato correttamente!');
+        });
+  }
+
+  onSubmitTrovaDisponibilita() {
+    // stop here if form is invalid
+    /* if (this.aggiungiBambinoForm.invalid) {
+      return;
+    } */
+
+    this.userService.trovaDisponibilita(this.trovaDisponibilitaForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.disponibilita.push(data);
+          this.alertService.success('Disponibilità aggiornate per la corsa scelta con successo!', true);
+          // this.router.navigate(['/simpleuser']);
+        },
+        error => {
+          this.alertService.error('Errore aggiornamento disponibilità per la corsa scelta!');
+        });
+  }
+
+  onSubmitConsolidaTurno() {
+    // stop here if form is invalid
+    /* if (this.aggiungiBambinoForm.invalid) {
+      return;
+    } */
+
+    let d: Disponibilita;
+    d.username = this.trovaDisponibilitaForm.value.username;
+    d.linea = this.consolidaTurnoForm.value.linea;
+    d.data = this.consolidaTurnoForm.value.data;
+    d.verso = this.consolidaTurnoForm.value.verso;
+
+    this.userService.consolidaTurno(d)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Turno assegnato per la corsa scelta con successo!', true);
+          // this.router.navigate(['/simpleuser']);
+        },
+        error => {
+          this.alertService.error('Errore assegnamento per la corsa scelta!');
+        });
+  }
 }

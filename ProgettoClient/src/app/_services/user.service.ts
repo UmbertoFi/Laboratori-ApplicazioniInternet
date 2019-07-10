@@ -8,6 +8,10 @@ import {Bambino} from '../_models/bambino';
 import {NUOVAPrenotazione} from '../_models/nuovaprenotazione';
 import {BambinoNew} from '../_models/bambinoNew';
 import {CandidaturaAccompagnatore} from '../_models/candidaturaAccompagnatore';
+import {ModificaRuolo} from '../_models/modificaRuolo';
+import {TrovaDisponibilita} from '../_models/TrovaDisponibilita';
+import {Disponibilita} from '../_models/disponibilita';
+import {UtenteNew} from '../_models/UtenteNew';
 
 @Injectable()
 export class UserService {
@@ -48,5 +52,18 @@ export class UserService {
 
   candidatiAccompagnatore(candidaturaAccompagnatore: CandidaturaAccompagnatore) {
     return this.http.post<CandidaturaAccompagnatore>('http://localhost:8080/utility/available/'+localStorage.getItem('username'),candidaturaAccompagnatore,this.httpOptions)
+  }
+
+  modificaRuolo(modificaRuolo: ModificaRuolo) {
+    return this.http.post<ModificaRuolo>('http://localhost:8080/utility/modificaRuolo',modificaRuolo,this.httpOptions);
+  }
+
+  trovaDisponibilita(trovaDisponibilita: TrovaDisponibilita) {
+    // <Disponibilità> è il tipo di valore che riceviamo????
+    return this.http.post<Disponibilita>('http://localhost:8080/utility/disponibilita',trovaDisponibilita,this.httpOptions);
+  }
+
+  consolidaTurno(disponibilita: Disponibilita) {
+    return this.http.post<Disponibilita>('http://localhost:8080/utility/turno', disponibilita, this.httpOptions)
   }
 }
