@@ -5,7 +5,7 @@ import it.polito.ai.demo.Entity.UtenteRuolo;
 import java.util.List;
 
 public interface UtenteRuoloService {
-    public UtenteRuolo getUtenteRuolo(String username, String linea);
+    public UtenteRuolo getUtenteRuolo(String username, String linea, String ruolo);
 
     public void save(UtenteRuolo ur);
 
