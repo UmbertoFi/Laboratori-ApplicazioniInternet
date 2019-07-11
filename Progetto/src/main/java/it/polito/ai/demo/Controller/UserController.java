@@ -241,15 +241,22 @@ public class UserController {
         if (utente != null) {
             if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
 
-                String UUID = generateUUID();
-                utente.setExpiredcredential(false);
-                utente.setToken(UUID);
-                utente.setExpiredToken(new Date());
-                userService.save(utente);
-                String body = "Gentilissimo, confermi di essere tu ad aver modificato la Password?, se sì clicca il seguente link per confermare la modifica http://localhost:8080/changepass/" + UUID;
-                email.sendSimpleMessage(username, "Password Recovery!", body);
-                return;
-            }
+                if(passwordEncoder.encode(changePassDTO.getPassword0()).compareTo(utente.getPassword())==0) {
+                    if (changePassDTO.getPassword1().compareTo(changePassDTO.getPassword2()) == 0) {
+                        String UUID = generateUUID();
+                        utente.setExpiredcredential(false);
+                        utente.setToken(UUID);
+                        utente.setPassword(passwordEncoder.encode(changePassDTO.getPassword1()));
+                        utente.setExpiredToken(new Date());
+                        userService.save(utente);
+                        String body = "Gentilissimo, confermi di essere tu ad aver modificato la Password?, se sì clicca il seguente link per confermare la modifica http://localhost:8080/changepass/" + UUID;
+                        email.sendSimpleMessage(username, "Pedibus-Conferma modifica password!", body);
+                        return;
+                    }
+                    throw new BadCredentialsException("le password sono diverse");
+                }
+                throw new NotFoundException("la password vecchia non corretta");
+                }
             throw new NotFoundException("token scaduto o invalido");
         }
         throw new BadCredentialsException("utente non valido");
@@ -262,8 +269,11 @@ public class UserController {
         Utente u = userService.getTokenForRecovery(randomUUID);
         Date now = new Date();
         long diff = now.getTime() - u.getExpiredToken().getTime();
-        if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione=1 h=3600000 ms
+        if (diff > 3600000)    {
+            // Tempo entro il quale poter confermare la registrazione=1 h=3600000 ms
             throw new NotFoundException("token di registrazione scaduto o invalido");
+        }
+
 
         u.setExpiredcredential(true);
         u.setExpiredToken(new Date(0));
