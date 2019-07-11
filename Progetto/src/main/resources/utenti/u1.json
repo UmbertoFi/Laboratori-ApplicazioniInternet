@@ -1,4 +1,4 @@
 {
   "username": "barbero@a.it",
-  "password": "ciaociao"
+  "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi"
 }

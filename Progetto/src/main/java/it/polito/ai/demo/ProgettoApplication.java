@@ -99,15 +99,19 @@ public class ProgettoApplication {
                         ruolo = "system-admin";
                         nomelinea="*";
                     } else {
-                        int resto=i%2;
+                        int resto=i%3;
                         if(resto==0) {
                             ruolo = "user";
                             nomelinea = "*";
                         }
-                        else{
+                        else if(resto==1){
                             ruolo="admin";
                             nomelinea="Santa_Rita-Politecnico";
 
+                        }
+                        else{
+                            ruolo="accompagnatore";
+                            nomelinea="Santa_Rita-Politecnico";
                         }
                     }
                     Utente utente=u.convertToEntity();
