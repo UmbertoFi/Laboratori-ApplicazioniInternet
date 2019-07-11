@@ -19,3 +19,17 @@ mat-card{
 button mat-icon-button:hover{
   cursor: pointer;
 }
+
+.sezioni{
+  padding-left: 10%;
+  display: block
+}
+
+.sezioni button:hover{
+  background-color: blue;
+}
+
+.btn-primary{
+  border: 1px black;
+  width: 60%;
+}

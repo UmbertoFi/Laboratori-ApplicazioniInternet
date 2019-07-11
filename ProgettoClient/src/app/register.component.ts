@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     if (localStorage.getItem('access_token') != null) {
       this.alertService.error('Utente già loggato! Premere Logout per effettuare altre operazioni!', true);
-      this.router.navigate(['/attendance']);
+      this.router.navigate(['/simpleuser']);
     }
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],

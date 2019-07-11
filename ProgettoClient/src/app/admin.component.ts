@@ -9,8 +9,9 @@ import {CorsaNew} from './_models/corsaNew';
 import {TrattaNew} from './_models/trattaNew';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
-import {UtenteNew} from './_models/UtenteNew';
+import {UtenteNew} from './_models/utenteNew';
 import {Disponibilita} from './_models/disponibilita';
+import {Ruolo} from './_models';
 
 @Component({
   selector: 'app-admin',
@@ -32,6 +33,10 @@ export class AdminComponent implements OnInit {
   disponibilita: Disponibilita[];
   consolidaTurnoForm: FormGroup;
   d: Disponibilita;
+  ruoli: Ruolo[];
+  checkAdmin: boolean = false;
+  checkAccompagnatore: boolean = false;
+  checkSystemAdmin: boolean = false;
 
 
   pageEvent: PageEvent;
@@ -70,6 +75,31 @@ export class AdminComponent implements OnInit {
     this.consolidaTurnoForm = this.formBuilder.group({
       username: ['', Validators.required]
     });
+
+
+    let promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.ruoli = data;
+        return;
+      }).then((data) => {
+        for(let r of this.ruoli){
+          console.log(r);
+          if(r.ruolo.localeCompare("admin")==0){
+            this.checkAdmin = true;
+          } else if(r.ruolo.localeCompare("system-admin")==0){
+            this.checkSystemAdmin = true;
+          } else if(r.ruolo.localeCompare("accompagnatore")==0){
+            this.checkAccompagnatore = true;
+          }
+        }
+      });
 
     let promiseUtenti = fetch('http://localhost:8080/users', {
       headers: {
@@ -413,5 +443,9 @@ export class AdminComponent implements OnInit {
       this.consolidaTurnoForm.reset();
       while (this.disponibilita.pop()) ;
     }
+  }
+
+  cambiaSezione(url: string) {
+    this.router.navigate(['/'+url]);
   }
 }

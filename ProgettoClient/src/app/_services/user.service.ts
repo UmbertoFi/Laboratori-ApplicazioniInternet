@@ -9,9 +9,9 @@ import {NUOVAPrenotazione} from '../_models/nuovaprenotazione';
 import {BambinoNew} from '../_models/bambinoNew';
 import {CandidaturaAccompagnatore} from '../_models/candidaturaAccompagnatore';
 import {ModificaRuolo} from '../_models/modificaRuolo';
-import {TrovaDisponibilita} from '../_models/TrovaDisponibilita';
+import {TrovaDisponibilita} from '../_models/trovaDisponibilita';
 import {Disponibilita} from '../_models/disponibilita';
-import {UtenteNew} from '../_models/UtenteNew';
+import {UtenteNew} from '../_models/utenteNew';
 
 @Injectable()
 export class UserService {

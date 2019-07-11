@@ -7,6 +7,7 @@ import {Bambino} from './_models/bambino';
 import {nomeLinea} from './_models/nomeLinea';
 import {CorsaNew} from './_models/corsaNew';
 import {TrattaNew} from './_models/trattaNew';
+import {Ruolo} from './_models';
 
 @Component({
   selector: 'app-attendance',
@@ -20,6 +21,7 @@ export class AttendanceComponent implements OnInit {
   nomiLinee: nomeLinea[];
   corse: CorsaNew[];
   tratte: TrattaNew;
+  data: string;
 
 
   pageEvent: PageEvent;
@@ -27,6 +29,11 @@ export class AttendanceComponent implements OnInit {
   pageSize = 1;
   pageIndex = 0;
   lineaSelezionataMenu = 0;
+  openDateForm: boolean = false;
+  ruoli: Ruolo[];
+  checkAdmin: boolean = false;
+  checkAccompagnatore: boolean = false;
+  checkSystemAdmin: boolean = false;
 
   constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
   }
@@ -36,6 +43,30 @@ export class AttendanceComponent implements OnInit {
       this.alertService.error('Utente non ancora loggato!', true);
       this.router.navigate(['/login']);
     }
+
+    let promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.ruoli = data;
+        return;
+      }).then((data) => {
+        for(let r of this.ruoli){
+          console.log(r);
+          if(r.ruolo.localeCompare("admin")==0){
+            this.checkAdmin = true;
+          } else if(r.ruolo.localeCompare("system-admin")==0){
+            this.checkSystemAdmin = true;
+          } else if(r.ruolo.localeCompare("accompagnatore")==0){
+            this.checkAccompagnatore = true;
+          }
+        }
+      });
 
     let promiseBambini = fetch('http://localhost:8080/utility/children', {
       headers: {
@@ -262,6 +293,46 @@ export class AttendanceComponent implements OnInit {
       this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
     }
     return;
+  }
+
+  OnClickOpenForm() {
+    if(this.openDateForm==false){
+      this.openDateForm=true;
+    }
+    else{
+      this.openDateForm=false;
+    }
+  }
+
+
+  selezionaCorsaCalendario() {
+    const pageDate = new Date(this.corse[this.pageIndex].data).setUTCHours(0o0,0o0,0o0,0o0);
+    const date = new Date(this.data).setUTCHours(0o0,0o0,0o0,0o0);
+    const diff = (date-pageDate)/(24*3600*1000);
+
+    if((this.pageIndex+diff)<0 || (this.pageIndex+diff)>364){
+      this.alertService.error('Corsa non esistente!');
+      return;
+    } else{
+      this.pageIndex += diff;
+      let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        }
+      })
+        .then((data) => {
+          return data.json();
+        }).then((data) => {
+          this.tratte = data;
+        });
+      this.openDateForm=false;
+      return;
+    }
+  }
+
+  cambiaSezione(url: string) {
+    this.router.navigate(['/'+url]);
   }
 }
 
