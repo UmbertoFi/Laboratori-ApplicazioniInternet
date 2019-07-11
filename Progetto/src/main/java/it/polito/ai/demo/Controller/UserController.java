@@ -1,5 +1,6 @@
 package it.polito.ai.demo.Controller;
 
+import it.polito.ai.demo.DTO.ChangePassDTO;
 import it.polito.ai.demo.DTO.LoginDTO;
 import it.polito.ai.demo.DTO.RegisterDTO;
 import it.polito.ai.demo.DTO.UsernameDTO;
@@ -14,9 +15,11 @@ import it.polito.ai.demo.Service.EmailService;
 import it.polito.ai.demo.Service.UserService;
 import it.polito.ai.demo.Service.UtenteRuoloService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -98,6 +102,8 @@ public class UserController {
             throw new UnauthorizedException("");
         }
     }
+
+
 
 
     @PostMapping(path = "/register")
@@ -184,7 +190,7 @@ public class UserController {
     }
 
 
-    /* @PostMapping(path = "/recover")
+    @PostMapping(path = "/recover")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     void recoverPassword(@RequestBody UsernameDTO usernameDTO) {
@@ -193,7 +199,7 @@ public class UserController {
             if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
 
                 String UUID = generateUUID();
-                utente.setExpiredcredential(false);
+                //utente.setExpiredcredential(false);
                 utente.setToken(UUID);
                 utente.setExpiredToken(new Date());
                 userService.save(utente);
@@ -201,11 +207,80 @@ public class UserController {
                 email.sendSimpleMessage(usernameDTO.getUsername(), "Password Recovery!", body);
                 return;
             }
+            throw new NotFoundException("non sei abilitato a procedere");
+        }
+        throw new BadCredentialsException("utente non valido");
+    }
+
+    @GetMapping("/recover/{randomUUID}")
+    @ResponseStatus(HttpStatus.OK)
+    public void checkRecoveryPass(@PathVariable("randomUUID") String randomUUID) {
+
+        Utente u = userService.getTokenForRecovery(randomUUID);
+        Date now = new Date();
+        long diff = now.getTime() - u.getExpiredToken().getTime();
+        if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione=1 h=3600000 ms
+            throw new NotFoundException("token di registrazione scaduto o invalido");
+
+        String password=generatePassword();
+        u.setExpiredcredential(true);
+        u.setExpiredToken(new Date(0));
+        u.setPassword(password);
+        userService.save(u);
+        String body = "Gentilissimo, le tue nuove credenziali sono:\n Username: "+u.getUserName()+"\nPassword:" + password+"\nRicordati di cambiarla il prima possibile\nSaluti, la direzione.";
+        email.sendSimpleMessage(u.getUserName(), "Pedibus-Nuove Credenziali", body);
+        return;
+    }
+
+    @PostMapping(path = "/changepass")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    void recoverPassword(HttpServletRequest req, @RequestBody ChangePassDTO changePassDTO) {
+        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+        Utente utente = userService.getUserById(username);
+        if (utente != null) {
+            if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
+
+                if(passwordEncoder.encode(changePassDTO.getPassword0()).compareTo(utente.getPassword())==0) {
+                    if (changePassDTO.getPassword1().compareTo(changePassDTO.getPassword2()) == 0) {
+                        String UUID = generateUUID();
+                        utente.setExpiredcredential(false);
+                        utente.setToken(UUID);
+                        utente.setPassword(passwordEncoder.encode(changePassDTO.getPassword1()));
+                        utente.setExpiredToken(new Date());
+                        userService.save(utente);
+                        String body = "Gentilissimo, confermi di essere tu ad aver modificato la Password?, se sì clicca il seguente link per confermare la modifica http://localhost:8080/changepass/" + UUID;
+                        email.sendSimpleMessage(username, "Pedibus-Conferma modifica password!", body);
+                        return;
+                    }
+                    throw new BadCredentialsException("le password sono diverse");
+                }
+                throw new NotFoundException("la password vecchia non corretta");
+                }
             throw new NotFoundException("token scaduto o invalido");
         }
-    } */
+        throw new BadCredentialsException("utente non valido");
+    }
+
+    @GetMapping("/changepass/{randomUUID}")
+    @ResponseStatus(HttpStatus.OK)
+    public void checkChangePass(@PathVariable("randomUUID") String randomUUID) {
+
+        Utente u = userService.getTokenForRecovery(randomUUID);
+        Date now = new Date();
+        long diff = now.getTime() - u.getExpiredToken().getTime();
+        if (diff > 3600000)    {
+            // Tempo entro il quale poter confermare la registrazione=1 h=3600000 ms
+            throw new NotFoundException("token di registrazione scaduto o invalido");
+        }
 
 
+        u.setExpiredcredential(true);
+        u.setExpiredToken(new Date(0));
+        userService.save(u);
+
+        return;
+    }
 
 
 
@@ -321,6 +396,17 @@ public class UserController {
             return true;
         }
         return false;
+    }
+
+
+    private String generatePassword() {
+        Random r = new Random();
+        StringBuilder generatedString = new StringBuilder();
+        for (int i = 0; i < 5; i++)
+            generatedString.append(r.nextInt());
+
+        String p=generatedString.substring(0,10);
+        return p;
     }
 
 
