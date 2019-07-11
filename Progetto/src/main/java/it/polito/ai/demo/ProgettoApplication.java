@@ -92,19 +92,32 @@ public class ProgettoApplication {
                 ListaUtentiDTO utenti = mapper.readValue(new ClassPathResource("json_new/utenti.json").getInputStream(), ListaUtentiDTO.class);
                 int i=0;
                 for(UtenteDTO u : utenti.getUtenti()) {
+
+
                     UtenteRuolo ur;
+
+                    Utente utente=u.convertToEntity();
+                    idRuolo id = idRuolo.builder()
+                            .utente(utente)
+                            .ruolo("user")
+                            .NomeLinea("*")
+                            .build();
+
+                    ur = UtenteRuolo.builder()
+                            .id(id)
+                            .build();
+
+                    us.save(utente);
+                    urs.save(ur);
+
                     String ruolo;
                     String nomelinea;
                     if (urs.getByRuoloSystemAdmin() == false) {
                         ruolo = "system-admin";
                         nomelinea="*";
                     } else {
-                        int resto=i%3;
-                        if(resto==0) {
-                            ruolo = "user";
-                            nomelinea = "*";
-                        }
-                        else if(resto==1){
+                        int resto=i%2;
+                        if(resto==1){
                             ruolo="admin";
                             nomelinea="Santa_Rita-Politecnico";
 
@@ -114,18 +127,16 @@ public class ProgettoApplication {
                             nomelinea="Santa_Rita-Politecnico";
                         }
                     }
-                    Utente utente=u.convertToEntity();
-                    idRuolo id = idRuolo.builder()
+                    idRuolo id2 = idRuolo.builder()
                             .utente(utente)
                             .ruolo(ruolo)
                             .NomeLinea(nomelinea)
                             .build();
 
                     ur = UtenteRuolo.builder()
-                            .id(id)
+                            .id(id2)
                             .build();
 
-                    us.save(utente);
                     urs.save(ur);
 
                     i++;

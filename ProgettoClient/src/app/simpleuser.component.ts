@@ -9,6 +9,7 @@ import {CorsaNew} from './_models/corsaNew';
 import {TrattaNew} from './_models/trattaNew';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
+import {Ruolo} from './_models';
 
 @Component({
   selector: 'app-simpleuser',
@@ -25,6 +26,12 @@ export class SimpleuserComponent implements OnInit {
   aggiungiBambinoForm: FormGroup;
   submitted: boolean = false;
   candidatiAccompagnatoreForm: FormGroup;
+  data: string;
+  openDateForm: boolean = false;
+  ruoli: Ruolo[];
+  checkAdmin: boolean = false;
+  checkAccompagnatore: boolean = false;
+  checkSystemAdmin: boolean = false;
 
 
   pageEvent: PageEvent;
@@ -53,6 +60,30 @@ export class SimpleuserComponent implements OnInit {
       data: ['', Validators.required],
       verso: ['', Validators.required]
     });
+
+    let promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.ruoli = data;
+        return;
+      }).then((data) => {
+        for(let r of this.ruoli){
+          console.log(r);
+          if(r.ruolo.localeCompare("admin")==0){
+            this.checkAdmin = true;
+          } else if(r.ruolo.localeCompare("system-admin")==0){
+            this.checkSystemAdmin = true;
+          } else if(r.ruolo.localeCompare("accompagnatore")==0){
+            this.checkAccompagnatore = true;
+          }
+        }
+      });
 
     let promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
       headers: {
@@ -308,7 +339,7 @@ export class SimpleuserComponent implements OnInit {
           // this.router.navigate(['/simpleuser']);
         },
         error => {
-          this.alertService.error("Inserimento bambino fallito!");
+          this.alertService.error('Inserimento bambino fallito!');
         });
   }
 
@@ -327,6 +358,47 @@ export class SimpleuserComponent implements OnInit {
           // this.router.navigate(['/simpleuser']);
         },
         error => {
-          this.alertService.error("Candidatura come accompagnatore fallita!");
-        });  }
+          this.alertService.error('Candidatura come accompagnatore fallita!');
+        });
+  }
+
+  OnClickOpenForm() {
+    if(this.openDateForm==false){
+      this.openDateForm=true;
+    }
+    else{
+      this.openDateForm=false;
+    }
+  }
+
+
+  selezionaCorsaCalendario() {
+    const pageDate = new Date(this.corse[this.pageIndex].data).setUTCHours(0o0,0o0,0o0,0o0);
+    const date = new Date(this.data).setUTCHours(0o0,0o0,0o0,0o0);
+    const diff = (date-pageDate)/(24*3600*1000);
+
+    if((this.pageIndex+diff)<0 || (this.pageIndex+diff)>364){
+      this.alertService.error('Corsa non esistente!');
+      return;
+    } else{
+      this.pageIndex += diff;
+      let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        }
+      })
+        .then((data) => {
+          return data.json();
+        }).then((data) => {
+          this.tratte = data;
+        });
+      this.openDateForm=false;
+      return;
+    }
+  }
+
+  cambiaSezione(url: string) {
+    this.router.navigate(['/'+url]);
+  }
 }

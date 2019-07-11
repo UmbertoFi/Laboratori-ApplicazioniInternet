@@ -147,7 +147,8 @@ public class UtilityController {
             List<BambinoDTO> children = bambinoService.getFigli(u);
 
             if (children == null) {
-                throw new BadRequestException("bambini non trovati!");
+                children=new ArrayList<>();
+                // throw new BadRequestException("bambini non trovati!");
             }
 
             return children;
@@ -516,17 +517,15 @@ public class UtilityController {
 
     @GetMapping(path = "/utility/ruoli")
     public @ResponseBody
-    ResponseEntity getAllCorse(HttpServletRequest req){
+    List<RuoloDTO> getAllCorse(HttpServletRequest req){
 
+        List<RuoloDTO> ruoli=new ArrayList<>();
 
         List<String> ru = jwtTokenProvider.getRole(jwtTokenProvider.resolveToken(req));
-        Map<Object, Object> model = new HashMap<>();
+
         for(String s:ru) {
-            model.put("ruolo", s);
+            ruoli.add(RuoloDTO.builder().ruolo(s).build());
         }
-
-        return ok(model);
+        return ruoli;
     }
-
-
 }

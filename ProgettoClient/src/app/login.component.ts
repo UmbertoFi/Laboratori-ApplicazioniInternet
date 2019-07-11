@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     if(localStorage.getItem('access_token')!=null) {
       this.alertService.error("Utente già loggato! Premere Logout per effettuare altre operazioni!", true);
-      this.router.navigate(['/attendance']);
+      this.router.navigate(['/simpleuser']);
     }
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.email]],
@@ -54,9 +54,7 @@ export class LoginComponent implements OnInit {
         data => {
           if(data){
             this.userService.login(data);
-
-            // this.router.navigate([this.returnUrl]);
-            this.router.navigate(['/attendance']);
+            this.router.navigate(['/simpleuser']);
           }
         },
         error => {

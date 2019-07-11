@@ -1,9 +1,3 @@
-<div style="text-align:right">
-  <button (click)="logout($event)">
-    Logout
-  </button>
-
-</div>
 <div style="text-align:center">
   <h1>
     {{ title }}
@@ -92,18 +86,42 @@
                 </div>
               </form>
               <form [formGroup]="consolidaTurnoForm" (ngSubmit)="onSubmitConsolidaTurno()">
-              <div class="form-group">
-                <mat-label>Disponibilità</mat-label>
-                <mat-select formControlName="username" class="form-control">
-                  <mat-option class="clickable" *ngFor="let d of disponibilita" value="{{d.username}}">
-                    {{d.username}}
-                  </mat-option>
-                </mat-select>
-              </div>
-              <div class="form-group">
-                <button class="btn btn-primary">Consolida turno</button>
-              </div>
+                <div class="form-group">
+                  <mat-label>Disponibilità</mat-label>
+                  <mat-select formControlName="username" class="form-control">
+                    <mat-option class="clickable" *ngFor="let d of disponibilita" value="{{d.username}}">
+                      {{d.username}}
+                    </mat-option>
+                  </mat-select>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary">Consolida turno</button>
+                </div>
               </form>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Sezioni">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Sezioni</mat-card-title>
+            <mat-card-subtitle>vedi di sbrigarti</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="sezioni">
+              <div>
+                <button class="btn btn-primary" (click)="logout($event)">Logout</button>
+                <br><br></div>
+              <div>
+                <button class="btn btn-primary">Cambia Password</button>
+                <br><br></div>
+              <div>
+                <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
+                <br><br></div>
+              <div *ngIf="checkAccompagnatore">
+                <button class="btn btn-primary" (click)="cambiaSezione('attendance')">Accompagnatore</button>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>
