@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 
 
+
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatListModule,
@@ -29,6 +30,8 @@ import {AuthenticationService} from './_services/authentication.service';
 import {JwtInterceptor} from './jwt.interceptor';
 import {SimpleuserComponent} from './simpleuser.component';
 import {AdminComponent} from './admin.component';
+import {WebSocketService} from './_services/websocket.service';
+
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -62,8 +65,10 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}, LineaService, UserService, AlertService, AuthenticationService, MatDatepickerModule],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}, LineaService, UserService, AlertService, AuthenticationService, MatDatepickerModule, WebSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 }
+
+

@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import {AlertService, AuthenticationService, UserService} from './_services';
+import {WebSocketService} from './_services/websocket.service';
+import {Notifica} from './_models/notifica';
 
 
 
@@ -10,19 +12,36 @@ import {AlertService, AuthenticationService, UserService} from './_services';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted = false;
+  notifications: Notifica;
   // returnUrl: string;
 
   constructor(
+    private webSocketService: WebSocketService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService) {}
+    private alertService: AlertService) {
+
+
+
+// Open connection with server socket
+    const stompClient = this.webSocketService.connect();
+    stompClient.connect({}, frame => {
+
+      // Subscribe to notification topic
+      stompClient.subscribe('/topic/notification', notifications => {
+
+        // Update notifications attribute with the recent messsage sent from the server
+        this.notifications = JSON.parse(notifications.body);
+      });
+    });
+  }
 
   ngOnInit() {
-    if(localStorage.getItem('access_token')!=null) {
-      this.alertService.error("Utente già loggato! Premere Logout per effettuare altre operazioni!", true);
+    if (localStorage.getItem('access_token') != null) {
+      this.alertService.error('Utente già loggato! Premere Logout per effettuare altre operazioni!', true);
       this.router.navigate(['/simpleuser']);
     }
     this.loginForm = this.formBuilder.group({
@@ -52,13 +71,13 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          if(data){
+          if (data) {
             this.userService.login(data);
             this.router.navigate(['/simpleuser']);
           }
         },
         error => {
-          this.alertService.error("Login fallito!");
+          this.alertService.error('Login fallito!');
         });
   }
 }
