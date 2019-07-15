@@ -4,4 +4,6 @@ export class TrovaDisponibilita {
     public data: string,
     public verso: string) {
   }
+
+  //add
 }
