@@ -449,6 +449,7 @@ public class UtilityController {
 
     }
 
+    NotificationController notificationController;
 
     @GetMapping(path = "/utility/disponibilita/{linea}/{data}/{verso}")
     public @ResponseBody
@@ -478,41 +479,7 @@ public class UtilityController {
     }
 
 
-    @PostMapping(path = "/utility/turno")
-    @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    void postConsolidaTurno(@RequestBody DisponibilitaGetDTO disponibilitaGetDTO) {
 
-
-        // Controllare se esiste già un turno di quella persona in quel verso in quella data
-        // se è già presente lo blocca, altrimenti lo inserisce
-
-        String[] pieces = disponibilitaGetDTO.getData().split("-");
-        LocalDate date = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
-
-        String verso;
-        if(disponibilitaGetDTO.getVerso().compareTo("Andata")==0)
-            verso="A";
-        else
-            verso="R";
-        idTurno id = idTurno.builder()
-                .utente(userService.getUserById(disponibilitaGetDTO.getUsername()))
-                .data(date)
-                .verso(verso)
-                .build();
-
-        Optional<Turno> t = turnoService.getTurnoById(id);
-        if(!t.isPresent()){
-            Turno t2 = Turno.builder()
-                    .id(id)
-                    .linea(lineaService.getLinea(disponibilitaGetDTO.getLinea()))
-                    .build();
-            turnoService.save(t2);
-            return;
-        }
-        throw new NotFoundException ("Turno già presente!");
-
-    }
 
 
     @GetMapping(path = "/utility/ruoli")

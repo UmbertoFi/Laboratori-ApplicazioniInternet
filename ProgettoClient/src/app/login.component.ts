@@ -12,31 +12,15 @@ import {Notifica} from './_models/notifica';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted = false;
-  notifications: Notifica;
   // returnUrl: string;
 
   constructor(
-    private webSocketService: WebSocketService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
     private authenticationService: AuthenticationService,
     private alertService: AlertService) {
-
-
-
-// Open connection with server socket
-    const stompClient = this.webSocketService.connect();
-    stompClient.connect({}, frame => {
-
-      // Subscribe to notification topic
-      stompClient.subscribe('/topic/notification', notifications => {
-
-        // Update notifications attribute with the recent messsage sent from the server
-        this.notifications = JSON.parse(notifications.body);
-      });
-    });
   }
 
   ngOnInit() {

@@ -10,6 +10,8 @@ import {TrattaNew} from './_models/trattaNew';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 import {Ruolo} from './_models';
+import {WebSocketService} from './_services/websocket.service';
+import {Notifica} from './_models/notifica';
 
 @Component({
   selector: 'app-simpleuser',
@@ -24,14 +26,14 @@ export class SimpleuserComponent implements OnInit {
   tratte: TrattaNew;
   figli: Bambino[];
   aggiungiBambinoForm: FormGroup;
-  submitted: boolean = false;
+  submitted = false;
   candidatiAccompagnatoreForm: FormGroup;
   data: string;
-  openDateForm: boolean = false;
+  openDateForm = false;
   ruoli: Ruolo[];
-  checkAdmin: boolean = false;
-  checkAccompagnatore: boolean = false;
-  checkSystemAdmin: boolean = false;
+  checkAdmin = false;
+  checkAccompagnatore = false;
+  checkSystemAdmin = false;
 
 
   pageEvent: PageEvent;
@@ -41,7 +43,24 @@ export class SimpleuserComponent implements OnInit {
   lineaSelezionataMenu = 0;
 
 
-  constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder) {
+  notifications: Notifica;
+
+
+  constructor(
+    private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder) {
+
+    this.notifications = new Notifica(0, 'ciao');
+// Open connection with server socket
+    const stompClient = this.webSocketService.connect();
+    stompClient.connect({}, frame => {
+
+      // Subscribe to notification topic
+      stompClient.subscribe('/topic/notification', notifications => {
+
+        // Update notifications attribute with the recent messsage sent from the server
+        this.notifications = JSON.parse(notifications.body);
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -61,10 +80,10 @@ export class SimpleuserComponent implements OnInit {
       verso: ['', Validators.required]
     });
 
-    let promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
+    const promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -73,22 +92,22 @@ export class SimpleuserComponent implements OnInit {
         this.ruoli = data;
         return;
       }).then((data) => {
-        for(let r of this.ruoli){
+        for (const r of this.ruoli) {
           console.log(r);
-          if(r.ruolo.localeCompare("admin")==0){
+          if (r.ruolo.localeCompare('admin') == 0) {
             this.checkAdmin = true;
-          } else if(r.ruolo.localeCompare("system-admin")==0){
+          } else if (r.ruolo.localeCompare('system-admin') == 0) {
             this.checkSystemAdmin = true;
-          } else if(r.ruolo.localeCompare("accompagnatore")==0){
+          } else if (r.ruolo.localeCompare('accompagnatore') == 0) {
             this.checkAccompagnatore = true;
           }
         }
       });
 
-    let promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
+    const promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -109,10 +128,10 @@ export class SimpleuserComponent implements OnInit {
         this.bambini = data;
       }); */
 
-    let promiseLinea = fetch('http://localhost:8080/lines', {
+    const promiseLinea = fetch('http://localhost:8080/lines', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -121,10 +140,10 @@ export class SimpleuserComponent implements OnInit {
         this.nomiLinee = data;
         return;
       }).then(() => {
-        let promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[0].nome, {
+        const promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[0].nome, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         })
           .then((data) => {
@@ -152,10 +171,10 @@ export class SimpleuserComponent implements OnInit {
             this.pageIndex = j;
           })
           .then(() => {
-            let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[0].nome + '/' + this.corse[this.pageIndex].data, {
+            const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[0].nome + '/' + this.corse[this.pageIndex].data, {
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+                Authorization: 'Bearer ' + localStorage.getItem('access_token')
               }
             })
               .then((data) => {
@@ -230,10 +249,10 @@ export class SimpleuserComponent implements OnInit {
 
   selezionaLineaMenu(idLinea: number) {
     this.lineaSelezionataMenu = idLinea;
-    let promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[this.lineaSelezionataMenu].nome, {
+    const promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[this.lineaSelezionataMenu].nome, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -261,10 +280,10 @@ export class SimpleuserComponent implements OnInit {
         this.pageIndex = j;
       })
       .then(() => {
-        let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+        const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         })
           .then((data) => {
@@ -277,10 +296,10 @@ export class SimpleuserComponent implements OnInit {
 
   selezionaCorsaPaginator(pageEvent: PageEvent) {
     this.pageIndex = pageEvent.pageIndex;
-    let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+    const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -363,29 +382,28 @@ export class SimpleuserComponent implements OnInit {
   }
 
   OnClickOpenForm() {
-    if(this.openDateForm==false){
-      this.openDateForm=true;
-    }
-    else{
-      this.openDateForm=false;
+    if (this.openDateForm == false) {
+      this.openDateForm = true;
+    } else {
+      this.openDateForm = false;
     }
   }
 
 
   selezionaCorsaCalendario() {
-    const pageDate = new Date(this.corse[this.pageIndex].data).setUTCHours(0o0,0o0,0o0,0o0);
-    const date = new Date(this.data).setUTCHours(0o0,0o0,0o0,0o0);
-    const diff = (date-pageDate)/(24*3600*1000);
+    const pageDate = new Date(this.corse[this.pageIndex].data).setUTCHours(0o0, 0o0, 0o0, 0o0);
+    const date = new Date(this.data).setUTCHours(0o0, 0o0, 0o0, 0o0);
+    const diff = (date - pageDate) / (24 * 3600 * 1000);
 
-    if((this.pageIndex+diff)<0 || (this.pageIndex+diff)>364){
+    if ((this.pageIndex + diff) < 0 || (this.pageIndex + diff) > 364) {
       this.alertService.error('Corsa non esistente!');
       return;
-    } else{
+    } else {
       this.pageIndex += diff;
-      let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+      const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       })
         .then((data) => {
@@ -393,12 +411,13 @@ export class SimpleuserComponent implements OnInit {
         }).then((data) => {
           this.tratte = data;
         });
-      this.openDateForm=false;
+      this.openDateForm = false;
       return;
     }
   }
 
   cambiaSezione(url: string) {
-    this.router.navigate(['/'+url]);
+    this.router.navigate(['/' + url]);
   }
+
 }

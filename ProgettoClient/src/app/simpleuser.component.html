@@ -1,14 +1,14 @@
 <div style="text-align:center">
   <h1>
     {{ title }}
+
   </h1>
 </div>
-
 <mat-card>
   <mat-card-header>
     <mat-card-title-group>
       <mat-card-title>card esterna</mat-card-title>
-      <mat-card-subtitle>sticazzi</mat-card-subtitle>
+      <mat-card-subtitle>prova</mat-card-subtitle>
     </mat-card-title-group>
   </mat-card-header>
   <mat-card-content>
@@ -172,6 +172,8 @@
           </mat-card-header>
           <mat-card-content>
             <div class="sezioni">
+                                             <div>Notifications : +{{ notifications.count }} {{ notifications.msg }}</div>
+
               <div>
                 <button class="btn btn-primary" (click)="logout($event)">Logout</button>
                 <br><br></div>
