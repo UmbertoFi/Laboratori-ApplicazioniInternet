@@ -19,6 +19,7 @@ public class Turno {
     @ManyToOne
     @JoinColumn(name = "id_linea")
     private Linea linea;
+    private Boolean consolidato;
 
 
 }
