@@ -4,6 +4,7 @@ package it.polito.ai.demo.Controller;
 import it.polito.ai.demo.DTO.DisponibilitaGetDTO;
 import it.polito.ai.demo.DTO.NotificaDTO;
 import it.polito.ai.demo.Entity.Turno;
+import it.polito.ai.demo.Entity.Utente;
 import it.polito.ai.demo.Entity.idTurno;
 import it.polito.ai.demo.Exception.NotFoundException;
 import it.polito.ai.demo.Service.LineaService;
@@ -38,18 +39,39 @@ public class NotificationController {
     @Autowired
     LineaService lineaService;
 
-    // Initialize Notifications
-    private NotificaDTO notifications = NotificaDTO.builder().count(0).msg("prova").build();
 
-    @GetMapping("/notify/{username}")
-    public void sendTurno(@PathVariable("username") String email) {
+    // Initialize Notifications
+    private NotificaDTO notifications = NotificaDTO.builder().count(0).msg("").build();
+
+    @GetMapping("/notify/{id}")
+    public void sendTurno(@PathVariable("id") String id_turno) {
 
         //System.out.println("notify ci sono");
+String[] pieces = id_turno.split("_");
+
+
+        String[] dataPieces = pieces[1].split("-");
+        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
+        Utente utente=userService.getUserById(pieces[0]);
+        idTurno iT = idTurno.builder()
+                .data(data)
+                .utente(utente)
+                .verso(pieces[2])
+                .build();
+        if(turnoService.getTurnoById(iT).isPresent()){
+            notifications.increment();
+            notifications.setMsg("Nuovo turno!");
+            notifications.setData(data.toString());
+            notifications.setVerso(pieces[2]);
+            notifications.setUtente(utente.getUserName());
+            notifications.setLinea(turnoService.getTurnoById(iT).get().getLinea().getNome());
+
+            // Push notifications to front-end
+            template.convertAndSendToUser(utente.getUserName(),"/queue/reply", notifications);
+        }
+        throw new NotFoundException("turno non trovato no message!");
         // Increment Notification by one
-        notifications.increment();
-        notifications.setMsg("");
-        // Push notifications to front-end
-        template.convertAndSendToUser(email,"/queue/reply", notifications);
+
 
         //System.out.println("Notifications successfully sent to Angular");
 
@@ -89,8 +111,8 @@ public class NotificationController {
                     .build();
             turnoService.save(t2);
             //notificationController.getNotification();
-            System.out.println("redirect");
-            response.sendRedirect("/notify/"+id.getUtente().getUserName());
+            System.out.println(id.getUtente().getUserName()+"_"+id.getData()+"_"+id.getVerso());
+            response.sendRedirect("/notify/"+id.getUtente().getUserName()+"_"+id.getData()+"_"+id.getVerso());
 
             return;
         }

@@ -12,6 +12,10 @@ import java.io.Serializable;
 public class NotificaDTO implements Serializable {
     private int count;
     private String msg;
+    private String data;
+    private String verso;
+    private String utente;
+    private String linea;
 
     public void increment() {
         this.count++;
