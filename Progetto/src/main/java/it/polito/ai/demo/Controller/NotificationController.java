@@ -11,13 +11,19 @@ import it.polito.ai.demo.Service.TurnoService;
 import it.polito.ai.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -35,20 +41,24 @@ public class NotificationController {
     // Initialize Notifications
     private NotificaDTO notifications = NotificaDTO.builder().count(0).msg("prova").build();
 
-    @GetMapping("/notify")
-    public String getNotification() {
+    @GetMapping("/notify/{username}")
+    public void sendTurno(@PathVariable("username") String email) {
 
+        //System.out.println("notify ci sono");
         // Increment Notification by one
         notifications.increment();
-
+        notifications.setMsg("");
         // Push notifications to front-end
-        template.convertAndSend("/topic/notification", notifications);
+        template.convertAndSendToUser(email,"/queue/reply", notifications);
 
-        return "Notifications successfully sent to Angular !";
+        //System.out.println("Notifications successfully sent to Angular");
+
+        //return "Notifications successfully sent to Angular !";
     }
 
 
-    @PostMapping(path = "/utility/turno")
+
+        @PostMapping(path = "/utility/turno")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     void postConsolidaTurno(@RequestBody DisponibilitaGetDTO disponibilitaGetDTO, HttpServletResponse response) throws IOException {
@@ -79,7 +89,9 @@ public class NotificationController {
                     .build();
             turnoService.save(t2);
             //notificationController.getNotification();
-            response.sendRedirect("/notify");
+            System.out.println("redirect");
+            response.sendRedirect("/notify/"+id.getUtente().getUserName());
+
             return;
         }
         throw new NotFoundException("Turno già presente!");
