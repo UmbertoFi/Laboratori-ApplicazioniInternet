@@ -25,7 +25,7 @@ public class LineaServiceImpl implements LineaService {
 
     public void save(LineaDTO l) {
         Linea linea = l.convertToEntity();
-        em.persist(linea);
+//        em.persist(linea);
     }
 
     public Iterable<Linea> getLines(){

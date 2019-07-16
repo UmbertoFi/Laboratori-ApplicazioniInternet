@@ -50,7 +50,7 @@ public class UtenteRuoloServiceImpl implements UtenteRuoloService {
         return null;
     }
 
-    @Override
+    /*
     public List<Utente> getAdminByLinea(String linea) {
 
         List<Utente> res=new ArrayList<>();
@@ -63,7 +63,7 @@ public class UtenteRuoloServiceImpl implements UtenteRuoloService {
         }
         return null;
     }
-
+*/
     public UtenteRuolo getUtenteRuolo(String username, String linea, String ruolo) {
 
         Optional<Utente> utente = userRepository.findById(username);
