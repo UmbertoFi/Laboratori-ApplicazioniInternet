@@ -1,5 +1,6 @@
 package it.polito.ai.demo.ServiceImplementation;
 
+import it.polito.ai.demo.Entity.Linea;
 import it.polito.ai.demo.Entity.Utente;
 import it.polito.ai.demo.Entity.UtenteRuolo;
 import it.polito.ai.demo.Entity.idRuolo;
@@ -45,6 +46,20 @@ public class UtenteRuoloServiceImpl implements UtenteRuoloService {
             for (UtenteRuolo u : ur)
                 listUr.add(u);
             return listUr;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Utente> getAdminByLinea(String linea) {
+
+        List<Utente> res=new ArrayList<>();
+        Iterable<UtenteRuolo>ur= utenteRuoloRepository.findAdminByLinea(linea);
+        if(ur.iterator().hasNext()) {
+            for (UtenteRuolo x : ur) {
+                res.add(x.getId().getUtente());
+            }
+            return res;
         }
         return null;
     }

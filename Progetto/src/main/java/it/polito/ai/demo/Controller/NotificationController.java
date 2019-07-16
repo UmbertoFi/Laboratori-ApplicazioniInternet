@@ -2,14 +2,16 @@ package it.polito.ai.demo.Controller;
 
 
 import it.polito.ai.demo.DTO.DisponibilitaGetDTO;
-import it.polito.ai.demo.DTO.NotificaDTO;
-import it.polito.ai.demo.Entity.Turno;
-import it.polito.ai.demo.Entity.Utente;
-import it.polito.ai.demo.Entity.idTurno;
+import it.polito.ai.demo.DTO.NotificaTurnoDTO;
+import it.polito.ai.demo.DTO.PrenotazioneDTONew;
+import it.polito.ai.demo.DTO.TurnoDTO;
+import it.polito.ai.demo.Entity.*;
+import it.polito.ai.demo.Exception.BadRequestException;
 import it.polito.ai.demo.Exception.NotFoundException;
 import it.polito.ai.demo.Service.LineaService;
 import it.polito.ai.demo.Service.TurnoService;
 import it.polito.ai.demo.Service.UserService;
+import it.polito.ai.demo.Service.UtenteRuoloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.Header;
@@ -24,8 +26,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class NotificationController {
@@ -38,28 +39,38 @@ public class NotificationController {
     UserService userService;
     @Autowired
     LineaService lineaService;
+    @Autowired
+    UtenteRuoloService utenteRuoloService;
 
 
     // Initialize Notifications
-    private NotificaDTO notifications = NotificaDTO.builder().count(0).msg("").build();
+    private NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
+    private Map<String, Integer> contatori = new HashMap<>();
 
-    @GetMapping("/notify/{id}")
+    @GetMapping("/notifyT/{id}")
     public void sendTurno(@PathVariable("id") String id_turno) {
 
         //System.out.println("notify ci sono");
-String[] pieces = id_turno.split("_");
+        String[] pieces = id_turno.split("_");
 
 
         String[] dataPieces = pieces[1].split("-");
         LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
-        Utente utente=userService.getUserById(pieces[0]);
+        Utente utente = userService.getUserById(pieces[0]);
         idTurno iT = idTurno.builder()
                 .data(data)
                 .utente(utente)
                 .verso(pieces[2])
                 .build();
-        if(turnoService.getTurnoById(iT).isPresent()){
-            notifications.increment();
+        if (turnoService.getTurnoById(iT).isPresent()) {
+            if (!contatori.containsKey(utente.getUserName())) {
+                contatori.put(utente.getUserName(), 0);
+            }
+
+            Integer x = contatori.get(utente.getUserName());
+            contatori.put(utente.getUserName(), x + 1);
+
+            notifications.setCount(contatori.get(utente.getUserName()));
             notifications.setMsg("Nuovo turno!");
             notifications.setData(data.toString());
             notifications.setVerso(pieces[2]);
@@ -67,7 +78,7 @@ String[] pieces = id_turno.split("_");
             notifications.setLinea(turnoService.getTurnoById(iT).get().getLinea().getNome());
 
             // Push notifications to front-end
-            template.convertAndSendToUser(utente.getUserName(),"/queue/reply", notifications);
+            template.convertAndSendToUser(utente.getUserName(), "/queue/reply", notifications);
         }
         throw new NotFoundException("turno non trovato no message!");
         // Increment Notification by one
@@ -79,8 +90,7 @@ String[] pieces = id_turno.split("_");
     }
 
 
-
-        @PostMapping(path = "/utility/turno")
+    @PostMapping(path = "/utility/turno")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     void postConsolidaTurno(@RequestBody DisponibilitaGetDTO disponibilitaGetDTO, HttpServletResponse response) throws IOException {
@@ -93,10 +103,10 @@ String[] pieces = id_turno.split("_");
         LocalDate date = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
 
         String verso;
-        if(disponibilitaGetDTO.getVerso().compareTo("Andata")==0)
-            verso="A";
+        if (disponibilitaGetDTO.getVerso().compareTo("Andata") == 0)
+            verso = "A";
         else
-            verso="R";
+            verso = "R";
         idTurno id = idTurno.builder()
                 .utente(userService.getUserById(disponibilitaGetDTO.getUsername()))
                 .data(date)
@@ -104,19 +114,106 @@ String[] pieces = id_turno.split("_");
                 .build();
 
         Optional<Turno> t = turnoService.getTurnoById(id);
-        if(!t.isPresent()){
+        if (!t.isPresent()) {
             Turno t2 = Turno.builder()
                     .id(id)
                     .linea(lineaService.getLinea(disponibilitaGetDTO.getLinea()))
+                    .consolidato(false)
                     .build();
             turnoService.save(t2);
             //notificationController.getNotification();
-            System.out.println(id.getUtente().getUserName()+"_"+id.getData()+"_"+id.getVerso());
-            response.sendRedirect("/notify/"+id.getUtente().getUserName()+"_"+id.getData()+"_"+id.getVerso());
+            //System.out.println(id.getUtente().getUserName()+"_"+id.getData()+"_"+id.getVerso());
+            response.sendRedirect("/notifyT/" + id.getUtente().getUserName() + "_" + id.getData() + "_" + id.getVerso());
 
             return;
         }
         throw new NotFoundException("Turno già presente!");
+
+    }
+
+    @PutMapping(path = "/utility/confirm/turno")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    void confermaTurno(@RequestBody TurnoDTO turnoDTO, HttpServletResponse response) throws IOException {
+
+
+        String[] dataPieces = turnoDTO.getData().split("-");
+        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
+
+        Utente u = userService.getUserById(turnoDTO.getUtente());
+
+        if (u != null) {
+            idTurno iT = idTurno.builder()
+                    .data(data)
+                    .utente(u)
+                    .verso(turnoDTO.getVerso())
+                    .build();
+
+            Optional<Turno> t = turnoService.getTurnoById(iT);
+            if (t.isPresent()) {
+                if (t.get().getConsolidato() == true)
+                    t.get().setConsolidato(false);
+                else
+                    t.get().setConsolidato(true);
+                turnoService.save(t.get());
+
+                List<Utente> admin = utenteRuoloService.getAdminByLinea(t.get().getLinea().getNome());
+                if (admin != null) {
+                    for (Utente user : admin)
+                        response.sendRedirect("/notifyC/" + user.getUserName() + "_" + iT.getData() + "_" + iT.getVerso());
+                    return;
+                }
+                throw new NotFoundException("errore negli amministratori");
+            }
+            throw new NotFoundException("turno non trovato");
+        }
+        throw new NotFoundException("utente non trovato");
+    }
+
+
+    @GetMapping("/notifyC/{id}")
+    public void sendConferma(@PathVariable("id") String id_turno) {
+
+        //System.out.println("notify ci sono");
+        String[] pieces = id_turno.split("_");
+
+
+        String[] dataPieces = pieces[1].split("-");
+        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
+        Utente utente = userService.getUserById(pieces[0]);
+        idTurno iT = idTurno.builder()
+                .data(data)
+                .utente(utente)
+                .verso(pieces[2])
+                .build();
+        if (turnoService.getTurnoById(iT).isPresent()) {
+            if (turnoService.getTurnoById(iT).isPresent()) {
+                if (!contatori.containsKey(utente.getUserName())) {
+                    contatori.put(utente.getUserName(), 0);
+                }
+
+                Integer x = contatori.get(utente.getUserName());
+                contatori.put(utente.getUserName(), x + 1);
+
+                notifications.setCount(contatori.get(utente.getUserName()));
+                notifications.setMsg("Nuova Conferma Turno!");
+                notifications.setData(data.toString());
+                notifications.setVerso(pieces[2]);
+                notifications.setUtente(utente.getUserName());
+                notifications.setLinea(turnoService.getTurnoById(iT).get().getLinea().getNome());
+
+                // Push notifications to front-end
+                template.convertAndSendToUser(utente.getUserName(), "/queue/reply", notifications);
+            }
+            throw new NotFoundException("turno non trovato no message!");
+            // Increment Notification by one
+
+
+            //System.out.println("Notifications successfully sent to Angular");
+
+            //return "Notifications successfully sent to Angular !";
+        }
+
 
     }
 }

@@ -9,16 +9,8 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter
 @Getter
-public class NotificaDTO implements Serializable {
-    private int count;
-    private String msg;
+public class TurnoDTO implements Serializable {
     private String data;
     private String verso;
     private String utente;
-    private String linea;
-
-    public void increment() {
-        this.count++;
-    }
-
 }
