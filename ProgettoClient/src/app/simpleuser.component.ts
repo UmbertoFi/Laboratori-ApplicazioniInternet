@@ -55,7 +55,7 @@ export class SimpleuserComponent implements OnInit {
     stompClient.connect({}, frame => {
 
       // Subscribe to notification topic
-      stompClient.subscribe('/topic/notification', notifications => {
+      stompClient.subscribe('/user/'+localStorage.getItem('username')+'/queue/reply', notifications => {
 
         // Update notifications attribute with the recent messsage sent from the server
         this.notifications = JSON.parse(notifications.body);
