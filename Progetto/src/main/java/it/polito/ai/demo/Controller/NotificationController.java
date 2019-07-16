@@ -47,6 +47,27 @@ public class NotificationController {
     private NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
     private Map<String, Integer> contatori = new HashMap<>();
 
+
+
+    @PostMapping("/utility/zero/{username}")
+    public void azzeraCounter(@PathVariable("username") String username) {
+      if (contatori.containsKey(username)) {
+            contatori.put(username, 0);
+        }
+    }
+
+    @GetMapping("utility/primovalorenotifiche/{username}")
+    public @ResponseBody int initializeCounter(@PathVariable("username") String username){
+      int x;
+      if (contatori.containsKey(username)) {
+        x = contatori.get(username);
+      }
+      else x = 0;
+
+      return x;
+    }
+
+
     @GetMapping("/notifyT/{id}")
     public void sendTurno(@PathVariable("id") String id_turno) {
 
