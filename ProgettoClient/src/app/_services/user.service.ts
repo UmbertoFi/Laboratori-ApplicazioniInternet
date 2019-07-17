@@ -12,6 +12,7 @@ import {ModificaRuolo} from '../_models/modificaRuolo';
 import {TrovaDisponibilita} from '../_models/trovaDisponibilita';
 import {Disponibilita} from '../_models/disponibilita';
 import {UtenteNew} from '../_models/utenteNew';
+import {presaVisione} from '../_models/presaVisione';
 
 @Injectable()
 export class UserService {
@@ -92,5 +93,17 @@ export class UserService {
 
   consolidaTurno(disponibilita: Disponibilita) {
     return this.http.post<Disponibilita>('http://localhost:8080/utility/turno', disponibilita, this.httpOptions)
+  }
+
+  azzeraNotifica(username: String){
+    return this.http.post<String>('http://localhost:8080/utility/zero/'+username, this.httpOptions)
+  }
+
+  inizializzaNotifica(username: String){
+    return this.http.get<number>('http://localhost:8080/utility/primovalorenotifiche/'+username, this.httpOptions);
+  }
+
+  presaVisione(p: presaVisione) {
+    return this.http.put<presaVisione>('http://localhost:8080/utility/confirm/turno', p, this.httpOptions);
   }
 }
