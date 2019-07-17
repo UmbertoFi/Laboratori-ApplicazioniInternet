@@ -8,6 +8,9 @@ import {nomeLinea} from './_models/nomeLinea';
 import {CorsaNew} from './_models/corsaNew';
 import {TrattaNew} from './_models/trattaNew';
 import {Ruolo} from './_models';
+import {Notifica} from './_models/notifica';
+import {WebSocketService} from './_services/websocket.service';
+import {presaVisione} from './_models/presaVisione';
 
 @Component({
   selector: 'app-attendance',
@@ -35,7 +38,43 @@ export class AttendanceComponent implements OnInit {
   checkAccompagnatore: boolean = false;
   checkSystemAdmin: boolean = false;
 
-  constructor(private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
+  notifications: Notifica[];
+  notifica: Notifica;
+  x: number;
+  p: presaVisione;
+
+  constructor(private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
+    this.notifications = new Array<Notifica>();
+
+    const promiseZero = fetch('http://localhost:8080/utility/primovalorenotifiche/'+localStorage.getItem('username'), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
+    }).then((data) => {
+      return data.json();
+    }).then((data) => {
+      this.x = data;
+      if (this.x != 0) {
+        this.notifica = new Notifica(this.x, '', '', '', '', '', 0);
+        this.notifications.push(this.notifica);
+      }
+    });
+
+
+
+// Open connection with server socket
+    const stompClient = this.webSocketService.connect();
+    stompClient.connect({}, frame => {
+
+      // Subscribe to notification topic
+      stompClient.subscribe('/user/'+localStorage.getItem('username')+'/queue/reply', notifications => {
+
+        // Update notifications attribute with the recent messsage sent from the server
+        this.notifica= JSON.parse(notifications.body);
+        this.notifications.push(this.notifica);
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -333,6 +372,18 @@ export class AttendanceComponent implements OnInit {
 
   cambiaSezione(url: string) {
     this.router.navigate(['/'+url]);
+  }
+
+  AzzeraContatore($event) {
+    if ($event.index==4){     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+      this.notifica.count=0;
+      this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
+    }
+  }
+
+  presavisione($event: MouseEvent, data: string, verso: string, utente: string) {
+    this.p = new presaVisione(data, verso, utente);
+    this.userService.presaVisione(this.p).subscribe();
   }
 }
 

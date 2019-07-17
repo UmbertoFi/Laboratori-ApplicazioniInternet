@@ -13,7 +13,7 @@
     </mat-card-title-group>
   </mat-card-header>
   <mat-card-content>
-    <mat-tab-group>
+    <mat-tab-group (selectedTabChange)="AzzeraContatore($event)">
       <mat-tab label="Gestione presenze">
         <mat-card>
           <mat-card-header>
@@ -120,6 +120,32 @@
                   Admin
                 </button>
                 <br></div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Comunicazioni {{ notifica?.count }}" >
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Comunicazioni</mat-card-title>
+            <mat-card-subtitle>vedi di sbrigarti</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="comunicazioni">
+              <ul mat-line>
+                <div *ngFor="let n of notifications">
+                  <div *ngIf="n?.tipo==1">
+                    <div>{{ n?.msg }} per data {{n?.data}}, linea {{n?.linea}}, verso {{n?.verso}}
+                      <button class="btn btn-primary" (click)="presavisione($event,n.data,n.verso,n.utente)">Conferma</button>
+                    </div>
+
+                  </div>
+                  <div *ngIf="n?.tipo==2">
+                    <div>{{ n?.msg }} per data {{n?.data}}, linea {{n?.linea}}, verso {{n?.verso}}
+                    </div>
+                  </div>
+                </div>
+              </ul>
             </div>
           </mat-card-content>
         </mat-card>
