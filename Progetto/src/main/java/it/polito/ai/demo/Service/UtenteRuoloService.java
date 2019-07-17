@@ -20,4 +20,6 @@ public interface UtenteRuoloService {
     public List<UtenteRuolo> getRuoli(String username);
 
     public List<Utente> getAdminByLinea(String linea);
+
+    public List<Utente> getAccompagnatoreByLinea(String nome);
 }

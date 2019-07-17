@@ -73,5 +73,10 @@ public class BambinoServiceImpl implements BambinoService {
         Optional<Bambino> bambino = bambinoRepository.findBambino(nome,cognome,utente);
         return bambino;
     }
+    public Bambino getBambinoById(int id_bambino){
+    if(bambinoRepository.findById(id_bambino).isPresent())
+        return bambinoRepository.findById(id_bambino).get();
+    return null;
+    }
 
 }

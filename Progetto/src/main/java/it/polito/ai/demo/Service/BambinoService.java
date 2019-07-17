@@ -19,4 +19,6 @@ public interface BambinoService {
     public void save(Bambino b);
 
     public Optional<Bambino> getBambinoByAll(String nome, String cognome, Utente utente);
+
+    public Bambino getBambinoById(int id_bambino);
 }

@@ -64,6 +64,19 @@ public class UtenteRuoloServiceImpl implements UtenteRuoloService {
         return null;
     }
 
+    public List<Utente> getAccompagnatoreByLinea(String linea) {
+
+        List<Utente> res=new ArrayList<>();
+        Iterable<UtenteRuolo>ur= utenteRuoloRepository.findAccompagnatoreByLinea(linea);
+        if(ur.iterator().hasNext()) {
+            for (UtenteRuolo x : ur) {
+                res.add(x.getId().getUtente());
+            }
+            return res;
+        }
+        return null;
+    }
+
     public UtenteRuolo getUtenteRuolo(String username, String linea, String ruolo) {
 
         Optional<Utente> utente = userRepository.findById(username);
