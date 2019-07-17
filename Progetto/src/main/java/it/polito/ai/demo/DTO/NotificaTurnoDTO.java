@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Getter
 public class NotificaTurnoDTO implements Serializable {
     private int count;
+    private int tipo;
     private String msg;
     private String data;
     private String verso;
