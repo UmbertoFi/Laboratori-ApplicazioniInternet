@@ -198,7 +198,7 @@ public class NotificationController {
     }
 
 
-    @GetMapping("/notifyC/{id}/{linea}")
+    @PutMapping("/notifyC/{id}/{linea}")
     public void sendConferma(@PathVariable("id") String id_turno,
                              @PathVariable("linea") String linea) {
 
@@ -236,7 +236,7 @@ public class NotificationController {
                 if (admin != null) {
                     for (Utente user : admin)
                         template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
-
+                    return;
                 }
                 throw new NotFoundException("errore negli amministratori");
             }
@@ -380,23 +380,17 @@ public class NotificationController {
         Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
         if (p.isPresent()) {
             prenotazioneService.deleteOne(p.get());
-
-            List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.get().getCorsa().getLinea().getNome());
-            if (accompagnatori != null) {
-                for (Utente user : accompagnatori)
-                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/cancellato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))+"/"+user.getUserName());
-            }
+            response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/cancellato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))+"/"+p.get().getCorsa().getLinea().getNome());
             return ;
         }
         throw new BadRequestException("errore nella cancellazione");
     }
 
 
-    @GetMapping("/notifyP/{id}/{action}/{username}/{accompagnatore}")
-    public void sendPrenotazione(@PathVariable("id") String id_prenotazione,
+    @PostMapping("/notifyP/{id}/{action}/{username}")
+    public void sendPostPrenotazione(@PathVariable("id") String id_prenotazione,
                                  @PathVariable("action") String azione,
-                                 @PathVariable("username") String username,
-                                 @PathVariable("accompagnatore") String accompagnatore) {
+                                 @PathVariable("username") String username){
 
         //System.out.println("notify ci sono");
         String[] pieces = id_prenotazione.split("_");
@@ -433,10 +427,14 @@ public class NotificationController {
                         notifications.setLinea(p.getCorsa().getLinea().getNome());
                         notifications.setTipo(3);
                         // Push notifications to front-end
-                        template.convertAndSendToUser(accompagnatore, "/queue/reply", notifications);
 
-
-                        return;
+                        List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
+                        if (accompagnatori != null) {
+                            for (Utente user : accompagnatori)
+                                template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                            return;
+                        }
+                        throw new NotFoundException("nessun accompagnatore trovato");
                     }
                 throw new NotFoundException("bambino non trovato!");
                 }
@@ -452,5 +450,129 @@ public class NotificationController {
 
     }
 
+    @PutMapping("/notifyP/{id}/{action}/{username}")
+    public void sendPutPrenotazione(@PathVariable("id") String id_prenotazione,
+                                     @PathVariable("action") String azione,
+                                     @PathVariable("username") String username){
 
+        //System.out.println("notify ci sono");
+        String[] pieces = id_prenotazione.split("_");
+
+
+        String[] dataPieces = pieces[1].split("-");
+        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
+
+        Utente utente = userService.getUserById(username);
+
+        if(utente!=null) {
+            idPrenotazione iP = idPrenotazione.builder()
+                    .data(data)
+                    .id_bambino(Integer.parseInt(pieces[0]))
+                    .verso(pieces[2])
+                    .build();
+
+            if (prenotazioneService.getPrenotazione(iP).isPresent()) {
+                Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
+                if (!contatori.containsKey(utente.getUserName())) {
+                    contatori.put(utente.getUserName(), 0);
+                }
+
+                Integer x = contatori.get(utente.getUserName());
+                contatori.put(utente.getUserName(), x + 1);
+
+                Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
+                if(b!=null) {
+                    notifications.setCount(contatori.get(utente.getUserName()));
+                    notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + "la prenotazione");
+                    notifications.setData(data.toString());
+                    notifications.setVerso(pieces[2]);
+                    notifications.setUtente(b.getNome()+" "+b.getCognome());
+                    notifications.setLinea(p.getCorsa().getLinea().getNome());
+                    notifications.setTipo(3);
+                    // Push notifications to front-end
+
+                    List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
+                    if (accompagnatori != null) {
+                        for (Utente user : accompagnatori)
+                            template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                        return;
+                    }
+                    throw new NotFoundException("nessun accompagnatore trovato");
+                }
+                throw new NotFoundException("bambino non trovato!");
+            }
+            throw new NotFoundException("turno non trovato no message!");
+            // Increment Notification by one
+
+
+            //System.out.println("Notifications successfully sent to Angular");
+
+            //return "Notifications successfully sent to Angular !"
+        }
+        throw new NotFoundException("utente non trovato");
+
+    }
+
+    @DeleteMapping("/notifyP/{id}/{action}/{username}")
+    public void sendDeletePrenotazione(@PathVariable("id") String id_prenotazione,
+                                     @PathVariable("action") String azione,
+                                     @PathVariable("username") String username){
+
+        //System.out.println("notify ci sono");
+        String[] pieces = id_prenotazione.split("_");
+
+
+        String[] dataPieces = pieces[1].split("-");
+        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
+
+        Utente utente = userService.getUserById(username);
+
+        if(utente!=null) {
+            idPrenotazione iP = idPrenotazione.builder()
+                    .data(data)
+                    .id_bambino(Integer.parseInt(pieces[0]))
+                    .verso(pieces[2])
+                    .build();
+
+            if (prenotazioneService.getPrenotazione(iP).isPresent()) {
+                Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
+                if (!contatori.containsKey(utente.getUserName())) {
+                    contatori.put(utente.getUserName(), 0);
+                }
+
+                Integer x = contatori.get(utente.getUserName());
+                contatori.put(utente.getUserName(), x + 1);
+
+                Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
+                if(b!=null) {
+                    notifications.setCount(contatori.get(utente.getUserName()));
+                    notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + "la prenotazione");
+                    notifications.setData(data.toString());
+                    notifications.setVerso(pieces[2]);
+                    notifications.setUtente(b.getNome()+" "+b.getCognome());
+                    notifications.setLinea(p.getCorsa().getLinea().getNome());
+                    notifications.setTipo(3);
+                    // Push notifications to front-end
+
+                    List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
+                    if (accompagnatori != null) {
+                        for (Utente user : accompagnatori)
+                            template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                        return;
+                    }
+                    throw new NotFoundException("nessun accompagnatore trovato");
+                }
+                throw new NotFoundException("bambino non trovato!");
+            }
+            throw new NotFoundException("turno non trovato no message!");
+            // Increment Notification by one
+
+
+            //System.out.println("Notifications successfully sent to Angular");
+
+            //return "Notifications successfully sent to Angular !"
+        }
+        throw new NotFoundException("utente non trovato");
+
+    }
 }
