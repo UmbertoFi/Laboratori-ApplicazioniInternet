@@ -8,8 +8,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title-group>
-      <mat-card-title>card esterna</mat-card-title>
-      <mat-card-subtitle>sticazzi</mat-card-subtitle>
+      <mat-card-title>Sezione accompagnatore</mat-card-title>
     </mat-card-title-group>
   </mat-card-header>
   <mat-card-content>
@@ -43,7 +42,14 @@
           <mat-card-content>
             <mat-tab-group>
               <mat-tab label="Andata">
-                <mat-icon class="downloadPresenze" (click)="downloadJSONpresenze()">save_alt</mat-icon>
+                <mat-menu #downloadMenuAndata="matMenu">
+                  <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('json', 0)">JSON</button>
+                  <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('csv', 0)">CSV</button>
+                  <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('xls', 0)">XLS</button>
+                </mat-menu>
+                <button mat-icon-button [matMenuTriggerFor]="downloadMenuAndata" class="downloadPresenze">
+                  <mat-icon>save_alt</mat-icon>
+                </button>
                 <mat-list>
                   <mat-list-item *ngFor="let fermata of tratte.fermateA; let f = index; let last = last">
                     <h3 mat-line>
@@ -70,7 +76,14 @@
                 </mat-form-field>
               </mat-tab>
               <mat-tab label="Ritorno">
-                <mat-icon class="downloadPresenze" (click)="downloadJSONpresenze()">save_alt</mat-icon>
+                <mat-menu #downloadMenuRitorno="matMenu">
+                  <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('json', 1)">JSON</button>
+                  <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('csv', 1)">CSV</button>
+                  <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('xls', 1)">XLS</button>
+                </mat-menu>
+                <button mat-icon-button [matMenuTriggerFor]="downloadMenuRitorno" class="downloadPresenze">
+                  <mat-icon>save_alt</mat-icon>
+                </button>
                 <mat-list>
                   <mat-list-item *ngFor="let fermata of tratte.fermateR; let f = index">
                     <h3 mat-line>
@@ -104,7 +117,6 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Sezioni</mat-card-title>
-            <mat-card-subtitle>vedi di sbrigarti</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="sezioni">
@@ -130,7 +142,6 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Comunicazioni</mat-card-title>
-            <mat-card-subtitle>vedi di sbrigarti</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="comunicazioni">

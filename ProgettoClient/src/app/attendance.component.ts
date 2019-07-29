@@ -11,6 +11,7 @@ import {Ruolo} from './_models';
 import {Notifica} from './_models/notifica';
 import {WebSocketService} from './_services/websocket.service';
 import {presaVisione} from './_models/presaVisione';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-attendance',
@@ -46,7 +47,7 @@ export class AttendanceComponent implements OnInit {
   constructor(private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
     this.notifications = new Array<Notifica>();
 
-    const promiseZero = fetch('http://localhost:8080/utility/primovalorenotifiche/'+localStorage.getItem('username'), {
+    const promiseZero = fetch('http://localhost:8080/utility/primovalorenotifiche/' + localStorage.getItem('username'), {
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -62,16 +63,15 @@ export class AttendanceComponent implements OnInit {
     });
 
 
-
 // Open connection with server socket
     const stompClient = this.webSocketService.connect();
     stompClient.connect({}, frame => {
 
       // Subscribe to notification topic
-      stompClient.subscribe('/user/'+localStorage.getItem('username')+'/queue/reply', notifications => {
+      stompClient.subscribe('/user/' + localStorage.getItem('username') + '/queue/reply', notifications => {
 
         // Update notifications attribute with the recent messsage sent from the server
-        this.notifica= JSON.parse(notifications.body);
+        this.notifica = JSON.parse(notifications.body);
         this.notifications.push(this.notifica);
       });
     });
@@ -95,13 +95,13 @@ export class AttendanceComponent implements OnInit {
         this.ruoli = data;
         return;
       }).then((data) => {
-        for(let r of this.ruoli){
+        for (let r of this.ruoli) {
           console.log(r);
-          if(r.ruolo.localeCompare("admin")==0){
+          if (r.ruolo.localeCompare('admin') == 0) {
             this.checkAdmin = true;
-          } else if(r.ruolo.localeCompare("system-admin")==0){
+          } else if (r.ruolo.localeCompare('system-admin') == 0) {
             this.checkSystemAdmin = true;
-          } else if(r.ruolo.localeCompare("accompagnatore")==0){
+          } else if (r.ruolo.localeCompare('accompagnatore') == 0) {
             this.checkAccompagnatore = true;
           }
         }
@@ -335,24 +335,23 @@ export class AttendanceComponent implements OnInit {
   }
 
   OnClickOpenForm() {
-    if(this.openDateForm==false){
-      this.openDateForm=true;
-    }
-    else{
-      this.openDateForm=false;
+    if (this.openDateForm == false) {
+      this.openDateForm = true;
+    } else {
+      this.openDateForm = false;
     }
   }
 
 
   selezionaCorsaCalendario() {
-    const pageDate = new Date(this.corse[this.pageIndex].data).setUTCHours(0o0,0o0,0o0,0o0);
-    const date = new Date(this.data).setUTCHours(0o0,0o0,0o0,0o0);
-    const diff = (date-pageDate)/(24*3600*1000);
+    const pageDate = new Date(this.corse[this.pageIndex].data).setUTCHours(0o0, 0o0, 0o0, 0o0);
+    const date = new Date(this.data).setUTCHours(0o0, 0o0, 0o0, 0o0);
+    const diff = (date - pageDate) / (24 * 3600 * 1000);
 
-    if((this.pageIndex+diff)<0 || (this.pageIndex+diff)>364){
+    if ((this.pageIndex + diff) < 0 || (this.pageIndex + diff) > 364) {
       this.alertService.error('Corsa non esistente!');
       return;
-    } else{
+    } else {
       this.pageIndex += diff;
       let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
         headers: {
@@ -365,18 +364,18 @@ export class AttendanceComponent implements OnInit {
         }).then((data) => {
           this.tratte = data;
         });
-      this.openDateForm=false;
+      this.openDateForm = false;
       return;
     }
   }
 
   cambiaSezione(url: string) {
-    this.router.navigate(['/'+url]);
+    this.router.navigate(['/' + url]);
   }
 
   AzzeraContatore($event) {
-    if ($event.index==4){     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
-      this.notifica.count=0;
+    if ($event.index == 4) {     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+      this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }
   }
@@ -386,8 +385,68 @@ export class AttendanceComponent implements OnInit {
     this.userService.presaVisione(this.p).subscribe();
   }
 
-  downloadJSONpresenze() {
-    alert("Implementare funzione per download json!");
+  downloadJSONpresenze(format: string, verso: number) {
+    if (format === 'json') {
+      if (verso === 0) {
+        const blob = new Blob([JSON.stringify(this.tratte.fermateA, null, '  ')], {type: 'text/json'});
+        saveAs(blob, 'andata.json');
+      } else {
+        const blob = new Blob([JSON.stringify(this.tratte.fermateR, null, '  ')], {type: 'text/json'});
+        saveAs(blob, 'ritorno.json');
+      }
+    } else if (format === 'csv') {
+      if (verso === 0) {
+        let csv = AttendanceComponent.ConvertToCSV(JSON.stringify(this.tratte.fermateA));
+        saveAs(new Blob([csv]), 'andata.csv');
+      } else {
+        let csv = AttendanceComponent.ConvertToCSV(JSON.stringify(this.tratte.fermateR));
+        saveAs(new Blob([csv]), 'ritorno.csv');
+      }
+    } else if (format === 'xls') {
+      if (verso === 0) {
+        let xls = AttendanceComponent.ConvertToXLS(JSON.stringify(this.tratte.fermateA));
+        saveAs(new Blob([xls]), 'andata.xls');
+      } else {
+        let xls = AttendanceComponent.ConvertToXLS(JSON.stringify(this.tratte.fermateR));
+        saveAs(new Blob([xls]), 'ritorno.xls');
+      }
+    }
+  }
+
+  static ConvertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+
+    for (var i = 0; i < array.length; i++) {
+      var line = '';
+      for (var index in array[i]) {
+        if (line != '') {
+          line += ',';
+        }
+        line += array[i][index];
+      }
+      line = line.substr(0,line.length-1);
+      str += line + '\r\n';
+    }
+    return str;
+  }
+
+  static ConvertToXLS(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+
+    for (var i = 0; i < array.length; i++) {
+      var line = '';
+      for (var index in array[i]) {
+        if (line != '') {
+          line += ',';
+        }
+        line += '"'+array[i][index]+'"';
+      }
+      line = line.substr(0,line.length-3);
+      str += line + '\r\n';
+    }
+    return str;
   }
 }
 
