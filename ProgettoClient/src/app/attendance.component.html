@@ -43,6 +43,7 @@
           <mat-card-content>
             <mat-tab-group>
               <mat-tab label="Andata">
+                <mat-icon class="downloadPresenze" (click)="downloadJSONpresenze()">save_alt</mat-icon>
                 <mat-list>
                   <mat-list-item *ngFor="let fermata of tratte.fermateA; let f = index; let last = last">
                     <h3 mat-line>
@@ -69,6 +70,7 @@
                 </mat-form-field>
               </mat-tab>
               <mat-tab label="Ritorno">
+                <mat-icon class="downloadPresenze" (click)="downloadJSONpresenze()">save_alt</mat-icon>
                 <mat-list>
                   <mat-list-item *ngFor="let fermata of tratte.fermateR; let f = index">
                     <h3 mat-line>

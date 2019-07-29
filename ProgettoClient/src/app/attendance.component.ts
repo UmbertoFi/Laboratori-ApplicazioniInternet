@@ -385,5 +385,9 @@ export class AttendanceComponent implements OnInit {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p).subscribe();
   }
+
+  downloadJSONpresenze() {
+    alert("Implementare funzione per download json!");
+  }
 }
 
