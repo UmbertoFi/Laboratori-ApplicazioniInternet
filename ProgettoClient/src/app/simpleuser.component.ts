@@ -350,7 +350,7 @@ export class SimpleuserComponent implements OnInit {
 
   inserisciFiglio($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
     const today = new Date();
-    const date = new Date(this.corse[this.pageIndex].data);
+    let date = new Date(this.corse[this.pageIndex].data);
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
     let yyyy = today.getFullYear();
@@ -362,6 +362,18 @@ export class SimpleuserComponent implements OnInit {
 
     if (cur.localeCompare(curdate) < 0) {
       this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
+      if(confirm("Vuoi prenotare la stessa corsa per un intero anno?")){
+        date = new Date(this.corse[this.pageIndex].data);
+        for(let i=this.pageIndex;i<this.length-1;i++){
+          date.setDate(date.getDate()+1);
+          console.log(date);
+          let dd = String(date.getDate()).padStart(2, '0');
+          let mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+          let yyyy = date.getFullYear();
+          data = yyyy + '-' + mm + '-' + dd;
+          this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
+        }
+      }
     }
     return;
   }

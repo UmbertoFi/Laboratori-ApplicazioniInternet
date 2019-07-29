@@ -32,16 +32,12 @@ button mat-icon-button:hover{
 
 .listaBambini{
   float: right;
+  margin-right: 5%;
 }
 
 .downloadPresenze{
   float: right;
-  margin-right: 5%;
-}
-
-.downloadPresenze:hover{
-  cursor: pointer;
-  color: cornflowerblue;
+  margin-right: 3%;
 }
 
 .sezioni{
