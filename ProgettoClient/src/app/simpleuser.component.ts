@@ -9,7 +9,7 @@ import {CorsaNew} from './_models/corsaNew';
 import {TrattaNew} from './_models/trattaNew';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
-import {Ruolo} from './_models';
+import {Prenotazione, Ruolo} from './_models';
 import {WebSocketService} from './_services/websocket.service';
 import {Notifica} from './_models/notifica';
 import {presaVisione} from './_models/presaVisione';
@@ -55,7 +55,7 @@ export class SimpleuserComponent implements OnInit {
 
     this.notifications = new Array<Notifica>();
 
-    const promiseZero = fetch('http://localhost:8080/utility/primovalorenotifiche/'+localStorage.getItem('username'), {
+    const promiseZero = fetch('http://localhost:8080/utility/primovalorenotifiche/' + localStorage.getItem('username'), {
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -71,16 +71,15 @@ export class SimpleuserComponent implements OnInit {
     });
 
 
-
 // Open connection with server socket
     const stompClient = this.webSocketService.connect();
     stompClient.connect({}, frame => {
 
       // Subscribe to notification topic
-      stompClient.subscribe('/user/'+localStorage.getItem('username')+'/queue/reply', notifications => {
+      stompClient.subscribe('/user/' + localStorage.getItem('username') + '/queue/reply', notifications => {
 
         // Update notifications attribute with the recent messsage sent from the server
-        this.notifica= JSON.parse(notifications.body);
+        this.notifica = JSON.parse(notifications.body);
         this.notifications.push(this.notifica);
       });
     });
@@ -362,11 +361,10 @@ export class SimpleuserComponent implements OnInit {
 
     if (cur.localeCompare(curdate) < 0) {
       this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
-      if(confirm("Vuoi prenotare la stessa corsa per un intero anno?")){
+      if (confirm('Vuoi prenotare la stessa corsa per un intero anno?')) {
         date = new Date(this.corse[this.pageIndex].data);
-        for(let i=this.pageIndex;i<this.length-1;i++){
-          date.setDate(date.getDate()+1);
-          console.log(date);
+        for (let i = this.pageIndex; i < this.length - 1; i++) {
+          date.setDate(date.getDate() + 1);
           let dd = String(date.getDate()).padStart(2, '0');
           let mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
           let yyyy = date.getFullYear();
@@ -456,8 +454,8 @@ export class SimpleuserComponent implements OnInit {
   }
 
   AzzeraContatore($event) {
-    if ($event.index==4){     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
-      this.notifica.count=0;
+    if ($event.index == 4) {     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+      this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }
   }
@@ -465,5 +463,17 @@ export class SimpleuserComponent implements OnInit {
   presavisione($event: MouseEvent, data: string, verso: string, utente: string) {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p).subscribe();
+  }
+
+  rimuoviPrenotazione($event: MouseEvent, nomeLinea: string, data: string, id_bambino: number, id_fermata: number, verso: number) {
+    if (confirm('Desideri cancellare la prenotazione?')) {
+      let v;
+      if (verso == 0) {
+        v = 'A';
+      } else {
+        v = 'R';
+      }
+      this.userService.rimuoviPrenotazione(nomeLinea, data, id_bambino + '_' + data + '_' + v).subscribe();
+    }
   }
 }

@@ -106,4 +106,9 @@ export class UserService {
   presaVisione(p: presaVisione) {
     return this.http.put<presaVisione>('http://localhost:8080/utility/confirm/turno', p, this.httpOptions);
   }
+
+  rimuoviPrenotazione(linea: string, data: string, resID: string) {
+    console.log('http://localhost:8080/reservations/'+linea+'/'+data+'/'+resID);
+    return this.http.delete('http://localhost:8080/reservations/'+linea+'/'+data+'/'+resID, this.httpOptions);
+  }
 }

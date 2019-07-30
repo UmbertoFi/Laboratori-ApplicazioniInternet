@@ -2,6 +2,11 @@ li {
   display: inline-block;
 }
 
+.clickable:hover{
+  cursor: pointer;
+  color: red;
+}
+
 mat-card{
   width: 650px;
   margin: auto;
