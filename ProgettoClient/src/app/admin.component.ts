@@ -29,8 +29,8 @@ export class AdminComponent implements OnInit {
   corse: CorsaNew[];
   tratte: TrattaNew;
   figli: Bambino[];
-  aggiungiBambinoForm: FormGroup;
-  submitted: boolean = false;
+  // aggiungiBambinoForm: FormGroup;
+  // submitted: boolean = false;
   promuoviUserForm: FormGroup;
   utenti: UtenteNew[];
   trovaDisponibilitaForm: FormGroup;
@@ -41,6 +41,9 @@ export class AdminComponent implements OnInit {
   checkAdmin: boolean = false;
   checkAccompagnatore: boolean = false;
   checkSystemAdmin: boolean = false;
+  submitted0 = false;
+  submitted1 = false;
+  submitted2 = false;
 
 
   pageEvent: PageEvent;
@@ -53,12 +56,19 @@ export class AdminComponent implements OnInit {
   notifica: Notifica;
   x: number;
   p: presaVisione;
+  username_blur = false;
+  linea_blur = false;
+  azione_blur = false;
+  linea2_blur = false;
+  data_blur = false;
+  verso_blur = false;
+  username2_blur = false;
 
 
   constructor(private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder) {
     this.notifications = new Array<Notifica>();
 
-    const promiseZero = fetch('http://localhost:8080/utility/primovalorenotifiche/'+localStorage.getItem('username'), {
+    const promiseZero = fetch('http://localhost:8080/utility/primovalorenotifiche/' + localStorage.getItem('username'), {
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -74,16 +84,15 @@ export class AdminComponent implements OnInit {
     });
 
 
-
 // Open connection with server socket
     const stompClient = this.webSocketService.connect();
     stompClient.connect({}, frame => {
 
       // Subscribe to notification topic
-      stompClient.subscribe('/user/'+localStorage.getItem('username')+'/queue/reply', notifications => {
+      stompClient.subscribe('/user/' + localStorage.getItem('username') + '/queue/reply', notifications => {
 
         // Update notifications attribute with the recent messsage sent from the server
-        this.notifica= JSON.parse(notifications.body);
+        this.notifica = JSON.parse(notifications.body);
         this.notifications.push(this.notifica);
       });
     });
@@ -95,10 +104,10 @@ export class AdminComponent implements OnInit {
       this.router.navigate(['/login']);
     }
 
-    this.aggiungiBambinoForm = this.formBuilder.group({
+    /* this.aggiungiBambinoForm = this.formBuilder.group({
       nome: ['', Validators.required],
       cognome: ['', Validators.required]
-    });
+    }); */
 
     this.promuoviUserForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -129,13 +138,13 @@ export class AdminComponent implements OnInit {
         this.ruoli = data;
         return;
       }).then((data) => {
-        for(let r of this.ruoli){
+        for (let r of this.ruoli) {
           console.log(r);
-          if(r.ruolo.localeCompare("admin")==0){
+          if (r.ruolo.localeCompare('admin') == 0) {
             this.checkAdmin = true;
-          } else if(r.ruolo.localeCompare("system-admin")==0){
+          } else if (r.ruolo.localeCompare('system-admin') == 0) {
             this.checkSystemAdmin = true;
-          } else if(r.ruolo.localeCompare("accompagnatore")==0){
+          } else if (r.ruolo.localeCompare('accompagnatore') == 0) {
             this.checkAccompagnatore = true;
           }
         }
@@ -392,7 +401,7 @@ export class AdminComponent implements OnInit {
     return;
   }
 
-  onSubmit() {
+  /* onSubmit() {
     this.submitted = true;
 
     // stop here if form is invalid
@@ -409,14 +418,14 @@ export class AdminComponent implements OnInit {
         error => {
           this.alertService.error('Inserimento bambino fallito!');
         });
-  }
+  } */
 
   onSubmitPromuovi() {
-
+    this.submitted0 = true;
     // stop here if form is invalid
-    /* if (this.aggiungiBambinoForm.invalid) {
+    if (this.promuoviUserForm.invalid) {
       return;
-    } */
+    }
 
     this.userService.modificaRuolo(this.promuoviUserForm.value)
       .pipe(first())
@@ -431,12 +440,13 @@ export class AdminComponent implements OnInit {
   }
 
   onSubmitTrovaDisponibilita() {
+    this.submitted1 = true;
     // stop here if form is invalid
-    /* if (this.aggiungiBambinoForm.invalid) {
+    if (this.trovaDisponibilitaForm.invalid) {
       return;
-    } */
+    }
 
-    let promiseDisponibilita = fetch('http://localhost:8080/utility/disponibilita/'+this.trovaDisponibilitaForm.value.linea+"/"+this.trovaDisponibilitaForm.value.data+"/"+this.trovaDisponibilitaForm.value.verso, {
+    let promiseDisponibilita = fetch('http://localhost:8080/utility/disponibilita/' + this.trovaDisponibilitaForm.value.linea + '/' + this.trovaDisponibilitaForm.value.data + '/' + this.trovaDisponibilitaForm.value.verso, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('access_token')
@@ -446,23 +456,24 @@ export class AdminComponent implements OnInit {
         return data.json();
       }).then((data) => {
         this.disponibilita = data;
-        this.d = new Disponibilita(this.trovaDisponibilitaForm.value.linea, this.trovaDisponibilitaForm.value.data, this.trovaDisponibilitaForm.value.verso, "");
+        this.d = new Disponibilita(this.trovaDisponibilitaForm.value.linea, this.trovaDisponibilitaForm.value.data, this.trovaDisponibilitaForm.value.verso, '');
         this.alertService.success('Disponibilità aggiornate per la corsa scelta con successo!', true);
         // this.router.navigate(['/simpleuser']);
         return;
       })
       .catch((error) => {
-      this.alertService.error('Errore aggiornamento disponibilità per la corsa scelta!');
-    });
+        this.alertService.error('Errore aggiornamento disponibilità per la corsa scelta!');
+      });
 
 
   }
 
   onSubmitConsolidaTurno() {
+    this.submitted2 = true;
     // stop here if form is invalid
-    /* if (this.aggiungiBambinoForm.invalid) {
+    if (this.consolidaTurnoForm.invalid) {
       return;
-    } */
+    }
 
     this.d.username = this.consolidaTurnoForm.value.username;
 
@@ -479,19 +490,21 @@ export class AdminComponent implements OnInit {
   }
 
   consolidaTurnoReset() {
-    if(this.disponibilita!=undefined) {
+    if (this.disponibilita != undefined) {
       this.consolidaTurnoForm.reset();
-      while (this.disponibilita.pop()) ;
+      while (this.disponibilita.pop()) {
+        ;
+      }
     }
   }
 
   cambiaSezione(url: string) {
-    this.router.navigate(['/'+url]);
+    this.router.navigate(['/' + url]);
   }
 
   AzzeraContatore($event) {
-    if ($event.index==4){     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
-      this.notifica.count=0;
+    if ($event.index == 4) {     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+      this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }
   }
@@ -499,5 +512,23 @@ export class AdminComponent implements OnInit {
   presavisione($event: MouseEvent, data: string, verso: string, utente: string) {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p).subscribe();
+  }
+
+  onBlur(field: number) {
+    if (field == 0) {
+      this.username_blur = true;
+    } else if (field == 1) {
+      this.linea_blur = true;
+    } else if (field == 2) {
+      this.azione_blur = true;
+    } else if (field == 3) {
+      this.linea2_blur = true;
+    } else if (field == 4) {
+      this.data_blur = true;
+    } else if (field == 5) {
+      this.verso_blur = true;
+    } else if (field == 6) {
+      this.username2_blur = true;
+    }
   }
 }

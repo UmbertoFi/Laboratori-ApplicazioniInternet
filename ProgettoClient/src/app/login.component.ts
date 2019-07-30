@@ -12,6 +12,8 @@ import {Notifica} from './_models/notifica';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted = false;
+  username_blur=false;
+  password_blur=false;
   // returnUrl: string;
 
   constructor(
@@ -63,5 +65,13 @@ export class LoginComponent implements OnInit {
         error => {
           this.alertService.error('Login fallito!');
         });
+  }
+
+  onBlur(field: number) {
+    if(field==0){
+      this.username_blur = true;
+    } else if(field==1){
+      this.password_blur = true;
+    }
   }
 }

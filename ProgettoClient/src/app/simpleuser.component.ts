@@ -27,7 +27,8 @@ export class SimpleuserComponent implements OnInit {
   tratte: TrattaNew;
   figli: Bambino[];
   aggiungiBambinoForm: FormGroup;
-  submitted = false;
+  submitted0 = false;
+  submitted1 = false;
   candidatiAccompagnatoreForm: FormGroup;
   data: string;
   openDateForm = false;
@@ -48,6 +49,11 @@ export class SimpleuserComponent implements OnInit {
   notifica: Notifica;
   x: number;
   p: presaVisione;
+  nome_blur=false;
+  cognome_blur=false;
+  linea_blur=false;
+  data_blur=false;
+  verso_blur=false;
 
 
   constructor(
@@ -377,7 +383,7 @@ export class SimpleuserComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
+    this.submitted0 = true;
 
     // stop here if form is invalid
     if (this.aggiungiBambinoForm.invalid) {
@@ -397,10 +403,12 @@ export class SimpleuserComponent implements OnInit {
 
   onSubmitAccompagnatore() {
 
+    this.submitted1 = true;
+
     // stop here if form is invalid
-    /* if (this.aggiungiBambinoForm.invalid) {
+    if (this.candidatiAccompagnatoreForm.invalid) {
       return;
-    } */
+    }
 
     this.userService.candidatiAccompagnatore(this.candidatiAccompagnatoreForm.value)
       .pipe(first())
@@ -474,6 +482,20 @@ export class SimpleuserComponent implements OnInit {
         v = 'R';
       }
       this.userService.rimuoviPrenotazione(nomeLinea, data, id_bambino + '_' + data + '_' + v).subscribe();
+    }
+  }
+
+  onBlur(field: number) {
+    if(field==0){
+      this.nome_blur = true;
+    } else if(field==1){
+      this.cognome_blur = true;
+    } else if(field==2){
+      this.linea_blur = true;
+    } else if(field==3){
+      this.data_blur=true;
+    } else if(field==4){
+      this.verso_blur=true;
     }
   }
 }
