@@ -402,14 +402,6 @@ export class AttendanceComponent implements OnInit {
         let csv = AttendanceComponent.ConvertToCSV(JSON.stringify(this.tratte.fermateR));
         saveAs(new Blob([csv]), 'ritorno.csv');
       }
-    } else if (format === 'xls') {
-      if (verso === 0) {
-        let xls = AttendanceComponent.ConvertToXLS(JSON.stringify(this.tratte.fermateA));
-        saveAs(new Blob([xls]), 'andata.xls');
-      } else {
-        let xls = AttendanceComponent.ConvertToXLS(JSON.stringify(this.tratte.fermateR));
-        saveAs(new Blob([xls]), 'ritorno.xls');
-      }
     }
   }
 
@@ -420,30 +412,24 @@ export class AttendanceComponent implements OnInit {
     for (var i = 0; i < array.length; i++) {
       var line = '';
       for (var index in array[i]) {
-        if (line != '') {
+        if (line != '' && index != 'persone') {
           line += ',';
         }
-        line += array[i][index];
-      }
-      line = line.substr(0,line.length-1);
-      str += line + '\r\n';
-    }
-    return str;
-  }
-
-  static ConvertToXLS(objArray) {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    var str = '';
-
-    for (var i = 0; i < array.length; i++) {
-      var line = '';
-      for (var index in array[i]) {
-        if (line != '') {
-          line += ',';
+        if (typeof array[i][index] != 'object') {
+          line += array[i][index];
+        } else {
+          if (array[i][index].length > 0) {
+            line += ',';
+          }
+          for (var j = 0; j < array[i][index].length; j++) {
+            alert(array[i][index][j].nome + ' ' + array[i][index][j].cognome);
+            line += array[i][index][j].nome + ' ' + array[i][index][j].cognome;
+            if (j < array[i][index].length - 1) {
+              line += ', ';
+            }
+          }
         }
-        line += '"'+array[i][index]+'"';
       }
-      line = line.substr(0,line.length-3);
       str += line + '\r\n';
     }
     return str;

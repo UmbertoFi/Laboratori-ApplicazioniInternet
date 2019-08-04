@@ -45,7 +45,6 @@
                 <mat-menu #downloadMenuAndata="matMenu">
                   <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('json', 0)">JSON</button>
                   <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('csv', 0)">CSV</button>
-                  <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('xls', 0)">XLS</button>
                 </mat-menu>
                 <button mat-icon-button [matMenuTriggerFor]="downloadMenuAndata" class="downloadPresenze">
                   <mat-icon>save_alt</mat-icon>
@@ -79,7 +78,6 @@
                 <mat-menu #downloadMenuRitorno="matMenu">
                   <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('json', 1)">JSON</button>
                   <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('csv', 1)">CSV</button>
-                  <button mat-menu-item class="clickable" (click)="downloadJSONpresenze('xls', 1)">XLS</button>
                 </mat-menu>
                 <button mat-icon-button [matMenuTriggerFor]="downloadMenuRitorno" class="downloadPresenze">
                   <mat-icon>save_alt</mat-icon>
