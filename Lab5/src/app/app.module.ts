@@ -27,17 +27,19 @@ import {AlertService} from './_services/alert.service';
 import {AlertComponent} from './_directives';
 import {AuthenticationService} from './_services/authentication.service';
 import {JwtInterceptor} from './jwt.interceptor';
+import {UtenteComponent} from './utente';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'attendance', component: AttendanceComponent}
+  {path: 'attendance', component: AttendanceComponent},
+  {path: 'utente', component: UtenteComponent}
 ];
 
 
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, RegisterComponent, AttendanceComponent, AlertComponent
+    AppComponent, LoginComponent, RegisterComponent, AttendanceComponent, AlertComponent, UtenteComponent
   ],
   imports: [
     BrowserModule,

@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
             this.userService.login(data);
 
             // this.router.navigate([this.returnUrl]);
-            this.router.navigate(['/attendance']);
+            this.router.navigate(['/utente']);
           }
         },
         error => {

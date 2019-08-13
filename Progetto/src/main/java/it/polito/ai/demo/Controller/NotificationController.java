@@ -78,12 +78,13 @@ public class NotificationController {
     @GetMapping("/notifyT/{id}")
     public void sendTurno(@PathVariable("id") String id_turno) {
 
-        //System.out.println("notify ci sono");
+        System.out.println("NOTIFICA CONSOLIDA TURNO");
         String[] pieces = id_turno.split("_");
 
 
         String[] dataPieces = pieces[1].split("-");
-        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
+        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]),
+          Integer.parseInt(dataPieces[2]));
         Utente utente = userService.getUserById(pieces[0]);
         idTurno iT = idTurno.builder()
                 .data(data)
@@ -224,7 +225,7 @@ public class NotificationController {
                 contatori.put(utente.getUserName(), x + 1);
 
                 notifications.setCount(contatori.get(utente.getUserName()));
-                notifications.setMsg("Nuova Conferma Turno!");
+                notifications.setMsg("NUOVA Presa Visione!");
                 notifications.setData(data.toString());
                 notifications.setVerso(pieces[2]);
                 notifications.setUtente(utente.getUserName());
@@ -286,8 +287,7 @@ public class NotificationController {
 
                 List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
                 if (accompagnatori != null) {
-                    for (Utente user : accompagnatori)
-                        response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/modificato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))+"/"+user.getUserName());
+                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/modificato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
                 }
                 return IdPrenotazioneDTO.builder().id(iP.toString()).build();
                 //}
@@ -312,10 +312,8 @@ public class NotificationController {
 
                 List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
                 if (accompagnatori != null) {
-                    for (Utente user : accompagnatori)
-                        response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/effettuato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))+"/"+user.getUserName());
+                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/effettuato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
                 }
-
 
                 return IdPrenotazioneDTO.builder().id(iP.toString()).build();
             }
@@ -380,19 +378,18 @@ public class NotificationController {
         Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
         if (p.isPresent()) {
             prenotazioneService.deleteOne(p.get());
-            response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/cancellato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))+"/"+p.get().getCorsa().getLinea().getNome());
+            response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/cancellato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
             return ;
         }
         throw new BadRequestException("errore nella cancellazione");
     }
 
 
-    @PostMapping("/notifyP/{id}/{action}/{username}")
+    @GetMapping("/notifyP/{id}/{action}/{username}")
     public void sendPostPrenotazione(@PathVariable("id") String id_prenotazione,
                                  @PathVariable("action") String azione,
                                  @PathVariable("username") String username){
 
-        //System.out.println("notify ci sono");
         String[] pieces = id_prenotazione.split("_");
 
 
@@ -420,7 +417,7 @@ public class NotificationController {
                     Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
                     if(b!=null) {
                         notifications.setCount(contatori.get(utente.getUserName()));
-                        notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + "la prenotazione");
+                        notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + " la prenotazione");
                         notifications.setData(data.toString());
                         notifications.setVerso(pieces[2]);
                         notifications.setUtente(b.getNome()+" "+b.getCognome());
