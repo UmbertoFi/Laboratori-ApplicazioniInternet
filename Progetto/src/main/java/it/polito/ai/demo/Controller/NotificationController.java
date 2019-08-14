@@ -406,33 +406,34 @@ public class NotificationController {
 
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
                 Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
-                    if (!contatori.containsKey(utente.getUserName())) {
-                        contatori.put(utente.getUserName(), 0);
-                    }
 
-                    Integer x = contatori.get(utente.getUserName());
-                    contatori.put(utente.getUserName(), x + 1);
-
-                    Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
-                    if(b!=null) {
-                        notifications.setCount(contatori.get(utente.getUserName()));
-                        notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + " la prenotazione");
-                        notifications.setData(data.toString());
-                        notifications.setVerso(pieces[2]);
-                        notifications.setUtente(b.getNome()+" "+b.getCognome());
-                        notifications.setLinea(p.getCorsa().getLinea().getNome());
-                        notifications.setTipo(3);
-                        // Push notifications to front-end
+                                           // Push notifications to front-end
 
                         List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
                         if (accompagnatori != null) {
-                            for (Utente user : accompagnatori)
-                                template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
-                            return;
+                          Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
+                          if(b!=null){
+                            notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + " la prenotazione");
+                            notifications.setData(data.toString());
+                            notifications.setVerso(pieces[2]);
+                            notifications.setUtente(b.getNome()+" "+b.getCognome());
+                            notifications.setLinea(p.getCorsa().getLinea().getNome());
+                            notifications.setTipo(3);
+                          }
+                            for (Utente user : accompagnatori) {
+                              if (!contatori.containsKey(user.getUserName())) {
+                                contatori.put(user.getUserName(), 0);
+                              }
+                              Integer x = contatori.get(user.getUserName());
+                              contatori.put(user.getUserName(), x + 1);
+                              notifications.setCount(contatori.get(user.getUserName()));
+                              template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                            }
+                                return;
                         }
                         throw new NotFoundException("nessun accompagnatore trovato");
-                    }
-                throw new NotFoundException("bambino non trovato!");
+
+                //throw new NotFoundException("bambino non trovato!");
                 }
                 throw new NotFoundException("turno non trovato no message!");
                 // Increment Notification by one
@@ -469,33 +470,30 @@ public class NotificationController {
 
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
                 Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
-                if (!contatori.containsKey(utente.getUserName())) {
-                    contatori.put(utente.getUserName(), 0);
-                }
-
-                Integer x = contatori.get(utente.getUserName());
-                contatori.put(utente.getUserName(), x + 1);
-
-                Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
-                if(b!=null) {
-                    notifications.setCount(contatori.get(utente.getUserName()));
-                    notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + "la prenotazione");
-                    notifications.setData(data.toString());
-                    notifications.setVerso(pieces[2]);
-                    notifications.setUtente(b.getNome()+" "+b.getCognome());
-                    notifications.setLinea(p.getCorsa().getLinea().getNome());
-                    notifications.setTipo(3);
-                    // Push notifications to front-end
 
                     List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
                     if (accompagnatori != null) {
-                        for (Utente user : accompagnatori)
-                            template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                      Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
+                      if(b!=null){
+                        notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + " la prenotazione");
+                        notifications.setData(data.toString());
+                        notifications.setVerso(pieces[2]);
+                        notifications.setUtente(b.getNome()+" "+b.getCognome());
+                        notifications.setLinea(p.getCorsa().getLinea().getNome());
+                        notifications.setTipo(3);
+                      }
+                      for (Utente user : accompagnatori) {
+                          if (!contatori.containsKey(user.getUserName())) {
+                            contatori.put(user.getUserName(), 0);
+                          }
+                          Integer x = contatori.get(user.getUserName());
+                          contatori.put(user.getUserName(), x + 1);
+                          notifications.setCount(contatori.get(user.getUserName()));
+                          template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                        }
                         return;
                     }
                     throw new NotFoundException("nessun accompagnatore trovato");
-                }
-                throw new NotFoundException("bambino non trovato!");
             }
             throw new NotFoundException("turno non trovato no message!");
             // Increment Notification by one
@@ -514,7 +512,6 @@ public class NotificationController {
                                      @PathVariable("action") String azione,
                                      @PathVariable("username") String username){
 
-        System.out.println("NOTIFY DELETE");
         String[] pieces = id_prenotazione.split("_");
 
 
@@ -529,44 +526,35 @@ public class NotificationController {
                     .id_bambino(Integer.parseInt(pieces[0]))
                     .verso(pieces[2])
                     .build();
-        System.out.println("Prenotazione creata:");
 
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
-                System.out.println("Prenotazione presente");
                 Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
                 prenotazioneService.deleteOne(p);
-                if (!contatori.containsKey(utente.getUserName())) {
-                    contatori.put(utente.getUserName(), 0);
-                }
-                System.out.println("Valore contatori");
-                Integer x = contatori.get(utente.getUserName());
-                contatori.put(utente.getUserName(), x + 1);
-
-                System.out.println("Contatori settati");
-
-                Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
-                if(b!=null) {
-                    notifications.setCount(contatori.get(utente.getUserName()));
-                    notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + "la prenotazione");
-                    notifications.setData(data.toString());
-                    notifications.setVerso(pieces[2]);
-                    notifications.setUtente(b.getNome()+" "+b.getCognome());
-                    notifications.setLinea(p.getCorsa().getLinea().getNome());
-                    notifications.setTipo(3);
-                    // Push notifications to front-end
-                    System.out.println("Notifica settata");
 
                     List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
                     if (accompagnatori != null) {
-                        System.out.println("BEFORE convert and send");
-                        for (Utente user : accompagnatori)
-                            template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
-                        System.out.println("AFTER convert and send");
-                        return;
+                      Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
+                      if(b!=null){
+                        notifications.setMsg("Il genitore " + utente.getUserName() + " ha " + azione + "la prenotazione");
+                        notifications.setData(data.toString());
+                        notifications.setVerso(pieces[2]);
+                        notifications.setUtente(b.getNome()+" "+b.getCognome());
+                        notifications.setLinea(p.getCorsa().getLinea().getNome());
+                        notifications.setTipo(3);
+                      }
+                        for (Utente user : accompagnatori) {
+                          if (!contatori.containsKey(user.getUserName())) {
+                            contatori.put(user.getUserName(), 0);
+                          }
+                          Integer x = contatori.get(user.getUserName());
+                          contatori.put(user.getUserName(), x + 1);
+                          notifications.setCount(contatori.get(user.getUserName()));
+                          template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                        }
+                         return;
                     }
                     throw new NotFoundException("nessun accompagnatore trovato");
-                }
-                throw new NotFoundException("bambino non trovato!");
+
             }
             throw new NotFoundException("turno non trovato no message!");
             // Increment Notification by one
