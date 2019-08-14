@@ -377,8 +377,7 @@ public class NotificationController {
 
         Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
         if (p.isPresent()) {
-            prenotazioneService.deleteOne(p.get());
-            response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/cancellato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+            response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/cancellato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
             return ;
         }
         throw new BadRequestException("errore nella cancellazione");
@@ -515,7 +514,7 @@ public class NotificationController {
                                      @PathVariable("action") String azione,
                                      @PathVariable("username") String username){
 
-        //System.out.println("notify ci sono");
+        System.out.println("NOTIFY DELETE");
         String[] pieces = id_prenotazione.split("_");
 
 
@@ -530,15 +529,20 @@ public class NotificationController {
                     .id_bambino(Integer.parseInt(pieces[0]))
                     .verso(pieces[2])
                     .build();
+        System.out.println("Prenotazione creata:");
 
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
+                System.out.println("Prenotazione presente");
                 Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
+                prenotazioneService.deleteOne(p);
                 if (!contatori.containsKey(utente.getUserName())) {
                     contatori.put(utente.getUserName(), 0);
                 }
-
+                System.out.println("Valore contatori");
                 Integer x = contatori.get(utente.getUserName());
                 contatori.put(utente.getUserName(), x + 1);
+
+                System.out.println("Contatori settati");
 
                 Bambino b=bambinoService.getBambinoById(iP.getId_bambino());
                 if(b!=null) {
@@ -550,11 +554,14 @@ public class NotificationController {
                     notifications.setLinea(p.getCorsa().getLinea().getNome());
                     notifications.setTipo(3);
                     // Push notifications to front-end
+                    System.out.println("Notifica settata");
 
                     List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
                     if (accompagnatori != null) {
+                        System.out.println("BEFORE convert and send");
                         for (Utente user : accompagnatori)
                             template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                        System.out.println("AFTER convert and send");
                         return;
                     }
                     throw new NotFoundException("nessun accompagnatore trovato");
