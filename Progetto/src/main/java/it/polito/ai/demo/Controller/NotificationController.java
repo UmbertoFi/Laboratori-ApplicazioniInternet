@@ -235,8 +235,9 @@ public class NotificationController {
 
                 List<Utente> admin = utenteRuoloService.getAdminByLinea(linea);
                 if (admin != null) {
-                    for (Utente user : admin)
-                        template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                    for (Utente user : admin) {
+                      template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                    }
                     return;
                 }
                 throw new NotFoundException("errore negli amministratori");
