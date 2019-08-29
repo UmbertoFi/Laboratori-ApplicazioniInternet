@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @RestController
-public class NotificationController {
+public class NotificationController { //ciao antonino
     @Autowired
     private SimpMessagingTemplate template;
 
