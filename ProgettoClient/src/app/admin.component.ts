@@ -25,19 +25,19 @@ import {presaVisione} from './_models/presaVisione';
 export class AdminComponent implements OnInit {
   title = 'Pedibus';
 
-  nomiLinee: nomeLinea[];
-  corse: CorsaNew[];
-  tratte: TrattaNew;
-  figli: Bambino[];
+  nomiLinee: nomeLinea[] = [];
+  corse: CorsaNew[] = [];
+  tratte = {} as TrattaNew;
+  figli: Bambino[] = [];
   // aggiungiBambinoForm: FormGroup;
   // submitted: boolean = false;
   promuoviUserForm: FormGroup;
-  utenti: UtenteNew[];
+  utenti: UtenteNew[] = [];
   trovaDisponibilitaForm: FormGroup;
-  disponibilita: Disponibilita[];
+  disponibilita: Disponibilita[] = [];
   consolidaTurnoForm: FormGroup;
   d: Disponibilita;
-  ruoli: Ruolo[];
+  ruoli: Ruolo[] = [];
   checkAdmin: boolean = false;
   checkAccompagnatore: boolean = false;
   checkSystemAdmin: boolean = false;
@@ -52,7 +52,7 @@ export class AdminComponent implements OnInit {
   pageIndex = 0;
   lineaSelezionataMenu = 0;
 
-  notifications: Notifica[];
+  notifications: Notifica[] = [];
   notifica: Notifica;
   x: number;
   p: presaVisione;

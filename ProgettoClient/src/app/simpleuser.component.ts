@@ -22,17 +22,17 @@ import {presaVisione} from './_models/presaVisione';
 export class SimpleuserComponent implements OnInit {
   title = 'Pedibus';
 
-  nomiLinee: nomeLinea[];
-  corse: CorsaNew[];
+  nomiLinee: nomeLinea[] = [];
+  corse: CorsaNew[] = [];
   tratte: TrattaNew;
-  figli: Bambino[];
+  figli: Bambino[] = [];
   aggiungiBambinoForm: FormGroup;
   submitted0 = false;
   submitted1 = false;
   candidatiAccompagnatoreForm: FormGroup;
   data: string;
   openDateForm = false;
-  ruoli: Ruolo[];
+  ruoli: Ruolo[] = [];
   checkAdmin = false;
   checkAccompagnatore = false;
   checkSystemAdmin = false;
@@ -45,7 +45,7 @@ export class SimpleuserComponent implements OnInit {
   lineaSelezionataMenu = 0;
 
 
-  notifications: Notifica[];
+  notifications: Notifica[] = [];
   notifica: Notifica;
   x: number;
   p: presaVisione;

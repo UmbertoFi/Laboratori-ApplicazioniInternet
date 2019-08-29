@@ -21,10 +21,10 @@ import {saveAs} from 'file-saver';
 export class AttendanceComponent implements OnInit {
   title = 'Pedibus';
 
-  bambini: Bambino[];
-  nomiLinee: nomeLinea[];
-  corse: CorsaNew[];
-  tratte: TrattaNew;
+  bambini: Bambino[] = [];
+  nomiLinee: nomeLinea[] = [];
+  corse: CorsaNew[] = [];
+  tratte = {} as TrattaNew;
   data: string;
 
 
@@ -34,12 +34,12 @@ export class AttendanceComponent implements OnInit {
   pageIndex = 0;
   lineaSelezionataMenu = 0;
   openDateForm: boolean = false;
-  ruoli: Ruolo[];
+  ruoli: Ruolo[] = [];
   checkAdmin: boolean = false;
   checkAccompagnatore: boolean = false;
   checkSystemAdmin: boolean = false;
 
-  notifications: Notifica[];
+  notifications: Notifica[] = [];
   notifica: Notifica;
   x: number;
   p: presaVisione;

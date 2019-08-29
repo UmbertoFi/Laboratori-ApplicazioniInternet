@@ -24,8 +24,8 @@
                       (click)="selezionaLineaMenu(l)">{{nomiLinee[l].nome}}</button>
             </mat-menu>
             <mat-card-title-group>
-              <mat-card-title>Linea:  {{nomiLinee[lineaSelezionataMenu].nome}}</mat-card-title>
-              <mat-card-subtitle>{{corse[this.pageIndex].data}}&nbsp;
+              <mat-card-title>Linea:  {{nomiLinee[lineaSelezionataMenu]?.nome}}</mat-card-title>
+              <mat-card-subtitle>{{corse[this.pageIndex]?.data}}&nbsp;
                 <mat-icon class="clickable" (click)="OnClickOpenForm()">event</mat-icon>&nbsp;
                 <div *ngIf="openDateForm"><input type="date" [(ngModel)]="data" (change)="selezionaCorsaCalendario()">
                 </div>

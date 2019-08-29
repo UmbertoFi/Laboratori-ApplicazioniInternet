@@ -290,7 +290,7 @@ public class NotificationController { //ciao antonino
               prenotazioneService.save(p);
               f.get().getPrenotazioni().add(p);
 
-              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/modificato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/modificato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
 
               return IdPrenotazioneDTO.builder().id(iP.toString()).build();
             }
@@ -319,7 +319,7 @@ public class NotificationController { //ciao antonino
               prenotazioneService.save(p);
               f.get().getPrenotazioni().add(p);
 
-              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/effettuato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/effettuato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
 
               return IdPrenotazioneDTO.builder().id(iP.toString()).build();
 
@@ -360,8 +360,8 @@ public class NotificationController { //ciao antonino
               p.get().setPresente(true);
             prenotazioneService.save(p.get());
 
-            for (Utente user : accompagnatori)
-              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/modificata/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)) + "/" + user.getUserName());
+            // for (Utente user : accompagnatori)
+              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/modificata/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
 
             return;
           }
@@ -406,18 +406,13 @@ public class NotificationController { //ciao antonino
 
                 List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
                 if (accompagnatori != null) {
-                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/modificato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/modificato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
                 }
                 return IdPrenotazioneDTO.builder().id(iP.toString()).build();
                 //}
             } else {
                 // INSERT
-                boolean presente;
-                if (data.compareTo(curr) == 0) {
-                    presente = true;
-                } else {
-                    presente = false;
-                }
+                boolean presente = false;
                 Prenotazione p = Prenotazione.builder()
                         .fermata(f.get())
                         .presente(presente)
@@ -431,7 +426,7 @@ public class NotificationController { //ciao antonino
 
                 List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
                 if (accompagnatori != null) {
-                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/effettuato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/effettuato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
                 }
 
                 return IdPrenotazioneDTO.builder().id(iP.toString()).build();
@@ -466,8 +461,8 @@ public class NotificationController { //ciao antonino
 
             List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.get().getCorsa().getLinea().getNome());
             if (accompagnatori != null) {
-                for (Utente user : accompagnatori)
-                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/modificata/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))+"/"+user.getUserName());
+                // for (Utente user : accompagnatori)
+                    response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/modificata/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
             }
 
             return;
@@ -496,7 +491,7 @@ public class NotificationController { //ciao antonino
 
         Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
         if (p.isPresent()) {
-            response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/cancellato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+            response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/cancellato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
             return ;
         }
         throw new BadRequestException("errore nella cancellazione");
