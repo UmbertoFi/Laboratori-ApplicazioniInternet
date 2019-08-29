@@ -108,7 +108,16 @@ export class UserService {
   }
 
   rimuoviPrenotazione(linea: string, data: string, resID: string) {
-    console.log('http://localhost:8080/reservations/'+linea+'/'+data+'/'+resID);
+    // console.log('http://localhost:8080/reservations/'+linea+'/'+data+'/'+resID);
     return this.http.delete('http://localhost:8080/reservations/'+linea+'/'+data+'/'+resID, this.httpOptions);
+  }
+
+  pulisciDatabase() {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = today.getFullYear();
+    const data = yyyy + '-' + mm + '-' + dd;
+    return this.http.delete('http://localhost:8080/utility/pulisciDatabase/'+data, this.httpOptions);
   }
 }

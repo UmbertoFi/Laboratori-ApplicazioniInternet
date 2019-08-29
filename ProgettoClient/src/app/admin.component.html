@@ -148,6 +148,9 @@
               <div>
                 <button class="btn btn-primary">Cambia Password</button>
                 <br><br></div>
+              <div *ngIf="checkSystemAdmin">
+                <button class="btn btn-primary" (click)="pulisciDatabase()">Pulisci Database</button>
+              <br><br></div>
               <div>
                 <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
                 <br><br></div>
@@ -175,11 +178,13 @@
 
                   </div>
                   <div *ngIf="n?.tipo==2">
-                    <div>{{ n?.msg }} L'utente {{n?.utente}} ha preso visione del suo turno in data {{n?.data}}, linea {{n?.linea}}, verso {{n?.verso}}
+                    <div>{{ n?.msg }} L'utente {{n?.utente}} ha preso visione del suo turno in data {{n?.data}},
+                      linea {{n?.linea}}, verso {{n?.verso}}
                     </div>
                   </div>
                   <div *ngIf="n?.tipo==3">
-                    <div>{{ n?.msg }} del bambino {{n?.utente}} per la data {{n?.data}}, linea {{n?.linea}}, verso {{n?.verso}}
+                    <div>{{ n?.msg }} del bambino {{n?.utente}} per la data {{n?.data}}, linea {{n?.linea}},
+                      verso {{n?.verso}}
                     </div>
                   </div>
                 </div>
