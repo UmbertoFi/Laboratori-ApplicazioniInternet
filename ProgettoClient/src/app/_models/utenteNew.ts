@@ -1,4 +1,5 @@
 export class UtenteNew {
-  username: string;
-//add
+  constructor(
+    public username: string) {
+  }
 }
