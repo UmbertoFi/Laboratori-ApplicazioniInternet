@@ -37,4 +37,25 @@ export class LineaService {
       versoChar='R';
     return this.http.put<NUOVAPrenotazione>(url, new NUOVAPrenotazione(id_bambino,id_fermata,versoChar), this.httpOptions);
   }
+
+  inserisciPrenotazioneRitardataAccompagnatore(id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
+    let url = 'http://localhost:8080/utility/accompagnatore/reservations/'+linea+'/'+data;
+    let versoChar;
+    if(verso==0)
+      versoChar='A';
+    else
+      versoChar='R';
+    return this.http.post<NUOVAPrenotazione>(url, new NUOVAPrenotazione(id_bambino,id_fermata,versoChar), this.httpOptions);
+  }
+
+
+  updateprenotazioneAccompagnatore(id_bambino: number, id_fermata: number, data: string, verso: number) {
+    let url = 'http://localhost:8080/utility/accompagnatore/reservations/'+data;
+    let versoChar;
+    if(verso==0)
+      versoChar='A';
+    else
+      versoChar='R';
+    return this.http.put<NUOVAPrenotazione>(url, new NUOVAPrenotazione(id_bambino,id_fermata,versoChar), this.httpOptions);
+  }
 }

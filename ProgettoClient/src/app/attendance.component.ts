@@ -193,19 +193,23 @@ export class AttendanceComponent implements OnInit {
 
     if (cur.localeCompare(curdate) === 0) {
       if (verso == 0) {
-        if (this.tratte.fermateA[idFermata].persone[idPersona].selected === false) {
-          this.tratte.fermateA[idFermata].persone[idPersona].selected = true;
-        } else {
-          this.tratte.fermateA[idFermata].persone[idPersona].selected = false;
-        }
-        this.lineaService.updateprenotazione(this.tratte.fermateA[idFermata].persone[idPersona].id_bambino, this.tratte.fermateA[idFermata].id_fermata, this.corse[this.pageIndex].data, 0).subscribe();
+        this.lineaService.updateprenotazioneAccompagnatore(this.tratte.fermateA[idFermata].persone[idPersona].id_bambino, this.tratte.fermateA[idFermata].id_fermata, this.corse[this.pageIndex].data, 0).subscribe(
+          (data) => {if (this.tratte.fermateA[idFermata].persone[idPersona].selected === false) {
+            this.tratte.fermateA[idFermata].persone[idPersona].selected = true;
+          } else {
+            this.tratte.fermateA[idFermata].persone[idPersona].selected = false;
+          }}
+        );
       } else {
-        if (this.tratte.fermateR[idFermata].persone[idPersona].selected === false) {
-          this.tratte.fermateR[idFermata].persone[idPersona].selected = true;
-        } else {
-          this.tratte.fermateR[idFermata].persone[idPersona].selected = false;
-        }
-        this.lineaService.updateprenotazione(this.tratte.fermateR[idFermata].persone[idPersona].id_bambino, this.tratte.fermateR[idFermata].id_fermata, this.corse[this.pageIndex].data, 1).subscribe();
+        this.lineaService.updateprenotazioneAccompagnatore(this.tratte.fermateR[idFermata].persone[idPersona].id_bambino, this.tratte.fermateR[idFermata].id_fermata, this.corse[this.pageIndex].data, 1).subscribe(
+          (data) => {
+            if (this.tratte.fermateR[idFermata].persone[idPersona].selected === false) {
+              this.tratte.fermateR[idFermata].persone[idPersona].selected = true;
+            } else {
+              this.tratte.fermateR[idFermata].persone[idPersona].selected = false;
+            }
+          }
+        );
       }
     }
   }
@@ -329,7 +333,7 @@ export class AttendanceComponent implements OnInit {
     const curdate = yyyy + '/' + mm + '/' + dd;
 
     if (cur.localeCompare(curdate) === 0) {
-      this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
+      this.lineaService.inserisciPrenotazioneRitardataAccompagnatore(id_bambino, linea, id_fermata, verso, data).subscribe();
     }
     return;
   }

@@ -255,11 +255,9 @@ public class NotificationController { //ciao antonino
     }
 
     // LATO ACCOMPAGNATORE possibile solo se accompagnatore di quella linea
-
-    /*
-  @PostMapping(path = "/utility/reservations/{nome_linea}/{date}")
+  @PostMapping(path = "/utility/accompagnatore/reservations/{nome_linea}/{date}")
   public @ResponseBody
-  IdPrenotazioneDTO postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
+  IdPrenotazioneDTO postNuovaPrenotazioneAccompagnatore(@PathVariable("nome_linea") String nomeLinea,
                                           @PathVariable("date") String date,
                                           @RequestBody PrenotazioneDTONew prenotazioneDTO,
                                           HttpServletResponse response, HttpServletRequest req) throws IOException {
@@ -297,8 +295,8 @@ public class NotificationController { //ciao antonino
               return IdPrenotazioneDTO.builder().id(iP.toString()).build();
             }
           }
-          throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
         }
+        throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
         //}
       } else {
         // INSERT
@@ -327,17 +325,18 @@ public class NotificationController { //ciao antonino
 
             }
           }
-          throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
         }
+        throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
       }
     }
     throw new NotFoundException("errore nella prenotazione");
   }
 
-  @PutMapping(path = "/utility/reservations/{date}")
+  // LATO ACCOMPAGNATORE possibile solo se accompagnatore di quella linea
+  @PutMapping(path = "/utility/accompagnatore/reservations/{date}")
   @ResponseStatus(HttpStatus.OK)
   public @ResponseBody
-  void updatePrenotazione(@PathVariable("date") String date,
+  void updatePrenotazioneAccompagnatore(@PathVariable("date") String date,
                           @RequestBody PrenotazioneDTONew prenotazioneDTO, HttpServletResponse response, HttpServletRequest req) throws IOException {
 
     String[] dataPieces = date.split("-");
@@ -367,12 +366,12 @@ public class NotificationController { //ciao antonino
             return;
           }
         }
-        throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
       }
+      throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
     }
 
     throw new BadRequestException("errore nella modifica ");
-  } */
+  }
 
     @PostMapping(path = "/utility/reservations/{nome_linea}/{date}")
     public @ResponseBody
