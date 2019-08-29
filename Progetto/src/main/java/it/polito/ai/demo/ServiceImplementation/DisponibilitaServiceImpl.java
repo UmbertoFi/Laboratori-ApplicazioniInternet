@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,4 +45,13 @@ public class DisponibilitaServiceImpl implements DisponibilitaService {
 
         return disp;
     }
+
+  public List<Disponibilita> getDisponibilitaByData(LocalDate data){
+      List<Disponibilita> disponibilita = disponibilitaRepository.findByData(data);
+      return disponibilita;
+  }
+
+  public void deleteOne(Disponibilita d){
+    disponibilitaRepository.delete(d);
+  }
 }

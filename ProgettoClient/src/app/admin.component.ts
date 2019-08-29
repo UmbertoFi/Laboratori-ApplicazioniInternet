@@ -531,4 +531,8 @@ export class AdminComponent implements OnInit {
       this.username2_blur = true;
     }
   }
+
+  pulisciDatabase() {
+    this.userService.pulisciDatabase().subscribe();
+  }
 }
