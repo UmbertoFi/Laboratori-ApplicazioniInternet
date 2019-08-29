@@ -4,6 +4,11 @@ li {
 
 .clickable:hover{
   cursor: pointer;
+  color: cornflowerblue;
+}
+
+.clickableRimozione:hover{
+  cursor: pointer;
   color: red;
 }
 

@@ -57,7 +57,7 @@
                       </mat-menu>
                     </h3>
                     <ul mat-line>
-                      <li class="clickable"
+                      <li class="clickableRimozione"
                           *ngFor="let persona of personeOrdinateByNome(0,f); let p=index, let last = last">
                         <p
                           (click)="rimuoviPrenotazione($event,nomiLinee[lineaSelezionataMenu].nome,corse[this.pageIndex].data,persona.id_bambino,tratte.fermateA[f].id_fermata,0)">{{persona.nome}}&nbsp;{{persona.cognome}} {{persona.id_bambino}}{{last ? '' : ',&nbsp;'}}</p>
@@ -83,7 +83,7 @@
                       </mat-menu>
                     </h3>
                     <ul mat-line>
-                      <li class="clickable"
+                      <li class="clickableRimozione"
                           *ngFor="let persona of personeOrdinateByNome(1,f); let p=index; let last = last">
                         <p
                           (click)="rimuoviPrenotazione($event,nomiLinee[lineaSelezionataMenu].nome,corse[this.pageIndex].data,persona.id_bambino,tratte.fermateR[f].id_fermata,1)">{{persona.nome}}&nbsp;{{persona.cognome}}&nbsp;{{persona.id_bambino}}{{last ? '' : ',&nbsp;'}}</p>

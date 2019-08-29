@@ -254,6 +254,125 @@ public class NotificationController { //ciao antonino
 
     }
 
+    // LATO ACCOMPAGNATORE possibile solo se accompagnatore di quella linea
+
+    /*
+  @PostMapping(path = "/utility/reservations/{nome_linea}/{date}")
+  public @ResponseBody
+  IdPrenotazioneDTO postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
+                                          @PathVariable("date") String date,
+                                          @RequestBody PrenotazioneDTONew prenotazioneDTO,
+                                          HttpServletResponse response, HttpServletRequest req) throws IOException {
+
+
+    Optional<Fermata> f = fermataService.getFermata(prenotazioneDTO.getId_fermata());
+    if (f.isPresent()) {
+
+      String[] pieces = date.split("-");
+      LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
+      LocalDate curr = LocalDate.now();
+
+      idPrenotazione iP = idPrenotazione.builder()
+        .data(data)
+        .id_bambino(prenotazioneDTO.getId_bambino())
+        .verso(prenotazioneDTO.getVerso())
+        .build();
+
+
+      if (prenotazioneService.getPrenotazione(iP).isPresent()) {
+        // UPDATE
+        Prenotazione p = prenotazioneService.getPrenotazione(iP).get();
+        // if(p.getFermata().getLinea()!=fermataService.getFermata(prenotazioneDTO.getId_fermata()).get().getLinea()) {
+        List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
+        if (accompagnatori != null) {
+          for (Utente u : accompagnatori) {
+            if (u.getUserName().compareTo(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))) == 0) {
+              f.get().getPrenotazioni().remove(p);
+              p.setFermata(f.get());
+              prenotazioneService.save(p);
+              f.get().getPrenotazioni().add(p);
+
+              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/modificato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+
+              return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+            }
+          }
+          throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
+        }
+        //}
+      } else {
+        // INSERT
+        boolean presente;
+        if (data.compareTo(curr) == 0) {
+          presente = true;
+        } else {
+          presente = false;
+        }
+        Prenotazione p = Prenotazione.builder()
+          .fermata(f.get())
+          .presente(presente)
+          .corsa(corsaService.getCorsa(f.get().getLinea().getId(), data, prenotazioneDTO.getVerso()))
+          .id(iP)
+          .build();
+        List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.getCorsa().getLinea().getNome());
+        if (accompagnatori != null) {
+          for (Utente u : accompagnatori) {
+            if (u.getUserName().compareTo(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))) == 0) {
+              prenotazioneService.save(p);
+              f.get().getPrenotazioni().add(p);
+
+              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + date + "_" + iP.getVerso() + "/effettuato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+
+              return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+
+            }
+          }
+          throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
+        }
+      }
+    }
+    throw new NotFoundException("errore nella prenotazione");
+  }
+
+  @PutMapping(path = "/utility/reservations/{date}")
+  @ResponseStatus(HttpStatus.OK)
+  public @ResponseBody
+  void updatePrenotazione(@PathVariable("date") String date,
+                          @RequestBody PrenotazioneDTONew prenotazioneDTO, HttpServletResponse response, HttpServletRequest req) throws IOException {
+
+    String[] dataPieces = date.split("-");
+    LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
+
+    idPrenotazione iP = idPrenotazione.builder()
+      .data(data)
+      .id_bambino(prenotazioneDTO.getId_bambino())
+      .verso(prenotazioneDTO.getVerso())
+      .build();
+
+    Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
+    if (p.isPresent()) {
+      List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(p.get().getCorsa().getLinea().getNome());
+      if (accompagnatori != null) {
+        for (Utente u : accompagnatori) {
+          if (u.getUserName().compareTo(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))) == 0) {
+            if (p.get().isPresente() == true)
+              p.get().setPresente(false);
+            else
+              p.get().setPresente(true);
+            prenotazioneService.save(p.get());
+
+            for (Utente user : accompagnatori)
+              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getLocalData() + "_" + iP.getVerso() + "/modificata/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)) + "/" + user.getUserName());
+
+            return;
+          }
+        }
+        throw new BadRequestException("Errore: accompagnatore non autorizzato poichè non è accompagnatore della linea");
+      }
+    }
+
+    throw new BadRequestException("errore nella modifica ");
+  } */
 
     @PostMapping(path = "/utility/reservations/{nome_linea}/{date}")
     public @ResponseBody
