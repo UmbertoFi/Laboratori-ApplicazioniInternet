@@ -14,7 +14,7 @@ export class AuthenticationService {
   };
 
   login(user: UserLogin) {
-    /* function criptaPassword(password: string) {
+    function criptaPassword(password: string) {
       let c;
       let encryptedPassword: string = "";
 
@@ -39,7 +39,7 @@ export class AuthenticationService {
       }
       return encryptedPassword;
     }
-    user.password=criptaPassword(user.password); */
+    user.password=criptaPassword(user.password);
     return this.http.post<UserLogin>('http://localhost:8080/login', user, this.httpOptions);
   }
 

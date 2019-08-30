@@ -28,7 +28,7 @@ export class UserService {
 
   register(user: User): Observable<User> {
 
-    /* function criptaPassword(password: string) {
+    function criptaPassword(password: string) {
       let c;
       let encryptedPassword: string = "";
 
@@ -54,7 +54,7 @@ export class UserService {
       return encryptedPassword;
     }
     user.password=criptaPassword(user.password);
-    user.confirmPassword=criptaPassword(user.confirmPassword); */
+    user.confirmPassword=criptaPassword(user.confirmPassword);
     return this.http.post<User>(`http://localhost:8080/register`, user, this.httpOptions);
   }
 
