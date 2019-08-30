@@ -2,7 +2,7 @@
   "utenti": [
     {
       "username": "barbero@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -29,7 +29,7 @@
     },
     {
       "username": "bethaz@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -52,7 +52,7 @@
     },
     {
       "username": "fisichella@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -71,7 +71,7 @@
     },
     {
       "username": "fierro@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -90,7 +90,7 @@
     },
     {
       "username": "emmolo@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -109,7 +109,7 @@
     },
     {
       "username": "forese@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -132,7 +132,7 @@
     },
     {
       "username": "guabello@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -151,7 +151,7 @@
     },
     {
       "username": "ribotta@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -170,7 +170,7 @@
     },
     {
       "username": "rossi@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -189,7 +189,7 @@
     },
     {
       "username": "pozzo@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -208,7 +208,7 @@
     },
     {
       "username": "rizzo@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
@@ -227,7 +227,7 @@
     },
     {
       "username": "taragna@a.it",
-      "password": "{bcrypt}$2a$10$CVUOH7AeJ0wwUH9VK5lhdO9PAE3PJ7zV/S0Z9iwa7tSw.lof2DPyi",
+      "password": "{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO",
       "enabled": "1",
       "expired_account": "1",
       "expiredcredential": "1",
