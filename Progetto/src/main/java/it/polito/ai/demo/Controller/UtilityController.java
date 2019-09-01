@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.*;
@@ -507,4 +508,23 @@ public class UtilityController {
     }
     throw new BadRequestException("Errore nella pulizia del database: nessuna disponibilità da eliminare");
   }
+
+
+
+  @GetMapping(path = "/utility/checkChildren/{id_bambino}")
+  @ResponseStatus(HttpStatus.OK)
+  public @ResponseBody
+  void controllaFiglio(@PathVariable("id_bambino") int id, HttpServletRequest req){
+    System.out.println("DENTRO");
+    String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+    Utente u = userService.getUserById(username);
+    List<BambinoDTO> figli = bambinoService.getFigli(u);
+    for (BambinoDTO b : figli){
+      if(b.getId_bambino() == id)
+        return;
+    }
+    throw new BadRequestException("Errore: Il genitore non può cancellare la prenotazione di un figlio non suo");
+  }
+
+
 }
