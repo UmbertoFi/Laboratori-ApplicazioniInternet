@@ -51,7 +51,7 @@
                       </button>
                       <mat-menu #listaBambini="matMenu">
                         <button mat-menu-item *ngFor="let figlio of figli; let b = index"
-                                (click)="inserisciFiglio($event,figlio.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateA[f].id_fermata,0,corse[pageIndex].data)">
+                                (click)="inserisciFiglio($event,figlio.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateA[f].id_fermata,0,corse[pageIndex].data,tratte.fermateA[f].ora)">
                           {{figlio.nome}}
                         </button>
                       </mat-menu>
@@ -77,7 +77,7 @@
                       </button>
                       <mat-menu #listaBambini="matMenu">
                         <button mat-menu-item *ngFor="let figlio of figli; let b = index"
-                                (click)="inserisciFiglio($event,figlio.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateR[f].id_fermata,1,corse[pageIndex].data)">
+                                (click)="inserisciFiglio($event,figlio.id_bambino,nomiLinee[lineaSelezionataMenu].nome,tratte.fermateR[f].id_fermata,1,corse[pageIndex].data,tratte.fermateR[f].ora)">
                           {{figlio.nome}}
                         </button>
                       </mat-menu>

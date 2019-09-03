@@ -353,19 +353,23 @@ export class SimpleuserComponent implements OnInit {
   } */
 
 
-  inserisciFiglio($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
+  inserisciFiglio($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string, ora: string) {
     const today = new Date();
     let date = new Date(this.corse[this.pageIndex].data);
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
     let yyyy = today.getFullYear();
+    let actual_hour = today.getHours();
+    let actual_min = today.getMinutes()
     const cur = yyyy + '/' + mm + '/' + dd;
     dd = String(date.getDate()).padStart(2, '0');
     mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
     yyyy = date.getFullYear();
+    const h = parseInt(ora.split(':')[0]);
+    const min = parseInt(ora.split(':')[1]);
     const curdate = yyyy + '/' + mm + '/' + dd;
 
-    if (cur.localeCompare(curdate) < 0) {
+    if (cur.localeCompare(curdate) < 0 || (cur.localeCompare(curdate)==0 && actual_hour < h) || (cur.localeCompare(curdate)==0 && actual_hour == h && actual_min < min)) {
       this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
       if (confirm('Vuoi prenotare la stessa corsa per un intero anno?')) {
         date = new Date(this.corse[this.pageIndex].data);
@@ -394,7 +398,18 @@ export class SimpleuserComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Inserimento bambino eseguito con successo!', true);
-          // this.router.navigate(['/simpleuser']);
+           //this.router.navigate(['/simpleuser']);
+          const promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + localStorage.getItem('access_token')
+            }
+          })
+            .then((data) => {
+              return data.json();
+            }).then((data) => {
+              this.figli = data;
+            });
         },
         error => {
           this.alertService.error('Inserimento bambino fallito!');
@@ -474,15 +489,16 @@ export class SimpleuserComponent implements OnInit {
   }
 
   rimuoviPrenotazione($event: MouseEvent, nomeLinea: string, data: string, id_bambino: number, id_fermata: number, verso: number) {
-    if (confirm('Desideri cancellare la prenotazione?')) {
-      let v;
-      if (verso == 0) {
-        v = 'A';
-      } else {
-        v = 'R';
-      }
-      this.userService.rimuoviPrenotazione(nomeLinea, data, id_bambino + '_' + data + '_' + v).subscribe();
-    }
+    this.userService.checkChildren(id_bambino).subscribe(
+      (res) => {if (confirm('Desideri cancellare la prenotazione?')) {
+        let v;
+        if (verso == 0) {
+          v = 'A';
+        } else {
+          v = 'R';
+        }
+        this.userService.rimuoviPrenotazione(nomeLinea, data, id_bambino + '_' + data + '_' + v).subscribe();
+      }})
   }
 
   onBlur(field: number) {
