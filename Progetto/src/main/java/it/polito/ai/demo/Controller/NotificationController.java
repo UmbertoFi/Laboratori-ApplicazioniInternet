@@ -290,8 +290,6 @@ public class NotificationController { //ciao antonino
               prenotazioneService.save(p);
               f.get().getPrenotazioni().add(p);
 
-              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/modificato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
-
               return IdPrenotazioneDTO.builder().id(iP.toString()).build();
             }
           }
@@ -318,8 +316,6 @@ public class NotificationController { //ciao antonino
             if (u.getUserName().compareTo(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))) == 0) {
               prenotazioneService.save(p);
               f.get().getPrenotazioni().add(p);
-
-              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/effettuato/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
 
               return IdPrenotazioneDTO.builder().id(iP.toString()).build();
 
@@ -360,9 +356,6 @@ public class NotificationController { //ciao antonino
               p.get().setPresente(true);
             prenotazioneService.save(p.get());
 
-            // for (Utente user : accompagnatori)
-              response.sendRedirect("/notifyP/" + iP.getId_bambino() + "_" + iP.getData() + "_" + iP.getVerso() + "/modificata/" + jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
-
             return;
           }
         }
@@ -401,6 +394,7 @@ public class NotificationController { //ciao antonino
                 // if(p.getFermata().getLinea()!=fermataService.getFermata(prenotazioneDTO.getId_fermata()).get().getLinea()) {
                 f.get().getPrenotazioni().remove(p);
                 p.setFermata(f.get());
+                p.setCorsa(corsaService.getCorsa(f.get().getLinea().getId(), data, prenotazioneDTO.getVerso()));
                 prenotazioneService.save(p);
                 f.get().getPrenotazioni().add(p);
 
