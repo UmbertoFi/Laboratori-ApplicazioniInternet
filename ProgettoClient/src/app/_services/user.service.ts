@@ -103,8 +103,8 @@ export class UserService {
     return this.http.get<number>('http://localhost:8080/utility/primovalorenotifiche/'+username, this.httpOptions);
   }
 
-  presaVisione(p: presaVisione) {
-    return this.http.put<presaVisione>('http://localhost:8080/utility/confirm/turno', p, this.httpOptions);
+  presaVisione(p: presaVisione, ind: number) {
+    return this.http.put<presaVisione>('http://localhost:8080/utility/confirm/turno/'+ind, p, this.httpOptions);
   }
 
   rimuoviPrenotazione(linea: string, data: string, resID: string) {
@@ -123,5 +123,9 @@ export class UserService {
 
   checkChildren(id_bambino: number) {
     return this.http.get<void>('http://localhost:8080/utility/checkChildren/'+id_bambino, this.httpOptions);
+  }
+
+  cancellaNotifiche(username: string) {
+    return this.http.get<void>('http://localhost:8080/utility/cancellaNotifiche/'+username, this.httpOptions);
   }
 }
