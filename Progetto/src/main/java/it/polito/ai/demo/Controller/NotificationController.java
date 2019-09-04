@@ -51,8 +51,8 @@ public class NotificationController { //ciao antonino
 
 
     // Initialize Notifications
-    private NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
     private Map<String, Integer> contatori = new HashMap<>();
+    private Map<String, List<NotificaTurnoDTO>> mappaNotifiche = new HashMap<>();
 
 
 
@@ -65,11 +65,11 @@ public class NotificationController { //ciao antonino
 
     @GetMapping("utility/primovalorenotifiche/{username}")
     public @ResponseBody int initializeCounter(@PathVariable("username") String username){
-      int x;
+      int x=0;
       if (contatori.containsKey(username)) {
         x = contatori.get(username);
       }
-      else x = 0;
+      else contatori.put(username, 0);
 
       return x;
     }
@@ -78,7 +78,6 @@ public class NotificationController { //ciao antonino
     @GetMapping("/notifyT/{id}")
     public void sendTurno(@PathVariable("id") String id_turno) {
 
-        System.out.println("NOTIFICA CONSOLIDA TURNO");
         String[] pieces = id_turno.split("_");
 
 
@@ -99,6 +98,7 @@ public class NotificationController { //ciao antonino
             Integer x = contatori.get(utente.getUserName());
             contatori.put(utente.getUserName(), x + 1);
 
+            NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
             notifications.setCount(contatori.get(utente.getUserName()));
             notifications.setMsg("Nuovo turno!");
             notifications.setData(data.toString());
@@ -109,6 +109,14 @@ public class NotificationController { //ciao antonino
 
             // Push notifications to front-end
             template.convertAndSendToUser(utente.getUserName(), "/queue/reply", notifications);
+            if(mappaNotifiche.containsKey(utente.getUserName())){
+              mappaNotifiche.get(utente.getUserName()).add(notifications);
+            }
+            else{
+              List<NotificaTurnoDTO> listaNotifiche = new ArrayList<>();
+              listaNotifiche.add(notifications);
+              mappaNotifiche.put(utente.getUserName(), listaNotifiche);
+            }
 
             return;
         }
@@ -154,7 +162,7 @@ public class NotificationController { //ciao antonino
                     .build();
             turnoService.save(t2);
             //notificationController.getNotification();
-            //System.out.println(id.getUtente().getUserName()+"_"+id.getData()+"_"+id.getVerso());
+            System.out.println(id.getUtente().getUserName());
             response.sendRedirect("/notifyT/" + id.getUtente().getUserName() + "_" + id.getData() + "_" + id.getVerso());
 
             return;
@@ -163,10 +171,11 @@ public class NotificationController { //ciao antonino
 
     }
 
-    @PutMapping(path = "/utility/confirm/turno")
+    @PutMapping(path = "/utility/confirm/turno/{ind}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    void confermaTurno(@RequestBody TurnoDTO turnoDTO, HttpServletResponse response) throws IOException {
+    void confermaTurno(@RequestBody TurnoDTO turnoDTO, HttpServletResponse response,
+                       @PathVariable("ind") String ind) throws IOException {
 
 
         String[] dataPieces = turnoDTO.getData().split("-");
@@ -188,6 +197,9 @@ public class NotificationController { //ciao antonino
                 else
                     t.get().setConsolidato(true);
                 turnoService.save(t.get());
+
+                int index = Integer.parseInt(ind);
+                mappaNotifiche.get(iT.getUtente().getUserName()).remove(index);
 
                 response.sendRedirect("/notifyC/" + iT.getUtente().getUserName() + "_" + iT.getData() + "_" + iT.getVerso()+"/"+t.get().getLinea().getNome());
                 return;
@@ -217,18 +229,11 @@ public class NotificationController { //ciao antonino
                 .build();
         if (turnoService.getTurnoById(iT).isPresent()) {
             if (turnoService.getTurnoById(iT).isPresent()) {
-                if (!contatori.containsKey(utente.getUserName())) {
-                    contatori.put(utente.getUserName(), 0);
-                }
 
-                Integer x = contatori.get(utente.getUserName());
-                contatori.put(utente.getUserName(), x + 1);
-
-                notifications.setCount(contatori.get(utente.getUserName()));
+                NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
                 notifications.setMsg("NUOVA Presa Visione!");
                 notifications.setData(data.toString());
                 notifications.setVerso(pieces[2]);
-                notifications.setUtente(utente.getUserName());
                 notifications.setLinea(linea);
                 notifications.setTipo(2);
                 // Push notifications to front-end
@@ -236,7 +241,23 @@ public class NotificationController { //ciao antonino
                 List<Utente> admin = utenteRuoloService.getAdminByLinea(linea);
                 if (admin != null) {
                     for (Utente user : admin) {
+                      if (!contatori.containsKey(user.getUserName())) {
+                        contatori.put(user.getUserName(), 0);
+                      }
+
+                      Integer x = contatori.get(user.getUserName());
+                      contatori.put(user.getUserName(), x + 1);
+                      notifications.setCount(contatori.get(user.getUserName()));
+                      notifications.setUtente(user.getUserName());
                       template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                      if(mappaNotifiche.containsKey(user.getUserName())){
+                        mappaNotifiche.get(user.getUserName()).add(notifications);
+                      }
+                      else{
+                        List<NotificaTurnoDTO> listaNotifiche = new ArrayList<>();
+                        listaNotifiche.add(notifications);
+                        mappaNotifiche.put(user.getUserName(), listaNotifiche);
+                      }
                     }
                     return;
                 }
@@ -512,6 +533,8 @@ public class NotificationController { //ciao antonino
                     .verso(pieces[2])
                     .build();
 
+            NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
+
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
                 Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
 
@@ -536,7 +559,20 @@ public class NotificationController { //ciao antonino
                               contatori.put(user.getUserName(), x + 1);
                               notifications.setCount(contatori.get(user.getUserName()));
                               template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                              if(mappaNotifiche.containsKey(user.getUserName())){
+                                mappaNotifiche.get(user.getUserName()).add(notifications);
+                                System.out.println("Aggiunta notifica a lista già esistente");
+                                System.out.println(notifications.getUtente());
+                              }
+                              else{
+                                System.out.println("Lista Vuota");
+                                System.out.println(notifications.getUtente());
+                                List<NotificaTurnoDTO> listaNotifiche = new ArrayList<>();
+                                listaNotifiche.add(notifications);
+                                mappaNotifiche.put(user.getUserName(), listaNotifiche);
+                              }
                             }
+                            System.out.println(mappaNotifiche);
                                 return;
                         }
                         throw new NotFoundException("nessun accompagnatore trovato");
@@ -576,6 +612,8 @@ public class NotificationController { //ciao antonino
                     .verso(pieces[2])
                     .build();
 
+            NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
+
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
                 Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
 
@@ -598,6 +636,14 @@ public class NotificationController { //ciao antonino
                           contatori.put(user.getUserName(), x + 1);
                           notifications.setCount(contatori.get(user.getUserName()));
                           template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                        if(mappaNotifiche.containsKey(user.getUserName())){
+                          mappaNotifiche.get(user.getUserName()).add(notifications);
+                        }
+                        else{
+                          List<NotificaTurnoDTO> listaNotifiche = new ArrayList<>();
+                          listaNotifiche.add(notifications);
+                          mappaNotifiche.put(user.getUserName(), listaNotifiche);
+                        }
                         }
                         return;
                     }
@@ -635,6 +681,8 @@ public class NotificationController { //ciao antonino
                     .verso(pieces[2])
                     .build();
 
+            NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
+
             if (prenotazioneService.getPrenotazione(iP).isPresent()) {
                 Prenotazione p=prenotazioneService.getPrenotazione(iP).get();
                 prenotazioneService.deleteOne(p);
@@ -658,6 +706,14 @@ public class NotificationController { //ciao antonino
                           contatori.put(user.getUserName(), x + 1);
                           notifications.setCount(contatori.get(user.getUserName()));
                           template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+                          if(mappaNotifiche.containsKey(user.getUserName())){
+                            mappaNotifiche.get(user.getUserName()).add(notifications);
+                          }
+                          else{
+                            List<NotificaTurnoDTO> listaNotifiche = new ArrayList<>();
+                            listaNotifiche.add(notifications);
+                            mappaNotifiche.put(user.getUserName(), listaNotifiche);
+                          }
                         }
                          return;
                     }
@@ -675,4 +731,30 @@ public class NotificationController { //ciao antonino
         throw new NotFoundException("utente non trovato");
 
     }
+
+  @GetMapping("utility/notificheoffline/{username}")
+  public @ResponseBody List<NotificaTurnoDTO> listaNotifiche(@PathVariable("username") String username){
+
+    if (mappaNotifiche.containsKey(username)) {
+      return mappaNotifiche.get(username);
+    }
+    else {
+      List<NotificaTurnoDTO> listaNotifiche = new ArrayList<>();
+      mappaNotifiche.put(username, listaNotifiche);
+    }
+    return mappaNotifiche.get(username);
+  }
+
+
+  @GetMapping("utility/cancellaNotifiche/{username}")
+  public @ResponseBody List<NotificaTurnoDTO> cancellaNotifiche(@PathVariable("username") String username){
+
+    if (mappaNotifiche.containsKey(username)) {
+      mappaNotifiche.get(username).clear();
+      return mappaNotifiche.get(username);
+    }
+    throw new BadRequestException("Nessuna notifica da cacellare");
+  }
+
+
 }
