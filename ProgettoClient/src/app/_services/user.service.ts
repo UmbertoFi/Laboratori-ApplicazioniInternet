@@ -120,4 +120,8 @@ export class UserService {
     const data = yyyy + '-' + mm + '-' + dd;
     return this.http.delete('http://localhost:8080/utility/pulisciDatabase/'+data, this.httpOptions);
   }
+
+  checkChildren(id_bambino: number) {
+    return this.http.get<void>('http://localhost:8080/utility/checkChildren/'+id_bambino, this.httpOptions);
+  }
 }
