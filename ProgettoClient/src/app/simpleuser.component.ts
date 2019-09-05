@@ -393,8 +393,13 @@ export class SimpleuserComponent implements OnInit {
           data = yyyy + '-' + mm + '-' + dd;
           this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
         }
+        this.alertService.success("Bambino prenotato correttamente per un anno intero");
+        return;
       }
+      this.alertService.success("Bambino prenotato correttamente");
+      return;
     }
+    this.alertService.error("Impossibile prenotare il bambino per questa corsa");
     return;
   }
 

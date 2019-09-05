@@ -398,7 +398,7 @@ export class AttendanceComponent implements OnInit {
 
   presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
     this.p = new presaVisione(data, verso, utente);
-    this.userService.presaVisione(this.p).subscribe();
+    this.userService.presaVisione(this.p, ind).subscribe();
     var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
     element.disabled = true;
   }

@@ -463,7 +463,14 @@ export class AdminComponent implements OnInit {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('access_token')
       }
-    })
+    }).then( (response) => {if (response.status>=400 && response.status<500){
+      console.log("errore trovato");
+      throw "errore throw";
+    }
+    else{
+      console.log("tutto ok");
+      return response;
+    }})
       .then((data) => {
         return data.json();
       }).then((data) => {
@@ -475,6 +482,7 @@ export class AdminComponent implements OnInit {
       })
       .catch((error) => {
         this.alertService.error('Errore aggiornamento disponibilità per la corsa scelta!');
+        return;
       });
 
 
@@ -523,7 +531,7 @@ export class AdminComponent implements OnInit {
 
   presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
     this.p = new presaVisione(data, verso, utente);
-    this.userService.presaVisione(this.p).subscribe();
+    this.userService.presaVisione(this.p, ind).subscribe();
     var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
     element.disabled = true;
   }
