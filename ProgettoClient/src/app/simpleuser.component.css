@@ -31,8 +31,8 @@ button mat-icon-button:hover{
 }
 
 .sezioni{
-  padding-left: 10%;
-  display: block
+  padding-left: 25%;
+  display: block;
 }
 
 .sezioni button:hover{
@@ -43,3 +43,4 @@ button mat-icon-button:hover{
   border: 1px black;
   width: 60%;
 }
+

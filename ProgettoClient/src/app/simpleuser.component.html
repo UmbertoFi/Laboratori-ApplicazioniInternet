@@ -217,10 +217,10 @@
           <mat-card-content>
             <div class="comunicazioni">
               <ul mat-line>
-                <div *ngFor="let n of notifications">
+                <div *ngFor="let n of notifications let ind = index">
                   <div *ngIf="n?.tipo==1">
                     <div>{{ n?.msg }} per data {{n?.data}}, linea {{n?.linea}}, verso {{n?.verso}}
-                      <button (click)="presavisione($event,n.data,n.verso,n.utente)">Conferma</button>
+                      <button class="btn btn-primary btn-sm" id="myBtn{{ind}}" style="width:10%; font-size: 8px; margin-right:3%; float:right" (click)="presavisione($event,n.data,n.verso,n.utente, ind)">Conferma</button>
                     </div>
 
                   </div>
@@ -234,6 +234,7 @@
                   </div>
                 </div>
               </ul>
+              <div class="sezioni"><button class="btn btn-primary" (click)="cancellaNotifiche($event)">Cancella Notifiche</button></div>
             </div>
           </mat-card-content>
         </mat-card>

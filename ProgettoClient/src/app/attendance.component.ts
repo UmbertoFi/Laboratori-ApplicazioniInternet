@@ -60,7 +60,19 @@ export class AttendanceComponent implements OnInit {
         this.notifica = new Notifica(this.x, '', '', '', '', '', 0);
         this.notifications.push(this.notifica);
       }
-    });
+    }).then(() => {
+      const promiseTratte = fetch('http://localhost:8080/utility/notificheoffline/' + localStorage.getItem('username'), {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        }
+      })
+        .then((data) => {
+          return data.json();
+        }).then((data) => {
+          this.notifications = data;
+        });
+    });;
 
 
 // Open connection with server socket
@@ -384,9 +396,11 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
-  presavisione($event: MouseEvent, data: string, verso: string, utente: string) {
+  presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
     this.p = new presaVisione(data, verso, utente);
-    this.userService.presaVisione(this.p).subscribe();
+    this.userService.presaVisione(this.p, ind).subscribe();
+    var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
+    element.disabled = true;
   }
 
   downloadJSONpresenze(format: string, verso: number) {
@@ -437,6 +451,20 @@ export class AttendanceComponent implements OnInit {
       str += line + '\r\n';
     }
     return str;
+  }
+
+  cancellaNotifiche($event: MouseEvent) {
+    const promiseTratte = fetch('http://localhost:8080/utility/cancellaNotifiche/' + localStorage.getItem('username'), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.notifications = data;
+      });
   }
 }
 

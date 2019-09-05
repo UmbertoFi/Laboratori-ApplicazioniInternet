@@ -74,6 +74,18 @@ export class SimpleuserComponent implements OnInit {
         this.notifica = new Notifica(this.x, '', '', '', '', '', 0);
         this.notifications.push(this.notifica);
       }
+    }).then(() => {
+      const promiseTratte = fetch('http://localhost:8080/utility/notificheoffline/' + localStorage.getItem('username'), {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        }
+      })
+        .then((data) => {
+          return data.json();
+        }).then((data) => {
+          this.notifications = data;
+        });
     });
 
 
@@ -381,8 +393,13 @@ export class SimpleuserComponent implements OnInit {
           data = yyyy + '-' + mm + '-' + dd;
           this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
         }
+        this.alertService.success("Bambino prenotato correttamente per un anno intero");
+        return;
       }
+      this.alertService.success("Bambino prenotato correttamente");
+      return;
     }
+    this.alertService.error("Impossibile prenotare il bambino per questa corsa");
     return;
   }
 
@@ -483,9 +500,11 @@ export class SimpleuserComponent implements OnInit {
     }
   }
 
-  presavisione($event: MouseEvent, data: string, verso: string, utente: string) {
+  presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
     this.p = new presaVisione(data, verso, utente);
-    this.userService.presaVisione(this.p).subscribe();
+    this.userService.presaVisione(this.p, ind).subscribe();
+    var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
+    element.disabled = true;
   }
 
   rimuoviPrenotazione($event: MouseEvent, nomeLinea: string, data: string, id_bambino: number, id_fermata: number, verso: number) {
@@ -513,5 +532,19 @@ export class SimpleuserComponent implements OnInit {
     } else if(field==4){
       this.verso_blur=true;
     }
+  }
+
+  cancellaNotifiche($event: MouseEvent) {
+    const promiseTratte = fetch('http://localhost:8080/utility/cancellaNotifiche/' + localStorage.getItem('username'), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.notifications = data;
+      });
   }
 }
