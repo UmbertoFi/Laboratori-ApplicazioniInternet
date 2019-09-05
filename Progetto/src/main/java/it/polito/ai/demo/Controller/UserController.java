@@ -149,7 +149,7 @@ public class UserController {
 
         String body = "Gentilissimo, confermi di esserti registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/confirm/" + UUID;
 
-        email.sendSimpleMessage(registerDTO.getEmail(), "Benvenuto!", body);
+       // email.sendSimpleMessage(registerDTO.getEmail(), "Benvenuto!", body);
 
     }
 

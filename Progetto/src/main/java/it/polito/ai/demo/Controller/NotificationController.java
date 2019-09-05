@@ -201,6 +201,23 @@ public class NotificationController { //ciao antonino
                 int index = Integer.parseInt(ind);
                 mappaNotifiche.get(iT.getUtente().getUserName()).remove(index);
 
+                List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(t.get().getLinea().getNome());
+
+                int nuovo_accompagnatore=0;
+
+                for(Utente a : accompagnatori){
+                  if(a.getUserName().compareTo(u.getUserName())==0){
+                    nuovo_accompagnatore=1;
+                  }
+                }
+
+                if(nuovo_accompagnatore==0){
+                  idRuolo id = idRuolo.builder().NomeLinea(t.get().getLinea().getNome()).ruolo("accompagnatore").utente(u).build();
+                  UtenteRuolo ur = UtenteRuolo.builder().id(id).build();
+
+                  utenteRuoloService.save(ur);
+                }
+
                 response.sendRedirect("/notifyC/" + iT.getUtente().getUserName() + "_" + iT.getData() + "_" + iT.getVerso()+"/"+t.get().getLinea().getNome());
                 return;
 
@@ -306,12 +323,23 @@ public class NotificationController { //ciao antonino
         if (accompagnatori != null) {
           for (Utente u : accompagnatori) {
             if (u.getUserName().compareTo(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))) == 0) {
-              f.get().getPrenotazioni().remove(p);
-              p.setFermata(f.get());
-              prenotazioneService.save(p);
-              f.get().getPrenotazioni().add(p);
 
-              return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+              idTurno id = idTurno.builder().utente(u).data(p.getId().getData()).verso(p.getId().getVerso()).build();
+              Optional<Turno> t = turnoService.getTurnoById(id);
+
+              if(!t.isPresent())
+                throw new BadRequestException("Errore: accompagnatore non assegnato per questo turno");
+              else{
+                if(t.get().getLinea().getNome().compareTo(p.getFermata().getLinea().getNome())!=0)
+                  throw new BadRequestException("Errore: accompagnatore assegnato per quel turno a un'altra linea");
+                else{
+                  f.get().getPrenotazioni().remove(p);
+                  p.setFermata(f.get());
+                  prenotazioneService.save(p);
+                  f.get().getPrenotazioni().add(p);
+                  return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+                }
+              }
             }
           }
         }
@@ -335,11 +363,19 @@ public class NotificationController { //ciao antonino
         if (accompagnatori != null) {
           for (Utente u : accompagnatori) {
             if (u.getUserName().compareTo(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))) == 0) {
-              prenotazioneService.save(p);
-              f.get().getPrenotazioni().add(p);
-
-              return IdPrenotazioneDTO.builder().id(iP.toString()).build();
-
+              idTurno id = idTurno.builder().utente(u).data(p.getId().getData()).verso(p.getId().getVerso()).build();
+              Optional<Turno> t = turnoService.getTurnoById(id);
+              if (!t.isPresent())
+                throw new BadRequestException("Errore: accompagnatore non assegnato per questo turno");
+              else {
+                if (t.get().getLinea().getNome().compareTo(p.getFermata().getLinea().getNome()) != 0)
+                  throw new BadRequestException("Errore: accompagnatore assegnato per quel turno a un'altra linea");
+                else {
+                  prenotazioneService.save(p);
+                  f.get().getPrenotazioni().add(p);
+                  return IdPrenotazioneDTO.builder().id(iP.toString()).build();
+                }
+              }
             }
           }
         }
@@ -371,13 +407,23 @@ public class NotificationController { //ciao antonino
       if (accompagnatori != null) {
         for (Utente u : accompagnatori) {
           if (u.getUserName().compareTo(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req))) == 0) {
-            if (p.get().isPresente() == true)
-              p.get().setPresente(false);
-            else
-              p.get().setPresente(true);
-            prenotazioneService.save(p.get());
+            idTurno id = idTurno.builder().utente(u).data(p.get().getId().getData()).verso(p.get().getId().getVerso()).build();
+            Optional<Turno> t = turnoService.getTurnoById(id);
+            if (!t.isPresent())
+              throw new BadRequestException("Errore: accompagnatore non assegnato per questo turno");
+            else {
+              if (t.get().getLinea().getNome().compareTo(p.get().getFermata().getLinea().getNome()) != 0)
+                throw new BadRequestException("Errore: accompagnatore assegnato per quel turno a un'altra linea");
+              else {
+                if (p.get().isPresente() == true)
+                  p.get().setPresente(false);
+                else
+                  p.get().setPresente(true);
+                prenotazioneService.save(p.get());
 
-            return;
+                return;
+              }
+            }
           }
         }
       }

@@ -471,9 +471,9 @@ public class UtilityController {
       if (!disponibilita.isEmpty()) {
         return disponibilita;
       }
-      throw new NotFoundException("Nessuna disponibilità per la corsa scelta!");
+      throw new BadRequestException("Nessuna disponibilità per la corsa scelta!");
     }
-    throw new NotFoundException("Corsa non trovata!");
+    throw new BadRequestException("Corsa non trovata!");
   }
 
 
