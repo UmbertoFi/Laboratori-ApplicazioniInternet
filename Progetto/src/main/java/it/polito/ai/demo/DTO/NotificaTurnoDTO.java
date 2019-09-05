@@ -22,4 +22,15 @@ public class NotificaTurnoDTO implements Serializable {
         this.count++;
     }
 
+  @Override
+  public String toString() {
+    return "NotificaTurnoDTO{" +
+      "tipo=" + tipo +
+      ", msg='" + msg + '\'' +
+      ", data='" + data + '\'' +
+      ", verso='" + verso + '\'' +
+      ", utente='" + utente + '\'' +
+      ", linea='" + linea + '\'' +
+      '}';
+  }
 }
