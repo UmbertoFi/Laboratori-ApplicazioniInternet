@@ -29,11 +29,22 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 
 @SpringBootApplication
 @EnableTransactionManagement
 public class ProgettoApplication {
+
+  public String generateUUID() {
+    Random r = new Random();
+    StringBuilder generatedString = new StringBuilder();
+    for (int i = 0; i < 5; i++)
+      generatedString.append(r.nextInt());
+
+    return generatedString.toString();
+  }
 
     public static void main(String[] args) {
         SpringApplication.run(ProgettoApplication.class, args);
@@ -69,7 +80,7 @@ public class ProgettoApplication {
 
 
     @Bean
-    CommandLineRunner runner(CorsaService cs, UtenteRuoloService urs, LineaService ls, UserService us, PrenotazioneService ps, LineaRepository lr, FermataRepository fs, CorsaRepository cr) {
+    CommandLineRunner runner(CorsaService cs, UtenteRuoloService urs, LineaService ls, UserService us, PrenotazioneService ps, LineaRepository lr, FermataRepository fs, CorsaRepository cr,  EmailService email) {
         return argss -> {
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -80,6 +91,40 @@ public class ProgettoApplication {
                     InputStream resource = new ClassPathResource("json/"+r.getFilename()).getInputStream();
                     LineaDTO linea = mapper.readValue(resource, LineaDTO.class);
                     ls.save(linea);
+                    Utente u = us.getUserById(linea.getAmministratore());
+                    if(u==null){
+                        String UUID=generateUUID();
+                         u = Utente.builder()
+                        .UserName(linea.getAmministratore())
+                        //.Password(new BCryptPasswordEncoder(11).encode(registerDTO.getPassword()))
+                        .Password("{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO")
+                        .token(UUID)
+                        .expiredToken(new Date())
+                        .enabled(false)
+                        .expiredAccount(true)//logica inversa
+                        .expiredcredential(true)//logica inversa
+                        .locked(true)//logica inversa
+                        .build();
+
+
+                         idRuolo id = idRuolo.builder()
+                        .utente(u)
+                        .ruolo("admin")
+                        .NomeLinea(linea.getNome())
+                        .build();
+
+                      UtenteRuolo ur = UtenteRuolo.builder()
+                        .id(id)
+                        .build();
+
+                      us.save(u);
+                      urs.save(ur);
+
+
+                      String body = "Gentilissimo, confermi di esserti registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/confirm/" + UUID;
+                      //email.sendSimpleMessage(u.getUserName(), "Benvenuto!", body);
+
+                    }
                     LocalDate today = LocalDate.now();
                     for(int i=0; i<365; i++){
                         LocalDate day = today.plusDays(i);
@@ -118,13 +163,13 @@ public class ProgettoApplication {
                     } else {
                         int resto=i%2;
                         if(resto==1){
-                            ruolo="admin";
+                            ruolo="accompagnatore";
                             nomelinea="Santa_Rita-Politecnico";
 
                         }
                         else{
-                            ruolo="accompagnatore";
-                            nomelinea="Santa_Rita-Politecnico";
+                            i++;
+                            continue;
                         }
                     }
                     idRuolo id2 = idRuolo.builder()
