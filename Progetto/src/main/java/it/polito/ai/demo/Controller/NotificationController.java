@@ -45,7 +45,8 @@ public class NotificationController { //ciao antonino
     BambinoService bambinoService;
     @Autowired
     CorsaService corsaService;
-
+    @Autowired
+DisponibilitaService disponibilitaService;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
@@ -192,11 +193,16 @@ public class NotificationController { //ciao antonino
 
             Optional<Turno> t = turnoService.getTurnoById(iT);
             if (t.isPresent()) {
-                if (t.get().getConsolidato() == true)
-                    t.get().setConsolidato(false);
-                else
+                if (t.get().getConsolidato() == false)
                     t.get().setConsolidato(true);
+
                 turnoService.save(t.get());
+
+                List<Disponibilita> disp = disponibilitaService.getDisponibilitaByUserDataVerso(t.get().getId().getUtente(),t.get().getId().getData(), t.get().getId().getVerso());
+
+                for(Disponibilita d : disp){
+                  disponibilitaService.deleteOne(d);
+                }
 
                 int index = Integer.parseInt(ind);
                 mappaNotifiche.get(iT.getUtente().getUserName()).remove(index);

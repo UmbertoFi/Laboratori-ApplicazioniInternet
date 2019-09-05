@@ -2,6 +2,7 @@ package it.polito.ai.demo.ServiceImplementation;
 
 import it.polito.ai.demo.DTO.DisponibilitaGetDTO;
 import it.polito.ai.demo.Entity.Disponibilita;
+import it.polito.ai.demo.Entity.Utente;
 import it.polito.ai.demo.Repository.DisponibilitaRepository;
 import it.polito.ai.demo.Service.DisponibilitaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -53,5 +55,10 @@ public class DisponibilitaServiceImpl implements DisponibilitaService {
 
   public void deleteOne(Disponibilita d){
     disponibilitaRepository.delete(d);
+  }
+
+  public List<Disponibilita> getDisponibilitaByUserDataVerso(Utente utente, LocalDate data, String verso){
+    List<Disponibilita> disponibilita = disponibilitaRepository.findByUserDataVerso(utente,data,verso);
+    return disponibilita;
   }
 }

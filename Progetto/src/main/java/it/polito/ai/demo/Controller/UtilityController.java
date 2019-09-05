@@ -347,6 +347,13 @@ public class UtilityController {
         Corsa c = corsaService.getCorsa(l.getId(), date, verso);
         if (c != null) {
 
+          idTurno id = idTurno.builder().utente(u).data(c.getData()).verso(c.getVerso()).build();
+          Optional<Turno> t = turnoService.getTurnoById(id);
+
+          if(t.isPresent()){
+            throw new BadRequestException("Disponibilità non accettata perchè già assegnato in un turno consolidato per quella data e verso");
+          }
+
           Disponibilita d = Disponibilita.builder()
             .id(idDisponibilita.builder().corsa(c).utente(u).build())
             /* .fermataA()

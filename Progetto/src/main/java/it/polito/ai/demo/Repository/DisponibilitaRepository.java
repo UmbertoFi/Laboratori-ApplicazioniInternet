@@ -18,4 +18,7 @@ public interface DisponibilitaRepository extends CrudRepository<Disponibilita, i
 
   @Query("select d from Disponibilita d where d.id.corsa.data <= ?1")
   List<Disponibilita> findByData(LocalDate data);
+
+  @Query("select d from Disponibilita d where d.id.utente = ?1 and d.id.corsa.data = ?2 and d.id.corsa.verso = ?3")
+  List<Disponibilita> findByUserDataVerso(Utente utente, LocalDate data, String verso);
 }

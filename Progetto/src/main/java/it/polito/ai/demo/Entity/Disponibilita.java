@@ -20,5 +20,4 @@ public class Disponibilita {
     @JoinColumn(name = "id_fermataR")
     private Fermata fermataR;
 
-
 }
