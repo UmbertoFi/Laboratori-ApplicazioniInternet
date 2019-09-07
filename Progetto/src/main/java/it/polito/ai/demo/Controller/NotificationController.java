@@ -808,5 +808,4 @@ DisponibilitaService disponibilitaService;
     throw new BadRequestException("Nessuna notifica da cacellare");
   }
 
-
 }

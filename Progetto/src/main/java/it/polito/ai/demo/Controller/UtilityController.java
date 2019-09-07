@@ -534,4 +534,23 @@ public class UtilityController {
   }
 
 
+  @GetMapping("utility/turni/{username}")
+  @ResponseStatus(HttpStatus.OK)
+  public @ResponseBody List<DisponibilitaGetDTO> getTurni(HttpServletRequest req){
+
+
+
+    String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+    Utente u=userService.getUserById(username);
+    if(u==null)
+    throw new BadRequestException("utente non esistente ");
+
+    if(!jwtTokenProvider.getRole(jwtTokenProvider.resolveToken(req)).contains("accompagnatore"))
+      throw new UnauthorizedException("utente non è abilitato come accompagnatore");
+
+    List<DisponibilitaGetDTO> turni=turnoService.getProxTurni(u);
+    return turni;
+  }
+
+
 }
