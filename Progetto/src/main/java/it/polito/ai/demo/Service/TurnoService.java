@@ -14,4 +14,6 @@ public interface TurnoService {
     public Optional<Turno> getTurnoById(idTurno id);
 
   public List<DisponibilitaGetDTO> getProxTurni(Utente user);
+
+  public void deleteTurno(idTurno id);
 }

@@ -7,7 +7,7 @@ import {Bambino} from './_models/bambino';
 import {nomeLinea} from './_models/nomeLinea';
 import {CorsaNew} from './_models/corsaNew';
 import {TrattaNew} from './_models/trattaNew';
-import {Ruolo} from './_models';
+import {Disponibilita, Ruolo} from './_models';
 import {Notifica} from './_models/notifica';
 import {WebSocketService} from './_services/websocket.service';
 import {presaVisione} from './_models/presaVisione';
@@ -19,30 +19,6 @@ import {saveAs} from 'file-saver';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
-  title = 'Pedibus';
-
-  bambini: Bambino[] = [];
-  nomiLinee: nomeLinea[] = [];
-  corse: CorsaNew[] = [];
-  tratte = {} as TrattaNew;
-  data: string;
-
-
-  pageEvent: PageEvent;
-  length: number;
-  pageSize = 1;
-  pageIndex = 0;
-  lineaSelezionataMenu = 0;
-  openDateForm: boolean = false;
-  ruoli: Ruolo[] = [];
-  checkAdmin: boolean = false;
-  checkAccompagnatore: boolean = false;
-  checkSystemAdmin: boolean = false;
-
-  notifications: Notifica[] = [];
-  notifica: Notifica;
-  x: number;
-  p: presaVisione;
 
   constructor(private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {
     this.notifications = new Array<Notifica>();
@@ -72,7 +48,7 @@ export class AttendanceComponent implements OnInit {
         }).then((data) => {
           this.notifications = data;
         });
-    });;
+    });
 
 
 // Open connection with server socket
@@ -88,6 +64,62 @@ export class AttendanceComponent implements OnInit {
       });
     });
   }
+  title = 'Pedibus';
+
+  bambini: Bambino[] = [];
+  nomiLinee: nomeLinea[] = [];
+  corse: CorsaNew[] = [];
+  tratte = {} as TrattaNew;
+  data: string;
+
+
+  pageEvent: PageEvent;
+  length: number;
+  pageSize = 1;
+  pageIndex = 0;
+  lineaSelezionataMenu = 0;
+  openDateForm = false;
+  ruoli: Ruolo[] = [];
+  checkAdmin = false;
+  checkAccompagnatore = false;
+  checkSystemAdmin = false;
+
+  notifications: Notifica[] = [];
+  notifica: Notifica;
+  x: number;
+  p: presaVisione;
+
+  turni: Disponibilita[] = [];
+
+  static ConvertToCSV(objArray) {
+    const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    let str = '';
+
+    for (let i = 0; i < array.length; i++) {
+      let line = '';
+      for (const index in array[i]) {
+        if (line != '' && index != 'persone') {
+          line += ',';
+        }
+        if (typeof array[i][index] != 'object') {
+          line += array[i][index];
+        } else {
+          if (array[i][index].length > 0) {
+            line += ',';
+          }
+          for (let j = 0; j < array[i][index].length; j++) {
+            alert(array[i][index][j].nome + ' ' + array[i][index][j].cognome);
+            line += array[i][index][j].nome + ' ' + array[i][index][j].cognome;
+            if (j < array[i][index].length - 1) {
+              line += ', ';
+            }
+          }
+        }
+      }
+      str += line + '\r\n';
+    }
+    return str;
+  }
 
   ngOnInit(): void {
     if (localStorage.getItem('access_token') == null) {
@@ -95,10 +127,10 @@ export class AttendanceComponent implements OnInit {
       this.router.navigate(['/login']);
     }
 
-    let promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
+    const promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -107,7 +139,7 @@ export class AttendanceComponent implements OnInit {
         this.ruoli = data;
         return;
       }).then((data) => {
-        for (let r of this.ruoli) {
+        for (const r of this.ruoli) {
           console.log(r);
           if (r.ruolo.localeCompare('admin') == 0) {
             this.checkAdmin = true;
@@ -119,10 +151,10 @@ export class AttendanceComponent implements OnInit {
         }
       });
 
-    let promiseBambini = fetch('http://localhost:8080/utility/children', {
+    const promiseBambini = fetch('http://localhost:8080/utility/children', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -131,10 +163,10 @@ export class AttendanceComponent implements OnInit {
         this.bambini = data;
       });
 
-    let promiseLinea = fetch('http://localhost:8080/lines', {
+    const promiseLinea = fetch('http://localhost:8080/lines', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -143,10 +175,10 @@ export class AttendanceComponent implements OnInit {
         this.nomiLinee = data;
         return;
       }).then(() => {
-        let promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[0].nome, {
+        const promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[0].nome, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         })
           .then((data) => {
@@ -174,10 +206,10 @@ export class AttendanceComponent implements OnInit {
             this.pageIndex = j;
           })
           .then(() => {
-            let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[0].nome + '/' + this.corse[this.pageIndex].data, {
+            const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[0].nome + '/' + this.corse[this.pageIndex].data, {
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+                Authorization: 'Bearer ' + localStorage.getItem('access_token')
               }
             })
               .then((data) => {
@@ -188,6 +220,19 @@ export class AttendanceComponent implements OnInit {
                 this.tratte.fermateR.sort((a, b) => a.ora.localeCompare(b.ora));
               });
           });
+      });
+
+
+    const promiseTurni = fetch('http://localhost:8080/utility/turni', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.turni = data;
       });
   }
 
@@ -256,10 +301,10 @@ export class AttendanceComponent implements OnInit {
 
   selezionaLineaMenu(idLinea: number) {
     this.lineaSelezionataMenu = idLinea;
-    let promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[this.lineaSelezionataMenu].nome, {
+    const promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[this.lineaSelezionataMenu].nome, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -287,10 +332,10 @@ export class AttendanceComponent implements OnInit {
         this.pageIndex = j;
       })
       .then(() => {
-        let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+        const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         })
           .then((data) => {
@@ -303,10 +348,10 @@ export class AttendanceComponent implements OnInit {
 
   selezionaCorsaPaginator(pageEvent: PageEvent) {
     this.pageIndex = pageEvent.pageIndex;
-    let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+    const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -369,10 +414,10 @@ export class AttendanceComponent implements OnInit {
       return;
     } else {
       this.pageIndex += diff;
-      let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+      const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       })
         .then((data) => {
@@ -390,16 +435,16 @@ export class AttendanceComponent implements OnInit {
   }
 
   AzzeraContatore($event) {
-    if ($event.index == 2) {     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+    if ($event.index == 3) {     // SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO //old=2 new=3
       this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }
   }
 
-  presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
+  presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind: number) {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p, ind).subscribe();
-    var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
+    const element = document.getElementById('myBtn' + ind) as HTMLInputElement;
     element.disabled = true;
   }
 
@@ -414,43 +459,13 @@ export class AttendanceComponent implements OnInit {
       }
     } else if (format === 'csv') {
       if (verso === 0) {
-        let csv = AttendanceComponent.ConvertToCSV(JSON.stringify(this.tratte.fermateA));
+        const csv = AttendanceComponent.ConvertToCSV(JSON.stringify(this.tratte.fermateA));
         saveAs(new Blob([csv]), 'andata.csv');
       } else {
-        let csv = AttendanceComponent.ConvertToCSV(JSON.stringify(this.tratte.fermateR));
+        const csv = AttendanceComponent.ConvertToCSV(JSON.stringify(this.tratte.fermateR));
         saveAs(new Blob([csv]), 'ritorno.csv');
       }
     }
-  }
-
-  static ConvertToCSV(objArray) {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    var str = '';
-
-    for (var i = 0; i < array.length; i++) {
-      var line = '';
-      for (var index in array[i]) {
-        if (line != '' && index != 'persone') {
-          line += ',';
-        }
-        if (typeof array[i][index] != 'object') {
-          line += array[i][index];
-        } else {
-          if (array[i][index].length > 0) {
-            line += ',';
-          }
-          for (var j = 0; j < array[i][index].length; j++) {
-            alert(array[i][index][j].nome + ' ' + array[i][index][j].cognome);
-            line += array[i][index][j].nome + ' ' + array[i][index][j].cognome;
-            if (j < array[i][index].length - 1) {
-              line += ', ';
-            }
-          }
-        }
-      }
-      str += line + '\r\n';
-    }
-    return str;
   }
 
   cancellaNotifiche($event: MouseEvent) {
@@ -465,6 +480,14 @@ export class AttendanceComponent implements OnInit {
       }).then((data) => {
         this.notifications = data;
       });
+  }
+
+
+  cancellaTurno($event: MouseEvent, data: string, verso: string, username: string) {
+
+    this.userService.cancellaTurno(new presaVisione(data, verso, username)).subscribe();
+
+    // confirm('test' + ' ' + data + ' ' + verso + ' ' + username);
   }
 }
 

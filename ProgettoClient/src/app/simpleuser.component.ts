@@ -502,7 +502,13 @@ export class SimpleuserComponent implements OnInit {
 
   presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
     this.p = new presaVisione(data, verso, utente);
-    this.userService.presaVisione(this.p, ind).subscribe();
+    this.userService.presaVisione(this.p, ind).subscribe(
+        data => {
+          this.alertService.success('Turno consolidato con successo!', true);
+        },
+        error => {
+          this.alertService.error('Impossibile consolidare il turno!');
+        });
     var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
     element.disabled = true;
   }
@@ -516,7 +522,13 @@ export class SimpleuserComponent implements OnInit {
         } else {
           v = 'R';
         }
-        this.userService.rimuoviPrenotazione(nomeLinea, data, id_bambino + '_' + data + '_' + v).subscribe();
+        this.userService.rimuoviPrenotazione(nomeLinea, data, id_bambino + '_' + data + '_' + v).subscribe(
+          data => {
+            this.alertService.success('Prenotazione rimossa con successo!', true);
+          },
+          error => {
+            this.alertService.error('Impossibile rimuovere la prenotazione!');
+          });
       }})
   }
 
