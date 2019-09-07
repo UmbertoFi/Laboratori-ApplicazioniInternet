@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
         data => {
           if (data) {
             this.userService.login(data);
+            this.alertService.success('Login effettuato, benvenuto!', true);
             this.router.navigate(['/simpleuser']);
           }
         },

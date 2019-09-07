@@ -258,7 +258,7 @@ export class AdminComponent implements OnInit {
       });
   }
 
-  clickPersona($event: MouseEvent, verso, idFermata, idPersona) {
+  /* clickPersona($event: MouseEvent, verso, idFermata, idPersona) {
     const today = new Date();
     const date = new Date(this.corse[this.pageIndex].data);
     let dd = String(today.getDate()).padStart(2, '0');
@@ -299,7 +299,7 @@ export class AdminComponent implements OnInit {
         return 'personaSelezionata';
       }
     }
-  }
+  } */
 
   personeOrdinateByNome(verso: number, idFermata: number) {
     if (verso == 0) {
@@ -395,7 +395,7 @@ export class AdminComponent implements OnInit {
   } */
 
 
-  inserisciFiglio($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
+  /*inserisciFiglio($event: MouseEvent, id_bambino: number, linea: string, id_fermata: number, verso: number, data: string) {
     const today = new Date();
     const date = new Date(this.corse[this.pageIndex].data);
     let dd = String(today.getDate()).padStart(2, '0');
@@ -411,7 +411,7 @@ export class AdminComponent implements OnInit {
       this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
     }
     return;
-  }
+  }*/
 
   /* onSubmit() {
     this.submitted = true;
@@ -531,7 +531,13 @@ export class AdminComponent implements OnInit {
 
   presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
     this.p = new presaVisione(data, verso, utente);
-    this.userService.presaVisione(this.p, ind).subscribe();
+    this.userService.presaVisione(this.p, ind).subscribe(
+      data => {
+        this.alertService.success('Turno consolidato con successo!', true);
+      },
+      error => {
+        this.alertService.error('Impossibile consolidare il turno!');
+      });
     var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
     element.disabled = true;
   }
@@ -555,7 +561,14 @@ export class AdminComponent implements OnInit {
   }
 
   pulisciDatabase() {
-    this.userService.pulisciDatabase().subscribe();
+    this.userService.pulisciDatabase().subscribe(
+      data => {
+        this.alertService.success('Database pulito con successo!', true);
+        // this.router.navigate(['/simpleuser']);
+      },
+      error => {
+        this.alertService.error('Impossibile pulire il database!');
+      });
   }
 
   cancellaNotifiche($event: MouseEvent) {

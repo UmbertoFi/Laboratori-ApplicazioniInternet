@@ -251,22 +251,32 @@ export class AttendanceComponent implements OnInit {
     if (cur.localeCompare(curdate) === 0) {
       if (verso == 0) {
         this.lineaService.updateprenotazioneAccompagnatore(this.tratte.fermateA[idFermata].persone[idPersona].id_bambino, this.tratte.fermateA[idFermata].id_fermata, this.corse[this.pageIndex].data, 0).subscribe(
-          (data) => {if (this.tratte.fermateA[idFermata].persone[idPersona].selected === false) {
-            this.tratte.fermateA[idFermata].persone[idPersona].selected = true;
-          } else {
-            this.tratte.fermateA[idFermata].persone[idPersona].selected = false;
-          }}
-        );
+          data => {
+            if (this.tratte.fermateA[idFermata].persone[idPersona].selected === false) {
+              this.tratte.fermateA[idFermata].persone[idPersona].selected = true;
+            } else {
+              this.tratte.fermateA[idFermata].persone[idPersona].selected = false;
+            }
+            this.alertService.success('Presenza del bambino registrata con successo!', true);
+            // this.router.navigate(['/simpleuser']);
+          },
+          error => {
+            this.alertService.error('Impossibile registrare la presenza del bambino!');
+          });
       } else {
         this.lineaService.updateprenotazioneAccompagnatore(this.tratte.fermateR[idFermata].persone[idPersona].id_bambino, this.tratte.fermateR[idFermata].id_fermata, this.corse[this.pageIndex].data, 1).subscribe(
-          (data) => {
+          data => {
             if (this.tratte.fermateR[idFermata].persone[idPersona].selected === false) {
               this.tratte.fermateR[idFermata].persone[idPersona].selected = true;
             } else {
               this.tratte.fermateR[idFermata].persone[idPersona].selected = false;
             }
-          }
-        );
+            this.alertService.success('Presenza del bambino registrata con successo!', true);
+            // this.router.navigate(['/simpleuser']);
+          },
+          error => {
+            this.alertService.error('Impossibile registrare la presenza del bambino!');
+          });
       }
     }
   }
@@ -390,7 +400,14 @@ export class AttendanceComponent implements OnInit {
     const curdate = yyyy + '/' + mm + '/' + dd;
 
     if (cur.localeCompare(curdate) === 0) {
-      this.lineaService.inserisciPrenotazioneRitardataAccompagnatore(id_bambino, linea, id_fermata, verso, data).subscribe();
+      this.lineaService.inserisciPrenotazioneRitardataAccompagnatore(id_bambino, linea, id_fermata, verso, data).subscribe(
+        data => {
+          this.alertService.success('Presenza del bambino registrata con successo!', true);
+          // this.router.navigate(['/simpleuser']);
+        },
+        error => {
+          this.alertService.error('Impossibile registrare la presenza del bambino!');
+        });
     }
     return;
   }
@@ -443,7 +460,13 @@ export class AttendanceComponent implements OnInit {
 
   presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind: number) {
     this.p = new presaVisione(data, verso, utente);
-    this.userService.presaVisione(this.p, ind).subscribe();
+    this.userService.presaVisione(this.p, ind).subscribe(
+      data => {
+        this.alertService.success('Turno consolidato con successo!', true);
+      },
+      error => {
+        this.alertService.error('Impossibile consolidare il turno!');
+      });
     const element = document.getElementById('myBtn' + ind) as HTMLInputElement;
     element.disabled = true;
   }
@@ -485,7 +508,14 @@ export class AttendanceComponent implements OnInit {
 
   cancellaTurno($event: MouseEvent, data: string, verso: string, username: string) {
 
-    this.userService.cancellaTurno(new presaVisione(data, verso, username)).subscribe();
+    this.userService.cancellaTurno(new presaVisione(data, verso, username)).subscribe(
+      data => {
+        this.alertService.success('Turno cancellato con successo!', true);
+        // this.router.navigate(['/simpleuser']);
+      },
+      error => {
+        this.alertService.error('Impossibile cancellare il turno!');
+      });
 
     // confirm('test' + ' ' + data + ' ' + verso + ' ' + username);
   }

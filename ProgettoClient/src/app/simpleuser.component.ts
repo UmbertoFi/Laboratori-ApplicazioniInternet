@@ -247,14 +247,28 @@ export class SimpleuserComponent implements OnInit {
         } else {
           this.tratte.fermateA[idFermata].persone[idPersona].selected = false;
         }
-        this.lineaService.updateprenotazione(this.tratte.fermateA[idFermata].persone[idPersona].id_bambino, this.tratte.fermateA[idFermata].id_fermata, this.corse[this.pageIndex].data, 0).subscribe();
+        this.lineaService.updateprenotazione(this.tratte.fermateA[idFermata].persone[idPersona].id_bambino, this.tratte.fermateA[idFermata].id_fermata, this.corse[this.pageIndex].data, 0).subscribe(
+          data => {
+            this.alertService.success('Bambino prenotato con successo!', true);
+            // this.router.navigate(['/simpleuser']);
+          },
+          error => {
+            this.alertService.error('Impossibile prenotare il bambino!');
+          });
       } else {
         if (this.tratte.fermateR[idFermata].persone[idPersona].selected === false) {
           this.tratte.fermateR[idFermata].persone[idPersona].selected = true;
         } else {
           this.tratte.fermateR[idFermata].persone[idPersona].selected = false;
         }
-        this.lineaService.updateprenotazione(this.tratte.fermateR[idFermata].persone[idPersona].id_bambino, this.tratte.fermateR[idFermata].id_fermata, this.corse[this.pageIndex].data, 1).subscribe();
+        this.lineaService.updateprenotazione(this.tratte.fermateR[idFermata].persone[idPersona].id_bambino, this.tratte.fermateR[idFermata].id_fermata, this.corse[this.pageIndex].data, 1).subscribe(
+          data => {
+            this.alertService.success('Bambino prenotato con successo!', true);
+            // this.router.navigate(['/simpleuser']);
+          },
+          error => {
+            this.alertService.error('Impossibile prenotare bambino!');
+          });
       }
     }
   }
@@ -382,7 +396,14 @@ export class SimpleuserComponent implements OnInit {
     const curdate = yyyy + '/' + mm + '/' + dd;
 
     if (cur.localeCompare(curdate) < 0 || (cur.localeCompare(curdate)==0 && actual_hour < h) || (cur.localeCompare(curdate)==0 && actual_hour == h && actual_min < min)) {
-      this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
+      this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe(
+        data => {
+          this.alertService.success('Bambino prenotato con successo!', true);
+          // this.router.navigate(['/simpleuser']);
+        },
+        error => {
+          this.alertService.error('Impossibile prenotare il bambino!');
+        });
       if (confirm('Vuoi prenotare la stessa corsa per un intero anno?')) {
         date = new Date(this.corse[this.pageIndex].data);
         for (let i = this.pageIndex; i < this.length - 1; i++) {
@@ -393,13 +414,9 @@ export class SimpleuserComponent implements OnInit {
           data = yyyy + '-' + mm + '-' + dd;
           this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
         }
-        this.alertService.success("Bambino prenotato correttamente per un anno intero");
-        return;
+        this.alertService.success('Bambino prenotato con successo per un anno intero!', true);
       }
-      this.alertService.success("Bambino prenotato correttamente");
-      return;
     }
-    this.alertService.error("Impossibile prenotare il bambino per questa corsa");
     return;
   }
 
