@@ -144,7 +144,7 @@
           <mat-card-content>
             <mat-list>
               <mat-list-item *ngFor="let turno of turni;">
-                <p (click)="cancellaTurno($event, turno.data, turno.verso, turno.username)">{{turno.data}} {{turno.linea}} {{turno.verso}} </p>
+                <p class="clickableRimozione" (click)="cancellaTurno($event, turno.data, turno.verso, turno.username)">{{turno.data}} {{turno.linea}} {{turno.verso}} </p>
               </mat-list-item>
             </mat-list>
           </mat-card-content>

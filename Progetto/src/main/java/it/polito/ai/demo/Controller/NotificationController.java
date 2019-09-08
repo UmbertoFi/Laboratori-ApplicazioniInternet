@@ -5,6 +5,7 @@ import it.polito.ai.demo.DTO.*;
 import it.polito.ai.demo.Entity.*;
 import it.polito.ai.demo.Exception.BadRequestException;
 import it.polito.ai.demo.Exception.NotFoundException;
+import it.polito.ai.demo.Exception.UnauthorizedException;
 import it.polito.ai.demo.JWT.JwtTokenProvider;
 import it.polito.ai.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -806,6 +807,104 @@ DisponibilitaService disponibilitaService;
       return mappaNotifiche.get(username);
     }
     throw new BadRequestException("Nessuna notifica da cacellare");
+  }
+
+  @PutMapping("utility/eraseTurni")
+  @ResponseStatus(HttpStatus.OK)
+  public @ResponseBody void deleteTurno(HttpServletRequest req, HttpServletResponse response, @RequestBody TurnoDTO turnoDTO) throws IOException {
+
+
+
+    String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+    if(username.compareTo(turnoDTO.getUtente())!=0)
+      throw new UnauthorizedException("l'utente non è abilitato a cancellare la prenotazione");
+    Utente u=userService.getUserById(username);
+    if(u==null)
+      throw new BadRequestException("utente non esistente ");
+
+    String[] pieces = turnoDTO.getData().split("-");
+    LocalDate date = LocalDate.of(Integer.parseInt(pieces[2]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[0]));
+
+
+    idTurno id= idTurno.builder().data(date)
+      .utente(u)
+      .verso(turnoDTO.getVerso())
+      .build();
+
+    Optional<Turno> opt=turnoService.getTurnoById(id);
+    if(!opt.isPresent())
+      throw new BadRequestException("turno non esistente ");
+    String nomelinea=opt.get().getLinea().getNome();
+
+    turnoService.deleteTurno(id);
+    response.sendRedirect("/notifyE/" + username + "_" + turnoDTO.getData() + "_" + turnoDTO.getVerso()+"/"+nomelinea);
+    return;
+  }
+
+
+  @PutMapping("/notifyE/{id}/{linea}")
+  public void sendEliminazione(@PathVariable("id") String id_turno,
+                           @PathVariable("linea") String linea) {
+
+    //System.out.println("notify ci sono");
+    String[] pieces = id_turno.split("_");
+
+
+
+
+    /*Utente utente = userService.getUserById(pieces[0]);
+    idTurno iT = idTurno.builder()
+      .data(data)
+      .utente(utente)
+      .verso(pieces[2])
+      .build();
+    if (turnoService.getTurnoById(iT).isPresent()) {
+      if (turnoService.getTurnoById(iT).isPresent()) {*/
+
+        NotificaTurnoDTO notifications = NotificaTurnoDTO.builder().count(0).msg("").build();
+        notifications.setMsg("NUOVO Turno Cancellato!");
+        notifications.setData(pieces[1]);
+        notifications.setVerso(pieces[2]);
+    notifications.setUtente(pieces[0]);
+        notifications.setLinea(linea);
+        notifications.setTipo(4);
+        // Push notifications to front-end
+
+        List<Utente> admin = utenteRuoloService.getAdminByLinea(linea);
+        if (admin != null) {
+          for (Utente user : admin) {
+            if (!contatori.containsKey(user.getUserName())) {
+              contatori.put(user.getUserName(), 0);
+            }
+
+            Integer x = contatori.get(user.getUserName());
+            contatori.put(user.getUserName(), x + 1);
+            notifications.setCount(contatori.get(user.getUserName()));
+
+            template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
+            if(mappaNotifiche.containsKey(user.getUserName())){
+              mappaNotifiche.get(user.getUserName()).add(notifications);
+            }
+            else{
+              List<NotificaTurnoDTO> listaNotifiche = new ArrayList<>();
+              listaNotifiche.add(notifications);
+              mappaNotifiche.put(user.getUserName(), listaNotifiche);
+            }
+          }
+          return;
+        }
+        throw new NotFoundException("errore negli amministratori");
+      //}
+      //throw new NotFoundException("turno non trovato no message!");
+      // Increment Notification by one
+
+
+      //System.out.println("Notifications successfully sent to Angular");
+
+      //return "Notifications successfully sent to Angular !";
+    //}
+
+
   }
 
 }

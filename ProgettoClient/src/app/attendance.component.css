@@ -12,6 +12,11 @@ li {
   font-weight: bold;
 }
 
+.clickableRimozione:hover{
+  cursor: pointer;
+  color: red;
+}
+
 mat-card{
   width: 650px;
   margin: auto;

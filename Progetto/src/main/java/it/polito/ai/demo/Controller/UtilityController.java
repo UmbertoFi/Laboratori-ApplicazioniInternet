@@ -552,31 +552,7 @@ public class UtilityController {
     return turni;
   }
 
-  @PutMapping("utility/eraseTurni")
-  @ResponseStatus(HttpStatus.OK)
-  public @ResponseBody void deleteTurno(HttpServletRequest req, @RequestBody TurnoDTO turnoDTO){
 
-
-
-    String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
-    if(username.compareTo(turnoDTO.getUtente())!=0)
-      throw new UnauthorizedException("l'utente non è abilitato a cancellare la prenotazione");
-    Utente u=userService.getUserById(username);
-    if(u==null)
-      throw new BadRequestException("utente non esistente ");
-
-    String[] pieces = turnoDTO.getData().split("-");
-    LocalDate date = LocalDate.of(Integer.parseInt(pieces[2]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[0]));
-
-
-    idTurno id= idTurno.builder().data(date)
-                                  .utente(u)
-                                  .verso(turnoDTO.getVerso())
-      .build();
-
-    turnoService.deleteTurno(id);
-    return;
-  }
 
 
 }
