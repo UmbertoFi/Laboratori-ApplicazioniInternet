@@ -14,6 +14,8 @@ import {WebSocketService} from './_services/websocket.service';
 import {Notifica} from './_models/notifica';
 import {presaVisione} from './_models/presaVisione';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {checkRuoli} from './_models/checkRuoli';
+
 
 @Component({
   selector: 'app-simpleuser',
@@ -35,9 +37,7 @@ export class SimpleuserComponent implements OnInit {
   data: string;
   openDateForm = false;
   ruoli: Ruolo[] = [];
-  checkAdmin = false;
-  checkAccompagnatore = false;
-  checkSystemAdmin = false;
+  checkRuoli: checkRuoli = new checkRuoli(undefined, undefined, undefined, undefined);
 
 
   pageEvent: PageEvent;
@@ -141,14 +141,19 @@ export class SimpleuserComponent implements OnInit {
         this.ruoli = data;
         return;
       }).then((data) => {
+        this.checkRuoli.checkAccompagnatore = false;
+        this.checkRuoli.checkAdmin = false;
+        this.checkRuoli.checkSystemAdmin = false;
+        this.checkRuoli.checkUser = false;
         for (const r of this.ruoli) {
-          console.log(r);
           if (r.ruolo.localeCompare('admin') == 0) {
-            this.checkAdmin = true;
+            this.checkRuoli.checkAdmin = true;
           } else if (r.ruolo.localeCompare('system-admin') == 0) {
-            this.checkSystemAdmin = true;
+            this.checkRuoli.checkSystemAdmin = true;
           } else if (r.ruolo.localeCompare('accompagnatore') == 0) {
-            this.checkAccompagnatore = true;
+            this.checkRuoli.checkAccompagnatore = true;
+          } else if(r.ruolo.localeCompare('user') == 0){
+            this.checkRuoli.checkUser = true;
           }
         }
       });

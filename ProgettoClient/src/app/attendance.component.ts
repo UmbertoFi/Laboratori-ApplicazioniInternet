@@ -12,6 +12,7 @@ import {Notifica} from './_models/notifica';
 import {WebSocketService} from './_services/websocket.service';
 import {presaVisione} from './_models/presaVisione';
 import {saveAs} from 'file-saver';
+import {checkRuoli} from './_models/checkRuoli';
 
 @Component({
   selector: 'app-attendance',
@@ -80,9 +81,7 @@ export class AttendanceComponent implements OnInit {
   lineaSelezionataMenu = 0;
   openDateForm = false;
   ruoli: Ruolo[] = [];
-  checkAdmin = false;
-  checkAccompagnatore = false;
-  checkSystemAdmin = false;
+  checkRuoli: checkRuoli = new checkRuoli(undefined, undefined, undefined, undefined);
 
   notifications: Notifica[] = [];
   notifica: Notifica;
@@ -140,13 +139,18 @@ export class AttendanceComponent implements OnInit {
         return;
       }).then((data) => {
         for (const r of this.ruoli) {
-          console.log(r);
+          this.checkRuoli.checkAccompagnatore = false;
+          this.checkRuoli.checkAdmin = false;
+          this.checkRuoli.checkSystemAdmin = false;
+          this.checkRuoli.checkUser = false;
           if (r.ruolo.localeCompare('admin') == 0) {
-            this.checkAdmin = true;
+            this.checkRuoli.checkAdmin = true;
           } else if (r.ruolo.localeCompare('system-admin') == 0) {
-            this.checkSystemAdmin = true;
+            this.checkRuoli.checkSystemAdmin = true;
           } else if (r.ruolo.localeCompare('accompagnatore') == 0) {
-            this.checkAccompagnatore = true;
+            this.checkRuoli.checkAccompagnatore = true;
+          } else if(r.ruolo.localeCompare('user') == 0){
+            this.checkRuoli.checkUser = true;
           }
         }
       });

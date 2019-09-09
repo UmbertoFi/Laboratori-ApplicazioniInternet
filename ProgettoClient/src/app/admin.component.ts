@@ -16,6 +16,8 @@ import {Ruolo} from './_models';
 import {Notifica} from './_models/notifica';
 import {WebSocketService} from './_services/websocket.service';
 import {presaVisione} from './_models/presaVisione';
+import {checkRuoli} from './_models/checkRuoli';
+
 
 @Component({
   selector: 'app-admin',
@@ -38,9 +40,7 @@ export class AdminComponent implements OnInit {
   consolidaTurnoForm: FormGroup;
   d: Disponibilita;
   ruoli: Ruolo[] = [];
-  checkAdmin: boolean = false;
-  checkAccompagnatore: boolean = false;
-  checkSystemAdmin: boolean = false;
+  checkRuoli: checkRuoli = new checkRuoli(undefined, undefined, undefined, undefined);
   submitted0 = false;
   submitted1 = false;
   submitted2 = false;
@@ -150,14 +150,19 @@ export class AdminComponent implements OnInit {
         this.ruoli = data;
         return;
       }).then((data) => {
+        this.checkRuoli.checkAccompagnatore = false;
+        this.checkRuoli.checkAdmin = false;
+        this.checkRuoli.checkSystemAdmin = false;
+        this.checkRuoli.checkUser = false;
         for (let r of this.ruoli) {
-          console.log(r);
           if (r.ruolo.localeCompare('admin') == 0) {
-            this.checkAdmin = true;
+            this.checkRuoli.checkAdmin = true;
           } else if (r.ruolo.localeCompare('system-admin') == 0) {
-            this.checkSystemAdmin = true;
+            this.checkRuoli.checkSystemAdmin = true;
           } else if (r.ruolo.localeCompare('accompagnatore') == 0) {
-            this.checkAccompagnatore = true;
+            this.checkRuoli.checkAccompagnatore = true;
+          } else if(r.ruolo.localeCompare('user') == 0){
+            this.checkRuoli.checkUser = true;
           }
         }
       });

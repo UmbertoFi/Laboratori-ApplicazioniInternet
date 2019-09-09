@@ -120,6 +120,11 @@ public class ProgettoApplication {
                       us.save(u);
                       urs.save(ur);
 
+                      id.setRuolo("user");
+                      id.setNomeLinea("*");
+                      ur.setId(id);
+                      urs.save(ur);
+
 
                       String body = "Gentilissimo, confermi di esserti registrato al servizio?, se sì clicca il seguente link per confermare la registrazione http://localhost:8080/confirm/" + UUID;
                       //email.sendSimpleMessage(u.getUserName(), "Benvenuto!", body);
