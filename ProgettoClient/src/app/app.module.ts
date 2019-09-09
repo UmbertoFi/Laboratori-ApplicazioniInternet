@@ -31,6 +31,7 @@ import {JwtInterceptor} from './jwt.interceptor';
 import {SimpleuserComponent} from './simpleuser.component';
 import {AdminComponent} from './admin.component';
 import {WebSocketService} from './_services/websocket.service';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 const routes: Routes = [
@@ -63,7 +64,8 @@ const routes: Routes = [
     HttpClientModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    NgbModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}, LineaService, UserService, AlertService, AuthenticationService, MatDatepickerModule, WebSocketService],
   bootstrap: [AppComponent]

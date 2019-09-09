@@ -13,6 +13,7 @@ import {TrovaDisponibilita} from '../_models/trovaDisponibilita';
 import {Disponibilita} from '../_models/disponibilita';
 import {UtenteNew} from '../_models/utenteNew';
 import {presaVisione} from '../_models/presaVisione';
+import {NewPassword} from '../_models/NewPassword';
 
 @Injectable()
 export class UserService {
@@ -132,5 +133,39 @@ export class UserService {
   cancellaTurno(item: presaVisione) {
 
     return this.http.put<presaVisione>('http://localhost:8080/utility/eraseTurni', item, this.httpOptions);
+  }
+
+  cambiaPassword(changepass: NewPassword) {
+
+    function criptaPassword(password: string) {
+      let c;
+      let encryptedPassword: string = "";
+
+      for(let i=0; i<password.length; i++){
+        c = password.charCodeAt(i);
+        if(c==97 || c==98 || c==99 || c==100 || c==101){
+          c++;
+          encryptedPassword += String.fromCharCode(c);
+        } else if(c==102 || c==103 || c==104 || c==105 || c==106){
+          c += 3;
+          encryptedPassword += String.fromCharCode(c);
+        } else if(c==102 || c==103 || c==104 || c==105 || c==106){
+          c += 8;
+          encryptedPassword += String.fromCharCode(c);
+        } else if(c==102 || c==103 || c==104 || c==105 || c==106){
+          c += 2;
+          encryptedPassword += String.fromCharCode(c);
+        } else {
+          c += 7;
+          encryptedPassword += String.fromCharCode(c);
+        }
+      }
+      return encryptedPassword;
+    }
+    changepass.password0 = criptaPassword(changepass.password0)
+    changepass.password0 = criptaPassword(changepass.password1)
+    changepass.password0 = criptaPassword(changepass.password2)
+    console.log(changepass.password0)
+    return this.http.post<NewPassword>('http://localhost:8080/changepass',changepass, this.httpOptions);
   }
 }

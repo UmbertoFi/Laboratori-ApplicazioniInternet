@@ -13,6 +13,7 @@ import {Prenotazione, Ruolo} from './_models';
 import {WebSocketService} from './_services/websocket.service';
 import {Notifica} from './_models/notifica';
 import {presaVisione} from './_models/presaVisione';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-simpleuser',
@@ -29,6 +30,7 @@ export class SimpleuserComponent implements OnInit {
   aggiungiBambinoForm: FormGroup;
   submitted0 = false;
   submitted1 = false;
+  submitted2 = false;
   candidatiAccompagnatoreForm: FormGroup;
   data: string;
   openDateForm = false;
@@ -54,10 +56,11 @@ export class SimpleuserComponent implements OnInit {
   linea_blur=false;
   data_blur=false;
   verso_blur=false;
+  changePasswordForm: FormGroup;
 
 
   constructor(
-    private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder) {
+    private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder, private modalService: NgbModal) {
 
     this.notifications = new Array<Notifica>();
 
@@ -118,6 +121,12 @@ export class SimpleuserComponent implements OnInit {
       linea: ['', Validators.required],
       data: ['', Validators.required],
       verso: ['', Validators.required]
+    });
+
+    this.changePasswordForm = this.formBuilder.group({
+      password0: ['', Validators.required],
+      password1: ['', Validators.required],
+      password2: ['', Validators.required]
     });
 
     const promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
@@ -398,6 +407,17 @@ export class SimpleuserComponent implements OnInit {
     if (cur.localeCompare(curdate) < 0 || (cur.localeCompare(curdate)==0 && actual_hour < h) || (cur.localeCompare(curdate)==0 && actual_hour == h && actual_min < min)) {
       this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe(
         data => {
+          const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + localStorage.getItem('access_token')
+            }
+          })
+            .then((data) => {
+              return data.json();
+            }).then((data) => {
+              this.tratte = data;
+            });
           this.alertService.success('Bambino prenotato con successo!', true);
           // this.router.navigate(['/simpleuser']);
         },
@@ -413,6 +433,17 @@ export class SimpleuserComponent implements OnInit {
           let yyyy = date.getFullYear();
           data = yyyy + '-' + mm + '-' + dd;
           this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
+          const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + localStorage.getItem('access_token')
+            }
+          })
+            .then((data) => {
+              return data.json();
+            }).then((data) => {
+              this.tratte = data;
+            });
         }
         this.alertService.success('Bambino prenotato con successo per un anno intero!', true);
       }
@@ -575,5 +606,45 @@ export class SimpleuserComponent implements OnInit {
       }).then((data) => {
         this.notifications = data;
       });
+  }
+
+  closeResult: string;
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
+
+  changePasswordSubmit() {
+    this.submitted2 = true;
+    console.log(this.changePasswordForm.value)
+
+    //if (this.changePasswordForm.invalid) {
+    //  return;
+    //}
+    // stop here if form is invalid
+
+    this.userService.cambiaPassword(this.changePasswordForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Password cambiata con successo!', true);
+          //this.router.navigate(['/simpleuser']);
+          },
+        error => {
+          this.alertService.error('Cambio Password fallito!');
+        });
   }
 }
