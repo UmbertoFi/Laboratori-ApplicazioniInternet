@@ -128,7 +128,7 @@
               <div>
                 <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
                 <br><br></div>
-              <div *ngIf="checkAdmin || checkSystemAdmin">
+              <div *ngIf="checkRuoli.checkAdmin || checkRuoli.checkSystemAdmin">
                 <button class="btn btn-primary" (click)="cambiaSezione('Admin')">
                   Admin
                 </button>

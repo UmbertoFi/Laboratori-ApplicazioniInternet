@@ -149,13 +149,13 @@
               <div>
                 <button class="btn btn-primary">Cambia Password</button>
                 <br><br></div>
-              <div *ngIf="checkSystemAdmin">
+              <div *ngIf="checkRuoli.checkSystemAdmin">
                 <button class="btn btn-primary" (click)="pulisciDatabase()">Pulisci Database</button>
               <br><br></div>
               <div>
                 <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
                 <br><br></div>
-              <div *ngIf="checkAccompagnatore">
+              <div *ngIf="checkRuoli.checkAccompagnatore">
                 <button class="btn btn-primary" (click)="cambiaSezione('attendance')">Accompagnatore</button>
               </div>
             </div>
