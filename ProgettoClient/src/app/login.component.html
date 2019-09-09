@@ -23,10 +23,88 @@
           </div>
           <div class="form-group">
             <button class="btn btn-primary">Login</button>
-            <a [routerLink]="['/register']" class="btn btn-link">Register</a>
+            <a [routerLink]="['/register']" class="btn btn-link">Registrazione</a>
+            <a class="btn btn-link" (click)="open(content)">Hai dimenticato la password?</a>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Hai dimenticato la password?</h4>
+
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div  class="errorMessage">
+      <p> {{messaggio}}</p>
+    </div>
+    <form *ngIf="step1" [formGroup]="newEmailForm" (ngSubmit)="emailSubmit()">
+
+      <div  class="form-group">
+        <label for="username">Inserisci l'email:</label>
+        <input id="username" formControlName="username" class="form-control" type="email"
+               [ngClass]="{ 'is-invalid': (submitted1 && newEmailForm.controls.username.errors) || (email_blur && newEmailForm.controls.username.errors)}" (blur)="onBlurNewPassword(0)"/>
+
+        <div *ngIf="newEmailForm.controls.username.errors" class="invalid-feedback">
+          <div *ngIf="newEmailForm.controls.username.errors.required">Email richiesta</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary">Ricevi codice</button>
+      </div>
+    </form>
+    <form *ngIf="step2" [formGroup]="codiceForm" (ngSubmit)="codiceSubmit()">
+      <div  class="form-group">
+        <label for="codice">Inserisci il codice ricevuto per email:</label>
+        <input id="codice" formControlName="codice" class="form-control"
+               [ngClass]="{ 'is-invalid': (submitted2 && codiceForm.controls.codice.errors) || (codice_blur && codiceForm.controls.codice.errors)}" (blur)="onBlurNewPassword(1)"/>
+
+        <div *ngIf="codiceForm.controls.codice.errors" class="invalid-feedback">
+          <div *ngIf="codiceForm.controls.codice.errors.required">codice richiesto</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary">Verifica</button>
+      </div>
+    </form>
+    <form *ngIf="step3" [formGroup]="newPasswordForm" (ngSubmit)="newPasswordSubmit()">
+      <div class="form-group">
+        <label for="password">Password :</label>
+        <input id="password" formControlName="password" class="form-control" type="password"
+               [ngClass]="{ 'is-invalid': (submitted3 && newPasswordForm.controls.password.errors) || (newPassword_blur && newPasswordForm.controls.password.errors)}" (blur)="onBlurNewPassword(2)"/>
+
+        <div *ngIf="newPasswordForm.controls.password.errors" class="invalid-feedback">
+          <div *ngIf="newPasswordForm.controls.password.errors.required">Password richiesta</div>
+          <div *ngIf="newPasswordForm.controls.password.errors.minlength">Inserire almeno 6 caratteri</div>
+          <div *ngIf="newPasswordForm.controls.password.errors.maxlength">Inserire al massimo 12 caratteri</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Conferma Password :</label>
+        <input id="confirmPassword" formControlName="confirmPassword" class="form-control" type="password"
+               [ngClass]="{ 'is-invalid': (submitted3 && newPasswordForm.controls.confirmPassword.errors) || (confirmPassword_blur && newPasswordForm.controls.confirmPassword.errors)}" (blur)="onBlurNewPassword(3)"/>
+
+        <div *ngIf="newPasswordForm.controls.confirmPassword.errors" class="invalid-feedback">
+          <div *ngIf="newPasswordForm.controls.confirmPassword.errors.required">Password richiesta</div>
+          <div *ngIf="newPasswordForm.controls.confirmPassword.errors.minlength">Inserire almeno 6 caratteri</div>
+          <div *ngIf="newPasswordForm.controls.confirmPassword.errors.maxlength">Inserire al massimo 12 caratteri</div>
+          <div *ngIf="newPasswordForm.controls.confirmPassword.errors.mustMatch">Le password devono essere uguali</div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <button class="btn btn-primary">Cambia Password</button>
+      </div>
+    </form>
+  </div>
+
+</ng-template>

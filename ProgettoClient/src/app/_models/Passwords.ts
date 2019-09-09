@@ -1,6 +1,4 @@
-export class User {
-  email: string;
+export class Passwords {
   password: string;
   confirmPassword: string;
-
 }

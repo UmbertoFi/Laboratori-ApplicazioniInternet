@@ -7,6 +7,7 @@ import it.polito.ai.demo.DTO.UsernameDTO;
 import it.polito.ai.demo.Entity.Utente;
 import it.polito.ai.demo.Entity.UtenteRuolo;
 import it.polito.ai.demo.Entity.idRuolo;
+import it.polito.ai.demo.Exception.BadRequestException;
 import it.polito.ai.demo.Exception.NotFoundException;
 import it.polito.ai.demo.Exception.UnauthorizedException;
 import it.polito.ai.demo.JWT.JwtTokenProvider;
@@ -200,11 +201,11 @@ public class UserController {
             if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
 
                 String UUID = generateUUID();
-                //utente.setExpiredcredential(false);
+                utente.setExpiredcredential(false);
                 utente.setToken(UUID);
                 utente.setExpiredToken(new Date());
                 userService.save(utente);
-                String body = "Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì clicca il seguente link per modificare la tua password http://localhost:8080/recover/" + UUID;
+                String body = "Gentilissimo, confermi di aver richiesto il recupero della Password?, se sì inserisci il seguente codice per modificare la tua password \n" + UUID;
                 email.sendSimpleMessage(usernameDTO.getUsername(), "Password Recovery!", body);
                 return;
             }
@@ -213,25 +214,49 @@ public class UserController {
         throw new BadCredentialsException("utente non valido");
     }
 
-    @GetMapping("/recover/{randomUUID}")
+
+  @PostMapping("/recover/{UUID}")
+  @ResponseStatus(HttpStatus.OK)
+  public void checkRecoveryPass(@PathVariable("UUID") String  UUID,
+                                 @RequestBody UsernameDTO usernameDTO) {
+    Utente u = userService.getTokenForRecovery(UUID);
+    if(u==null || u.getUserName().compareTo(usernameDTO.getUsername())!=0)
+      throw new BadRequestException("non sei abilitato a procedere");
+
+    Date now = new Date();
+    long diff = now.getTime() - u.getExpiredToken().getTime();
+    if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione=1 h=3600000 ms
+      throw new NotFoundException("token di registrazione scaduto o invalido");
+
+    return;
+
+  }
+
+
+    @PostMapping("/recover/change")
     @ResponseStatus(HttpStatus.OK)
-    public void checkRecoveryPass(@PathVariable("randomUUID") String randomUUID) {
+    public void checkRecoveryPass (@RequestBody RegisterDTO registerDTO){
 
-        Utente u = userService.getTokenForRecovery(randomUUID);
-        Date now = new Date();
-        long diff = now.getTime() - u.getExpiredToken().getTime();
-        if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione=1 h=3600000 ms
-            throw new NotFoundException("token di registrazione scaduto o invalido");
+      Utente utente = userService.getUserById(registerDTO.getEmail());
+      if (utente != null) {
+        if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == false) && (utente.getLocked() == true)) {
 
-        String password=generatePassword();
-        u.setExpiredcredential(true);
-        u.setExpiredToken(new Date(0));
-        u.setPassword(password);
-        userService.save(u);
-        String body = "Gentilissimo, le tue nuove credenziali sono:\n Username: "+u.getUserName()+"\nPassword:" + password+"\nRicordati di cambiarla il prima possibile\nSaluti, la direzione.";
-        email.sendSimpleMessage(u.getUserName(), "Pedibus-Nuove Credenziali", body);
-        return;
+          if(registerDTO.getPassword().compareTo(registerDTO.getConfirmPassword())==0) {
+            utente.setExpiredcredential(true);
+            utente.setExpiredToken(new Date(0));
+            utente.setPassword(passwordEncoder.encode(registerDTO.getConfirmPassword()));
+            userService.save(utente);
+            String body = "Gentilissimo, le tue  credenziali d'accesso sono state modificate con successo!\nSaluti, la direzione.";
+            email.sendSimpleMessage(utente.getUserName(), "Pedibus-Nuove Credenziali", body);
+            return;
+          }
+          throw new BadRequestException("le due password non sono corrette");
+        }
+        throw new NotFoundException("non sei abilitato a procedere");
+      }
+      throw new BadCredentialsException("utente non valido");
     }
+
 
     @PostMapping(path = "/changepass")
     @ResponseStatus(HttpStatus.OK)

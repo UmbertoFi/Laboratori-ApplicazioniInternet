@@ -56,6 +56,7 @@ export class SimpleuserComponent implements OnInit {
   linea_blur = false;
   data_blur = false;
   verso_blur = false;
+
   changePasswordForm: FormGroup;
   password0_blur=false;
   password1_blur=false;

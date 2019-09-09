@@ -14,9 +14,14 @@ import {Disponibilita} from '../_models/disponibilita';
 import {UtenteNew} from '../_models/utenteNew';
 import {presaVisione} from '../_models/presaVisione';
 import {NewPassword} from '../_models/NewPassword';
+import {Codice} from '../_models/Codice';
+import {Passwords} from '../_models/Passwords';
 
 @Injectable()
 export class UserService {
+
+  u: User;
+
   constructor(private http: HttpClient) {}
 
   httpOptions = {
@@ -139,20 +144,20 @@ export class UserService {
 
     function criptaPassword(password: string) {
       let c;
-      let encryptedPassword: string = "";
+      let encryptedPassword = '';
 
-      for(let i=0; i<password.length; i++){
+      for (let i = 0; i < password.length; i++) {
         c = password.charCodeAt(i);
-        if(c==97 || c==98 || c==99 || c==100 || c==101){
+        if (c == 97 || c == 98 || c == 99 || c == 100 || c == 101) {
           c++;
           encryptedPassword += String.fromCharCode(c);
-        } else if(c==102 || c==103 || c==104 || c==105 || c==106){
+        } else if (c == 102 || c == 103 || c == 104 || c == 105 || c == 106) {
           c += 3;
           encryptedPassword += String.fromCharCode(c);
-        } else if(c==102 || c==103 || c==104 || c==105 || c==106){
+        } else if (c == 102 || c == 103 || c == 104 || c == 105 || c == 106) {
           c += 8;
           encryptedPassword += String.fromCharCode(c);
-        } else if(c==102 || c==103 || c==104 || c==105 || c==106){
+        } else if (c == 102 || c == 103 || c == 104 || c == 105 || c == 106) {
           c += 2;
           encryptedPassword += String.fromCharCode(c);
         } else {
@@ -166,7 +171,51 @@ export class UserService {
 
     changepass.password1 = criptaPassword(changepass.password1);
     changepass.password2 = criptaPassword(changepass.password2);
-    console.log(changepass.password0)
+    console.log(changepass.password0);
     return this.http.post<NewPassword>('http://localhost:8080/changepass', changepass, this.httpOptions);
+  }
+
+  recover(utente: UtenteNew) {
+    return this.http.post('http://localhost:8080/recover', utente, this.httpOptions);
+  }
+
+  recoverCheck(cod: Codice, utente: UtenteNew) {
+    return this.http.post('http://localhost:8080/recover/' + cod.codice, utente, this.httpOptions);
+  }
+
+  recoverChange(utente: UtenteNew, pass: Passwords) {
+
+    function criptaPassword(password: string) {
+      let c;
+      let encryptedPassword = '';
+
+      for (let i = 0; i < password.length; i++) {
+        c = password.charCodeAt(i);
+        if (c == 97 || c == 98 || c == 99 || c == 100 || c == 101) {
+          c++;
+          encryptedPassword += String.fromCharCode(c);
+        } else if (c == 102 || c == 103 || c == 104 || c == 105 || c == 106) {
+          c += 3;
+          encryptedPassword += String.fromCharCode(c);
+        } else if (c == 102 || c == 103 || c == 104 || c == 105 || c == 106) {
+          c += 8;
+          encryptedPassword += String.fromCharCode(c);
+        } else if (c == 102 || c == 103 || c == 104 || c == 105 || c == 106) {
+          c += 2;
+          encryptedPassword += String.fromCharCode(c);
+        } else {
+          c += 7;
+          encryptedPassword += String.fromCharCode(c);
+        }
+      }
+      return encryptedPassword;
+    }
+    pass.password = criptaPassword(pass.password);
+    pass.confirmPassword=criptaPassword(pass.confirmPassword);
+    this.u = new User();
+    this.u.confirmPassword = pass.confirmPassword;
+    this.u.password = pass.password;
+    this.u.email = utente.username;
+    return this.http.post('http://localhost:8080/recover/change', this.u, this.httpOptions);
   }
 }

@@ -12,6 +12,10 @@ li {
   color: red;
 }
 
+.errorMessage{
+  color: red;
+}
+
 mat-card{
   width: 650px;
   margin: auto;
