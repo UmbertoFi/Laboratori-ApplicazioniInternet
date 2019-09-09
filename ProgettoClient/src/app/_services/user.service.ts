@@ -162,10 +162,11 @@ export class UserService {
       }
       return encryptedPassword;
     }
-    changepass.password0 = criptaPassword(changepass.password0)
-    changepass.password0 = criptaPassword(changepass.password1)
-    changepass.password0 = criptaPassword(changepass.password2)
+    changepass.password0 = criptaPassword(changepass.password0);
+
+    changepass.password1 = criptaPassword(changepass.password1);
+    changepass.password2 = criptaPassword(changepass.password2);
     console.log(changepass.password0)
-    return this.http.post<NewPassword>('http://localhost:8080/changepass',changepass, this.httpOptions);
+    return this.http.post<NewPassword>('http://localhost:8080/changepass', changepass, this.httpOptions);
   }
 }
