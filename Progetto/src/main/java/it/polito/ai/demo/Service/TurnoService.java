@@ -5,6 +5,7 @@ import it.polito.ai.demo.Entity.Turno;
 import it.polito.ai.demo.Entity.Utente;
 import it.polito.ai.demo.Entity.idTurno;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,4 +17,8 @@ public interface TurnoService {
   public List<DisponibilitaGetDTO> getProxTurni(Utente user);
 
   public void deleteTurno(idTurno id);
+
+  public List<Turno> getTurniByData(LocalDate data);
+
+  public void deleteOne(Turno t);
 }

@@ -508,12 +508,13 @@ public class UtilityController {
     LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
 
     List<Disponibilita> disponibilita = disponibilitaService.getDisponibilitaByData(data);
-    if (!disponibilita.isEmpty()) {
       for (Disponibilita d : disponibilita)
         disponibilitaService.deleteOne(d);
-      return;
-    }
-    throw new BadRequestException("Errore nella pulizia del database: nessuna disponibilità da eliminare");
+
+    List<Turno> turni = turnoService.getTurniByData(data);
+    for (Turno t : turni)
+      turnoService.deleteOne(t);
+
   }
 
 

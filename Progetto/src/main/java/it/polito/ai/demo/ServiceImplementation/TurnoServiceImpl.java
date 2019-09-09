@@ -60,5 +60,17 @@ public class TurnoServiceImpl implements TurnoService {
       turnoRepository.deleteById(id);
   }
 
+  @Override
+  public List<Turno> getTurniByData(LocalDate data) {
+    List<Turno> turni = turnoRepository.findByData(data);
+    return turni;
+  }
+
+  @Override
+  public void deleteOne(Turno t) {
+      turnoRepository.delete(t);
+
+  }
+
 
 }

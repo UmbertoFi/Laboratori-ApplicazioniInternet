@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -15,4 +16,8 @@ public interface TurnoRepository extends CrudRepository<Turno, idTurno> {
 
   @Query("select t from Turno t where t.consolidato = true and t.id.utente=?1")
   List<Turno> getTurniProx(Utente user);
+
+
+  @Query("select t from Turno t where t.id.data <= ?1")
+  List<Turno> findByData(LocalDate data);
 }

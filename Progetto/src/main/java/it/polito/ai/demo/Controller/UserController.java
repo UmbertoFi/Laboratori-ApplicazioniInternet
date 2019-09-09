@@ -23,6 +23,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.AbstractPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,7 +69,6 @@ public class UserController {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-
             Utente utente =userService.getUserById(username);
             if(utente!=null){
 
@@ -241,15 +242,19 @@ public class UserController {
         if (utente != null) {
             if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getExpiredcredential() == true) && (utente.getLocked() == true)) {
 
-                if(passwordEncoder.encode(changePassDTO.getPassword0()).compareTo(utente.getPassword())==0) {
-                    if (changePassDTO.getPassword1().compareTo(changePassDTO.getPassword2()) == 0) {
+             /* System.out.println("encode pass "+ passwordEncoder.encode(changePassDTO.getPassword0()));
+              System.out.println("old pass "+ utente.getPassword());*/
+
+              if(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, changePassDTO.getPassword0())).isAuthenticated()){
+
+              if (changePassDTO.getPassword1().compareTo(changePassDTO.getPassword2()) == 0) {
                         String UUID = generateUUID();
                         utente.setExpiredcredential(false);
                         utente.setToken(UUID);
                         utente.setPassword(passwordEncoder.encode(changePassDTO.getPassword1()));
                         utente.setExpiredToken(new Date());
                         userService.save(utente);
-                        String body = "Gentilissimo, confermi di essere tu ad aver modificato la Password?, se sì clicca il seguente link per confermare la modifica http://localhost:8080/changepass/" + UUID;
+                        String body = "Gentilissimo, confermi di essere tu ad aver modificato la Password?, se sì clicca il seguente link per confermare la modifica http://localhost:8080/confirm/changepass/" + UUID;
                         email.sendSimpleMessage(username, "Pedibus-Conferma modifica password!", body);
                         return;
                     }
@@ -262,7 +267,7 @@ public class UserController {
         throw new BadCredentialsException("utente non valido");
     }
 
-    @GetMapping("/changepass/{randomUUID}")
+    @GetMapping("/confirm/changepass/{randomUUID}")
     @ResponseStatus(HttpStatus.OK)
     public void checkChangePass(@PathVariable("randomUUID") String randomUUID) {
 
