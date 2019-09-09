@@ -1,3 +1,4 @@
+<div *ngIf="checkRuoli?.checkUser">
 <div style="text-align:center">
   <h1>
     {{ title }}
@@ -275,3 +276,15 @@
   </div>
 
 </ng-template>
+</div>
+<div *ngIf="checkRuoli?.checkUser==false">
+  <mat-card>
+    <mat-card-title>
+      Accesso negato!
+    </mat-card-title>
+    <mat-card-content>
+      <button class="btn btn-primary btn-sm" (click)="this.router.navigate(['/simpleuser'])">HomePage</button><br><br>
+      <button class="btn btn-primary btn-sm" (click)="logout($event)">Logout</button>
+    </mat-card-content>
+  </mat-card>
+</div>

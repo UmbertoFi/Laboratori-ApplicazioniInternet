@@ -1,3 +1,4 @@
+<div *ngIf="checkRuoli?.checkAccompagnatore">
 <div style="text-align:center">
   <h1>
     {{ title }}
@@ -184,7 +185,18 @@
     </mat-tab-group>
   </mat-card-content>
 </mat-card>
-
+</div>
+<div *ngIf="checkRuoli?.checkAccompagnatore==false">
+  <mat-card>
+    <mat-card-title>
+      Accesso negato!
+    </mat-card-title>
+    <mat-card-content>
+      <button class="btn btn-primary btn-sm" (click)="this.router.navigate(['/simpleuser'])">HomePage</button><br><br>
+      <button class="btn btn-primary btn-sm" (click)="logout($event)">Logout</button>
+    </mat-card-content>
+  </mat-card>
+</div>
 
 
 

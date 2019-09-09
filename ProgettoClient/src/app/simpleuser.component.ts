@@ -14,6 +14,8 @@ import {WebSocketService} from './_services/websocket.service';
 import {Notifica} from './_models/notifica';
 import {presaVisione} from './_models/presaVisione';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {checkRuoli} from './_models/checkRuoli';
+
 
 @Component({
   selector: 'app-simpleuser',
@@ -21,6 +23,40 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./simpleuser.component.css']
 })
 export class SimpleuserComponent implements OnInit {
+  title = 'Pedibus';
+
+  nomiLinee: nomeLinea[] = [];
+  corse: CorsaNew[] = [];
+  tratte: TrattaNew;
+  figli: Bambino[] = [];
+  aggiungiBambinoForm: FormGroup;
+  submitted0 = false;
+  submitted1 = false;
+  submitted2 = false;
+  candidatiAccompagnatoreForm: FormGroup;
+  data: string;
+  openDateForm = false;
+  ruoli: Ruolo[] = [];
+  checkRuoli: checkRuoli = new checkRuoli(undefined, undefined, undefined, undefined);
+
+
+  pageEvent: PageEvent;
+  length: number;
+  pageSize = 1;
+  pageIndex = 0;
+  lineaSelezionataMenu = 0;
+
+
+  notifications: Notifica[] = [];
+  notifica: Notifica;
+  x: number;
+  p: presaVisione;
+  nome_blur = false;
+  cognome_blur = false;
+  linea_blur = false;
+  data_blur = false;
+  verso_blur = false;
+  changePasswordForm: FormGroup;
 
 
   constructor(
@@ -69,44 +105,6 @@ export class SimpleuserComponent implements OnInit {
       });
     });
   }
-  title = 'Pedibus';
-
-  nomiLinee: nomeLinea[] = [];
-  corse: CorsaNew[] = [];
-  tratte: TrattaNew;
-  figli: Bambino[] = [];
-  aggiungiBambinoForm: FormGroup;
-  submitted0 = false;
-  submitted1 = false;
-  submitted2 = false;
-  candidatiAccompagnatoreForm: FormGroup;
-  data: string;
-  openDateForm = false;
-  ruoli: Ruolo[] = [];
-  checkAdmin = false;
-  checkAccompagnatore = false;
-  checkSystemAdmin = false;
-
-
-  pageEvent: PageEvent;
-  length: number;
-  pageSize = 1;
-  pageIndex = 0;
-  lineaSelezionataMenu = 0;
-
-
-  notifications: Notifica[] = [];
-  notifica: Notifica;
-  x: number;
-  p: presaVisione;
-  nome_blur = false;
-  cognome_blur = false;
-  linea_blur = false;
-  data_blur = false;
-  verso_blur = false;
-  changePasswordForm: FormGroup;
-
-  closeResult: string;
 
   ngOnInit(): void {
     if (localStorage.getItem('access_token') == null) {
@@ -143,14 +141,19 @@ export class SimpleuserComponent implements OnInit {
         this.ruoli = data;
         return;
       }).then((data) => {
+        this.checkRuoli.checkAccompagnatore = false;
+        this.checkRuoli.checkAdmin = false;
+        this.checkRuoli.checkSystemAdmin = false;
+        this.checkRuoli.checkUser = false;
         for (const r of this.ruoli) {
-          console.log(r);
           if (r.ruolo.localeCompare('admin') == 0) {
-            this.checkAdmin = true;
+            this.checkRuoli.checkAdmin = true;
           } else if (r.ruolo.localeCompare('system-admin') == 0) {
-            this.checkSystemAdmin = true;
+            this.checkRuoli.checkSystemAdmin = true;
           } else if (r.ruolo.localeCompare('accompagnatore') == 0) {
-            this.checkAccompagnatore = true;
+            this.checkRuoli.checkAccompagnatore = true;
+          } else if (r.ruolo.localeCompare('user') == 0) {
+            this.checkRuoli.checkUser = true;
           }
         }
       });
@@ -610,11 +613,7 @@ export class SimpleuserComponent implements OnInit {
       });
   }
   open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
   }
 
   private getDismissReason(reason: any): string {
