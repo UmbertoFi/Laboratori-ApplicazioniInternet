@@ -49,11 +49,11 @@ export class SimpleuserComponent implements OnInit {
   notifica: Notifica;
   x: number;
   p: presaVisione;
-  nome_blur=false;
-  cognome_blur=false;
-  linea_blur=false;
-  data_blur=false;
-  verso_blur=false;
+  nome_blur = false;
+  cognome_blur = false;
+  linea_blur = false;
+  data_blur = false;
+  verso_blur = false;
 
 
   constructor(
@@ -385,8 +385,8 @@ export class SimpleuserComponent implements OnInit {
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
     let yyyy = today.getFullYear();
-    let actual_hour = today.getHours();
-    let actual_min = today.getMinutes()
+    const actual_hour = today.getHours();
+    const actual_min = today.getMinutes();
     const cur = yyyy + '/' + mm + '/' + dd;
     dd = String(date.getDate()).padStart(2, '0');
     mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -395,11 +395,11 @@ export class SimpleuserComponent implements OnInit {
     const min = parseInt(ora.split(':')[1]);
     const curdate = yyyy + '/' + mm + '/' + dd;
 
-    if (cur.localeCompare(curdate) < 0 || (cur.localeCompare(curdate)==0 && actual_hour < h) || (cur.localeCompare(curdate)==0 && actual_hour == h && actual_min < min)) {
+    if (cur.localeCompare(curdate) < 0 || (cur.localeCompare(curdate) == 0 && actual_hour < h) || (cur.localeCompare(curdate) == 0 && actual_hour == h && actual_min < min)) {
       this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe(
         data => {
           this.alertService.success('Bambino prenotato con successo!', true);
-          // this.router.navigate(['/simpleuser']);
+
         },
         error => {
           this.alertService.error('Impossibile prenotare il bambino!');
@@ -408,13 +408,14 @@ export class SimpleuserComponent implements OnInit {
         date = new Date(this.corse[this.pageIndex].data);
         for (let i = this.pageIndex; i < this.length - 1; i++) {
           date.setDate(date.getDate() + 1);
-          let dd = String(date.getDate()).padStart(2, '0');
-          let mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
-          let yyyy = date.getFullYear();
+          const dd = String(date.getDate()).padStart(2, '0');
+          const mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+          const yyyy = date.getFullYear();
           data = yyyy + '-' + mm + '-' + dd;
           this.lineaService.inserisciPrenotazioneRitardata(id_bambino, linea, id_fermata, verso, data).subscribe();
         }
         this.alertService.success('Bambino prenotato con successo per un anno intero!', true);
+
       }
     }
     return;
@@ -432,7 +433,7 @@ export class SimpleuserComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Inserimento bambino eseguito con successo!', true);
-           //this.router.navigate(['/simpleuser']);
+           // this.router.navigate(['/simpleuser']);
           const promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
             headers: {
               'Content-Type': 'application/json',
@@ -511,13 +512,13 @@ export class SimpleuserComponent implements OnInit {
   }
 
   AzzeraContatore($event) {
-    if ($event.index == 4) {     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+    if ($event.index == 4) {     // SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
       this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }
   }
 
-  presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
+  presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind: number) {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p, ind).subscribe(
         data => {
@@ -526,7 +527,7 @@ export class SimpleuserComponent implements OnInit {
         error => {
           this.alertService.error('Impossibile consolidare il turno!');
         });
-    var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
+    const element = document.getElementById('myBtn' + ind) as HTMLInputElement;
     element.disabled = true;
   }
 
@@ -546,20 +547,20 @@ export class SimpleuserComponent implements OnInit {
           error => {
             this.alertService.error('Impossibile rimuovere la prenotazione!');
           });
-      }})
+      }});
   }
 
   onBlur(field: number) {
-    if(field==0){
+    if (field == 0) {
       this.nome_blur = true;
-    } else if(field==1){
+    } else if (field == 1) {
       this.cognome_blur = true;
-    } else if(field==2){
+    } else if (field == 2) {
       this.linea_blur = true;
-    } else if(field==3){
-      this.data_blur=true;
-    } else if(field==4){
-      this.verso_blur=true;
+    } else if (field == 3) {
+      this.data_blur = true;
+    } else if (field == 4) {
+      this.verso_blur = true;
     }
   }
 

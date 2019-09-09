@@ -259,6 +259,7 @@ DisponibilitaService disponibilitaService;
                 notifications.setData(data.toString());
                 notifications.setVerso(pieces[2]);
                 notifications.setLinea(linea);
+                notifications.setUtente(pieces[0]);
                 notifications.setTipo(2);
                 // Push notifications to front-end
 
@@ -272,7 +273,7 @@ DisponibilitaService disponibilitaService;
                       Integer x = contatori.get(user.getUserName());
                       contatori.put(user.getUserName(), x + 1);
                       notifications.setCount(contatori.get(user.getUserName()));
-                      notifications.setUtente(user.getUserName());
+
                       template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
                       if(mappaNotifiche.containsKey(user.getUserName())){
                         mappaNotifiche.get(user.getUserName()).add(notifications);
@@ -825,6 +826,8 @@ DisponibilitaService disponibilitaService;
     String[] pieces = turnoDTO.getData().split("-");
     LocalDate date = LocalDate.of(Integer.parseInt(pieces[2]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[0]));
 
+    if(date.compareTo(LocalDate.now())<=0)
+      throw new BadRequestException("impossibile cancellare turno programmato per oggi");
 
     idTurno id= idTurno.builder().data(date)
       .utente(u)
@@ -834,6 +837,8 @@ DisponibilitaService disponibilitaService;
     Optional<Turno> opt=turnoService.getTurnoById(id);
     if(!opt.isPresent())
       throw new BadRequestException("turno non esistente ");
+
+
     String nomelinea=opt.get().getLinea().getNome();
 
     turnoService.deleteTurno(id);

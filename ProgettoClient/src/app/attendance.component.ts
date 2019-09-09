@@ -506,17 +506,30 @@ export class AttendanceComponent implements OnInit {
   }
 
 
-  cancellaTurno($event: MouseEvent, data: string, verso: string, username: string) {
+  cancellaTurno($event: MouseEvent, data: string, verso: string, username: string, ind: number) {
 
     this.userService.cancellaTurno(new presaVisione(data, verso, username)).subscribe(
       data => {
         this.alertService.success('Turno cancellato con successo!', true);
+        this.router.navigate(['/attendance']);
         // this.router.navigate(['/simpleuser']);
       },
       error => {
         this.alertService.error('Impossibile cancellare il turno!');
       });
 
+ /*   const promiseTurni = fetch('http://localhost:8080/utility/turni', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.turni = data;
+      });*/
+      this.turni.splice(ind, 1);
     // confirm('test' + ' ' + data + ' ' + verso + ' ' + username);
   }
 }
