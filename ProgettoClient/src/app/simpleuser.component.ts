@@ -57,7 +57,9 @@ export class SimpleuserComponent implements OnInit {
   data_blur = false;
   verso_blur = false;
   changePasswordForm: FormGroup;
-
+  password0_blur=false;
+  password1_blur=false;
+  password2_blur=false;
 
   constructor(
     private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder, private modalService: NgbModal) {
@@ -124,9 +126,11 @@ export class SimpleuserComponent implements OnInit {
     });
 
     this.changePasswordForm = this.formBuilder.group({
-      password0: ['', Validators.required],
-      password1: ['', Validators.required],
-      password2: ['', Validators.required]
+      password0: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
+      password1: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
+      password2: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]]
+    }, {
+      validators: [MustMatch('password1', 'password2')]
     });
 
     const promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
@@ -599,6 +603,16 @@ export class SimpleuserComponent implements OnInit {
     }
   }
 
+
+  onBlurChangePassword(field: number) {
+    if(field==0){
+      this.password0_blur = true;
+    } else if(field==1){
+      this.password1_blur = true;
+    } else if(field==2){
+      this.password2_blur = true;
+    }
+  }
   cancellaNotifiche($event: MouseEvent) {
     const promiseTratte = fetch('http://localhost:8080/utility/cancellaNotifiche/' + localStorage.getItem('username'), {
       headers: {
@@ -646,4 +660,25 @@ export class SimpleuserComponent implements OnInit {
           this.alertService.error('Cambio Password fallito!');
         });
   }
+
+
+}
+
+function MustMatch(controlName: string, matchingControlName: string) {
+  return (formGroup: FormGroup) => {
+    const control = formGroup.controls[controlName];
+    const matchingControl = formGroup.controls[matchingControlName];
+
+    if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+      // return if another validator has already found an error on the matchingControl
+      return;
+    }
+
+    // set error on matchingControl if validation fails
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({mustMatch: true});
+    } else {
+      matchingControl.setErrors(null);
+    }
+  };
 }
