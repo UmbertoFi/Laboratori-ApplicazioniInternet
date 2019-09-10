@@ -202,7 +202,6 @@ public class ProgettoApplication {
                 for(CorsaDTO c:corse.getCorse())
                     cs.save(c.convertToEntity(lr)); */
             } catch (Exception e) {
-                System.out.println("Impossibile salvare la linea: ");
                 e.printStackTrace();
             }
         };

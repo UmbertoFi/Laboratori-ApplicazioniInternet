@@ -469,11 +469,9 @@ export class AdminComponent implements OnInit {
         'Authorization': 'Bearer ' + localStorage.getItem('access_token')
       }
     }).then( (response) => {if (response.status>=400 && response.status<500){
-      console.log("errore trovato");
       throw "errore throw";
     }
     else{
-      console.log("tutto ok");
       return response;
     }})
       .then((data) => {
@@ -538,7 +536,9 @@ export class AdminComponent implements OnInit {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p, ind).subscribe(
       data => {
-        this.alertService.success('Turno consolidato con successo!', true);
+        this.alertService.success('Turno consolidato con successo! Purtroppo è necessario riloggare per confermare la modifica!', true);
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
       },
       error => {
         this.alertService.error('Impossibile consolidare il turno!');

@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Utente getTokenForRecovery(String randomUUID) {
-        Optional<Utente> u = userRepository.findByTokenAndExpiredCredential(randomUUID);
+        Optional<Utente> u = userRepository.findByTokenForRecovery(randomUUID);
 
         if (u.isPresent() == true) {
             return u.get();

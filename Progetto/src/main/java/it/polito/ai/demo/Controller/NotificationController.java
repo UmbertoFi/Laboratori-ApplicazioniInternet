@@ -126,7 +126,6 @@ DisponibilitaService disponibilitaService;
         // Increment Notification by one
 
 
-        //System.out.println("Notifications successfully sent to Angular");
 
         //return "Notifications successfully sent to Angular !";
     }
@@ -164,7 +163,6 @@ DisponibilitaService disponibilitaService;
                     .build();
             turnoService.save(t2);
             //notificationController.getNotification();
-            System.out.println(id.getUtente().getUserName());
             response.sendRedirect("/notifyT/" + id.getUtente().getUserName() + "_" + id.getData() + "_" + id.getVerso());
 
             return;
@@ -239,7 +237,6 @@ DisponibilitaService disponibilitaService;
     public void sendConferma(@PathVariable("id") String id_turno,
                              @PathVariable("linea") String linea) {
 
-        //System.out.println("notify ci sono");
         String[] pieces = id_turno.split("_");
 
 
@@ -292,7 +289,6 @@ DisponibilitaService disponibilitaService;
             // Increment Notification by one
 
 
-            //System.out.println("Notifications successfully sent to Angular");
 
             //return "Notifications successfully sent to Angular !";
         }
@@ -615,18 +611,15 @@ DisponibilitaService disponibilitaService;
                               template.convertAndSendToUser(user.getUserName(), "/queue/reply", notifications);
                               if(mappaNotifiche.containsKey(user.getUserName())){
                                 mappaNotifiche.get(user.getUserName()).add(notifications);
-                                System.out.println("Aggiunta notifica a lista già esistente");
-                                System.out.println(notifications.getUtente());
+
                               }
                               else{
-                                System.out.println("Lista Vuota");
-                                System.out.println(notifications.getUtente());
+
                                 List<NotificaTurnoDTO> listaNotifiche = new ArrayList<>();
                                 listaNotifiche.add(notifications);
                                 mappaNotifiche.put(user.getUserName(), listaNotifiche);
                               }
                             }
-                            System.out.println(mappaNotifiche);
                                 return;
                         }
                         throw new NotFoundException("nessun accompagnatore trovato");
@@ -637,7 +630,6 @@ DisponibilitaService disponibilitaService;
                 // Increment Notification by one
 
 
-                //System.out.println("Notifications successfully sent to Angular");
 
                 //return "Notifications successfully sent to Angular !"
         }
@@ -650,7 +642,6 @@ DisponibilitaService disponibilitaService;
                                      @PathVariable("action") String azione,
                                      @PathVariable("username") String username){
 
-        //System.out.println("notify ci sono");
         String[] pieces = id_prenotazione.split("_");
 
 
@@ -707,7 +698,6 @@ DisponibilitaService disponibilitaService;
             // Increment Notification by one
 
 
-            //System.out.println("Notifications successfully sent to Angular");
 
             //return "Notifications successfully sent to Angular !"
         }
@@ -778,7 +768,6 @@ DisponibilitaService disponibilitaService;
             // Increment Notification by one
 
 
-            //System.out.println("Notifications successfully sent to Angular");
 
             //return "Notifications successfully sent to Angular !"
         }
@@ -851,7 +840,6 @@ DisponibilitaService disponibilitaService;
   public void sendEliminazione(@PathVariable("id") String id_turno,
                            @PathVariable("linea") String linea) {
 
-    //System.out.println("notify ci sono");
     String[] pieces = id_turno.split("_");
 
 
@@ -904,7 +892,6 @@ DisponibilitaService disponibilitaService;
       // Increment Notification by one
 
 
-      //System.out.println("Notifications successfully sent to Angular");
 
       //return "Notifications successfully sent to Angular !";
     //}

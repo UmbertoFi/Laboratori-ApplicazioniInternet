@@ -14,6 +14,7 @@ public interface UserRepository extends CrudRepository<Utente, String> {
     @Query("select u from Utente u where u.token = ?1 and u.enabled=false")
     Optional<Utente> findByToken(String randomUUID);
 
-    @Query("select u from Utente u where u.token = ?1 and u.expiredcredential=false") //con la c minuscola
-    Optional<Utente> findByTokenAndExpiredCredential(String randomUUID);
+    @Query("select u from Utente u where u.token = ?1") //con la c minuscola
+    Optional<Utente> findByTokenForRecovery(String randomUUID);
+
 }

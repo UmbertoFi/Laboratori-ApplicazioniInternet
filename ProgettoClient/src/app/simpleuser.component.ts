@@ -291,6 +291,7 @@ export class SimpleuserComponent implements OnInit {
           });
       }
     }
+    this.alertService.error('Impossibile prenotare bambino poichè il bus è già passato!');
   }
 
   selezionaPersona(verso: number, idFermata: number, idPersona: number) {
@@ -435,7 +436,7 @@ export class SimpleuserComponent implements OnInit {
         error => {
           this.alertService.error('Impossibile prenotare il bambino!');
         });
-      if (confirm('Vuoi prenotare la stessa corsa per un intero anno?')) {
+      /* if (confirm('Vuoi prenotare la stessa corsa per un intero anno?')) {
         date = new Date(this.corse[this.pageIndex].data);
         for (let i = this.pageIndex; i < this.length - 1; i++) {
           date.setDate(date.getDate() + 1);
@@ -457,7 +458,7 @@ export class SimpleuserComponent implements OnInit {
             });
         }
         this.alertService.success('Bambino prenotato con successo per un anno intero!', true);
-      }
+      } */
     }
     return;
   }
@@ -563,7 +564,9 @@ export class SimpleuserComponent implements OnInit {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p, ind).subscribe(
         data => {
-          this.alertService.success('Turno consolidato con successo!', true);
+          this.alertService.success('Turno consolidato con successo! Purtroppo è necessario riloggare per confermare la modifica!', true);
+          this.authenticationService.logout();
+          this.router.navigate(['/login']);
         },
         error => {
           this.alertService.error('Impossibile consolidare il turno!');
@@ -583,6 +586,17 @@ export class SimpleuserComponent implements OnInit {
         }
         this.userService.rimuoviPrenotazione(nomeLinea, data, id_bambino + '_' + data + '_' + v).subscribe(
           data => {
+            const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access_token')
+              }
+            })
+              .then((data) => {
+                return data.json();
+              }).then((data) => {
+                this.tratte = data;
+              });
             this.alertService.success('Prenotazione rimossa con successo!', true);
           },
           error => {
@@ -644,8 +658,6 @@ export class SimpleuserComponent implements OnInit {
 
   changePasswordSubmit() {
     this.submitted2 = true;
-    console.log(this.changePasswordForm.value)
-
     //if (this.changePasswordForm.invalid) {
     //  return;
     //}

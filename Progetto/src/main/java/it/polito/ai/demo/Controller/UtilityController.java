@@ -523,7 +523,6 @@ public class UtilityController {
   @ResponseStatus(HttpStatus.OK)
   public @ResponseBody
   void controllaFiglio(@PathVariable("id_bambino") int id, HttpServletRequest req){
-    System.out.println("DENTRO");
     String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
     Utente u = userService.getUserById(username);
     List<BambinoDTO> figli = bambinoService.getFigli(u);
