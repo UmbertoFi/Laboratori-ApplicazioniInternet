@@ -10,6 +10,7 @@ import it.polito.ai.demo.JWT.JwtTokenProvider;
 import it.polito.ai.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -24,6 +25,7 @@ import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class NotificationController { //ciao antonino
@@ -109,6 +111,18 @@ DisponibilitaService disponibilitaService;
             notifications.setLinea(turnoService.getTurnoById(iT).get().getLinea().getNome());
             notifications.setTipo(1);
 
+          Boolean trovato_accompagnatore=false;
+
+
+          List<String> ruoli=utenteRuoloService.getRuoli(utente.getUserName()).stream().map(r->r.getId().getRuolo()).collect(Collectors.toList());
+            if(ruoli.contains("accompagnatore")==true){
+            trovato_accompagnatore=true;
+            System.out.println(utente.getUserName());
+          }
+
+          notifications.setAccompagnatore(trovato_accompagnatore);
+
+
             // Push notifications to front-end
             template.convertAndSendToUser(utente.getUserName(), "/queue/reply", notifications);
             if(mappaNotifiche.containsKey(utente.getUserName())){
@@ -173,11 +187,10 @@ DisponibilitaService disponibilitaService;
 
     @PutMapping(path = "/utility/confirm/turno/{ind}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    void confermaTurno(@RequestBody TurnoDTO turnoDTO, HttpServletResponse response,
-                       @PathVariable("ind") String ind) throws IOException {
+    public void confermaTurno(@RequestBody TurnoDTO turnoDTO, HttpServletResponse response,
+                                        @PathVariable("ind") String ind) throws IOException {
 
-
+      Map<Object, Object> model = new HashMap<>();
         String[] dataPieces = turnoDTO.getData().split("-");
         LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
 
@@ -208,15 +221,15 @@ DisponibilitaService disponibilitaService;
 
                 List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(t.get().getLinea().getNome());
 
-                int nuovo_accompagnatore=0;
+                int trovato_accompagnatore=0;
 
                 for(Utente a : accompagnatori){
                   if(a.getUserName().compareTo(u.getUserName())==0){
-                    nuovo_accompagnatore=1;
+                    trovato_accompagnatore=1;
                   }
                 }
 
-                if(nuovo_accompagnatore==0){
+                if(trovato_accompagnatore==0){
                   idRuolo id = idRuolo.builder().NomeLinea(t.get().getLinea().getNome()).ruolo("accompagnatore").utente(u).build();
                   UtenteRuolo ur = UtenteRuolo.builder().id(id).build();
 
@@ -224,6 +237,8 @@ DisponibilitaService disponibilitaService;
                 }
 
                 response.sendRedirect("/notifyC/" + iT.getUtente().getUserName() + "_" + iT.getData() + "_" + iT.getVerso()+"/"+t.get().getLinea().getNome());
+
+                //model.put("accompagnatore", trovato_accompagnatore);
                 return;
 
             }

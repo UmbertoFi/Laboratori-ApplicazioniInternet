@@ -46,7 +46,7 @@ export class AttendanceComponent implements OnInit {
     }).then((data) => {
       this.x = data;
       if (this.x != 0) {
-        this.notifica = new Notifica(this.x, '', '', '', '', '', 0);
+        this.notifica = new Notifica(this.x, '', '', '', '', '', 0, false);
         this.notifications.push(this.notifica);
       }
     }).then(() => {

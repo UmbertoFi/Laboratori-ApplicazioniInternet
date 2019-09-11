@@ -85,7 +85,7 @@ export class AdminComponent implements OnInit {
     }).then((data) => {
       this.x = data;
       if (this.x != 0) {
-        this.notifica = new Notifica(this.x, '', '', '', '', '', 0);
+        this.notifica = new Notifica(this.x, '', '', '', '', '', 0, false);
         this.notifications.push(this.notifica);
       }
     }).then(() => {
@@ -587,9 +587,14 @@ export class AdminComponent implements OnInit {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p, ind).subscribe(
       data => {
-        this.alertService.success('Turno consolidato con successo! Purtroppo è necessario riloggare per confermare la modifica!', true);
-        this.authenticationService.logout();
-        this.router.navigate(['/login']);
+        if(this.notifications[ind].accompagnatore){
+          this.alertService.success('Turno consolidato con successo!', true);
+        }
+        else {
+          this.alertService.success('Turno consolidato con successo! Purtroppo devi rifare il login!', true);
+          this.authenticationService.logout();
+          this.router.navigate(['/login']);
+        }
       },
       error => {
         this.alertService.error('Impossibile consolidare il turno!');

@@ -16,6 +16,7 @@ import {presaVisione} from '../_models/presaVisione';
 import {NewPassword} from '../_models/NewPassword';
 import {Codice} from '../_models/Codice';
 import {Passwords} from '../_models/Passwords';
+import {Flag} from "../_models/flag";
 
 @Injectable()
 export class UserService {
@@ -110,7 +111,7 @@ export class UserService {
   }
 
   presaVisione(p: presaVisione, ind: number) {
-    return this.http.put<presaVisione>('http://localhost:8080/utility/confirm/turno/' + ind, p, this.httpOptions);
+    return this.http.put('http://localhost:8080/utility/confirm/turno/' + ind, p, this.httpOptions);
   }
 
   rimuoviPrenotazione(linea: string, data: string, resID: string) {

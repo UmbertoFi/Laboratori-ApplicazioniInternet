@@ -6,6 +6,7 @@ export class Notifica {
     public verso: string,
     public utente: string,
     public linea: string,
-    public tipo: number) {
+    public tipo: number,
+    public  accompagnatore: boolean) {
   }
 }
