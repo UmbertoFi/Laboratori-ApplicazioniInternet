@@ -646,15 +646,6 @@ export class SimpleuserComponent implements OnInit {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
-  }
 
   changePasswordSubmit() {
     this.submitted2 = true;
@@ -667,6 +658,7 @@ export class SimpleuserComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
+          this.changePasswordForm.reset();
           this.alertService.success('Password cambiata con successo!', true);
           //this.router.navigate(['/simpleuser']);
           this.modalService.dismissAll();

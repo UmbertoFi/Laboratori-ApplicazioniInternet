@@ -17,6 +17,7 @@ import {Notifica} from './_models/notifica';
 import {WebSocketService} from './_services/websocket.service';
 import {presaVisione} from './_models/presaVisione';
 import {checkRuoli} from './_models/checkRuoli';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -64,8 +65,14 @@ export class AdminComponent implements OnInit {
   verso_blur = false;
   username2_blur = false;
 
+  changePasswordForm: FormGroup;
+  password0_blur=false;
+  password1_blur=false;
+  password2_blur=false;
+  messaggio: string;
 
-  constructor(private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder) {
+
+  constructor(private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder, private modalService: NgbModal) {
     this.notifications = new Array<Notifica>();
 
     const promiseZero = fetch('http://localhost:8080/utility/primovalorenotifiche/' + localStorage.getItem('username'), {
@@ -135,6 +142,14 @@ export class AdminComponent implements OnInit {
 
     this.consolidaTurnoForm = this.formBuilder.group({
       username: ['', Validators.required]
+    });
+
+    this.changePasswordForm = this.formBuilder.group({
+      password0: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
+      password1: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
+      password2: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]]
+    }, {
+      validators: [MustMatch('password1', 'password2')]
     });
 
 
@@ -391,6 +406,16 @@ export class AdminComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  onBlurChangePassword(field: number) {
+    if(field==0){
+      this.password0_blur = true;
+    } else if(field==1){
+      this.password1_blur = true;
+    } else if(field==2){
+      this.password2_blur = true;
+    }
+  }
+
   /* getBambini() {
     this.lineaService.getbambini().subscribe(
       val => {
@@ -512,6 +537,32 @@ export class AdminComponent implements OnInit {
         });
   }
 
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
+  }
+
+  changePasswordSubmit() {
+    this.submitted2 = true;
+    //if (this.changePasswordForm.invalid) {
+    //  return;
+    //}
+    // stop here if form is invalid
+
+    this.userService.cambiaPassword(this.changePasswordForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.changePasswordForm.reset();
+          this.alertService.success('Password cambiata con successo!', true);
+          //this.router.navigate(['/simpleuser']);
+          this.modalService.dismissAll();
+        },
+        error => {
+          this.alertService.error('Cambio Password fallito!');
+          //this.messaggio='Cambio Password fallito!';
+        });
+  }
+
   consolidaTurnoReset() {
     if (this.disponibilita != undefined) {
       this.consolidaTurnoForm.reset();
@@ -589,4 +640,24 @@ export class AdminComponent implements OnInit {
         this.notifications = data;
       });
   }
+}
+
+
+function MustMatch(controlName: string, matchingControlName: string) {
+  return (formGroup: FormGroup) => {
+    const control = formGroup.controls[controlName];
+    const matchingControl = formGroup.controls[matchingControlName];
+
+    if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+      // return if another validator has already found an error on the matchingControl
+      return;
+    }
+
+    // set error on matchingControl if validation fails
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({mustMatch: true});
+    } else {
+      matchingControl.setErrors(null);
+    }
+  };
 }

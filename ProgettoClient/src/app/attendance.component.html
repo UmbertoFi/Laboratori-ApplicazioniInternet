@@ -123,7 +123,7 @@
                 <button class="btn btn-primary" (click)="logout($event)">Logout</button>
                 <br><br></div>
               <div>
-                <button class="btn btn-primary">Cambia Password</button>
+                <button class="btn btn-primary" (click)="open(content)">Cambia Password</button>
                 <br><br></div>
               <div>
                 <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
@@ -185,6 +185,65 @@
     </mat-tab-group>
   </mat-card-content>
 </mat-card>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Cambia Password</h4>
+
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <alert></alert>
+      <div  class="errorMessage">
+        <p> {{messaggio}}</p>
+      </div>
+      <form [formGroup]="changePasswordForm" (ngSubmit)="changePasswordSubmit()">
+        <div class="form-group">
+          <label for="password0">Password Vecchia:</label>
+          <input id="password0" formControlName="password0" class="form-control" type="password"
+                 [ngClass]="{ 'is-invalid': (submitted2 && changePasswordForm.controls.password0.errors) || (password0_blur && changePasswordForm.controls.password0.errors)}" (blur)="onBlurChangePassword(0)"/>
+
+          <div *ngIf="changePasswordForm.controls.password0.errors" class="invalid-feedback">
+            <div *ngIf="changePasswordForm.controls.password0.errors.required">Password richiesta</div>
+            <div *ngIf="changePasswordForm.controls.password0.errors.minlength">Inserire almeno 6 caratteri</div>
+            <div *ngIf="changePasswordForm.controls.password0.errors.maxlength">Inserire al massimo 12 caratteri</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password1">Password Nuova:</label>
+          <input id="password1" formControlName="password1" class="form-control" type="password"
+                 [ngClass]="{ 'is-invalid': (submitted2 && changePasswordForm.controls.password1.errors) || (password1_blur && changePasswordForm.controls.password1.errors)}" (blur)="onBlurChangePassword(1)"/>
+
+          <div *ngIf="changePasswordForm.controls.password1.errors" class="invalid-feedback">
+            <div *ngIf="changePasswordForm.controls.password1.errors.required">Password richiesta</div>
+            <div *ngIf="changePasswordForm.controls.password1.errors.minlength">Inserire almeno 6 caratteri</div>
+            <div *ngIf="changePasswordForm.controls.password1.errors.maxlength">Inserire al massimo 12 caratteri</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password2">Ripeti Password Nuova:</label>
+          <input id="password2" formControlName="password2" class="form-control" type="password"
+                 [ngClass]="{ 'is-invalid': (submitted2 && changePasswordForm.controls.password2.errors) || (password2_blur && changePasswordForm.controls.password2.errors)}" (blur)="onBlurChangePassword(2)"/>
+
+          <div *ngIf="changePasswordForm.controls.password2.errors" class="invalid-feedback">
+            <div *ngIf="changePasswordForm.controls.password2.errors.required">Password richiesta</div>
+            <div *ngIf="changePasswordForm.controls.password2.errors.minlength">Inserire almeno 6 caratteri</div>
+            <div *ngIf="changePasswordForm.controls.password2.errors.maxlength">Inserire al massimo 12 caratteri</div>
+            <div *ngIf="changePasswordForm.controls.password2.errors.mustMatch">Le password devono essere uguali</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary">Cambia Password</button>
+        </div>
+      </form>
+    </div>
+
+  </ng-template>
+
+
 </div>
 <div *ngIf="checkRuoli?.checkAccompagnatore==false">
   <mat-card>
