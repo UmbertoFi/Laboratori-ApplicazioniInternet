@@ -672,7 +672,8 @@ export class SimpleuserComponent implements OnInit {
           this.modalService.dismissAll();
           },
         error => {
-          this.messaggio='Cambio Password fallito!';
+          this.alertService.error('Cambio Password fallito!');
+          //this.messaggio='Cambio Password fallito!';
         });
   }
 

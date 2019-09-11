@@ -43,9 +43,7 @@
   </div>
 
   <div class="modal-body">
-    <div  class="errorMessage">
-      <p> {{messaggio}}</p>
-    </div>
+    <alert></alert>
     <form *ngIf="step1" [formGroup]="newEmailForm" (ngSubmit)="emailSubmit()">
 
       <div  class="form-group">
