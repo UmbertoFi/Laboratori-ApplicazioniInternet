@@ -26,7 +26,7 @@
                   <mat-select formControlName="username" class="form-control"
                               [ngClass]="{ 'is-invalid': (username_blur && this.promuoviUserForm.controls.username.errors) || (submitted0 && this.promuoviUserForm.controls.username.errors)}"
                               (blur)="onBlur(0)">
-                    <mat-option class="clickable" *ngFor="let u of utenti" value="{{u.username}}">
+                    <mat-option class="clickable" *ngFor="let u of utentiEsclusoMe" value="{{u.username}}">
                       {{u.username}}
                     </mat-option>
                   </mat-select>
@@ -80,8 +80,8 @@
                   <mat-select formControlName="linea" class="form-control" (click)="consolidaTurnoReset()"
                               [ngClass]="{ 'is-invalid': (linea2_blur && this.trovaDisponibilitaForm.controls.linea.errors) || (submitted1 && this.trovaDisponibilitaForm.controls.linea.errors)}"
                               (blur)="onBlur(3)">
-                    <mat-option class="clickable" *ngFor="let l of nomiLinee" value="{{l.nome}}">
-                      {{l.nome}}
+                    <mat-option class="clickable" *ngFor="let l of nomiLineePerAdmin" value="{{l}}">
+                      {{l}}
                     </mat-option>
                   </mat-select>
                   <div *ngIf="this.trovaDisponibilitaForm.controls.linea.errors" class="invalid-feedback">

@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -16,5 +17,17 @@ export class JwtInterceptor implements HttpInterceptor {
     }
 
     return next.handle(request);
+
+    /* .pipe(tap((event: HttpEvent<any>) => {
+        if(event instanceof HttpResponse){
+          // if the token is valid
+        }
+      }, (err: any) => {
+        // if the token has expired.
+        // this is where you can do anything like navigating
+        this.authenticationService.logout();
+        this.router.navigateByUrl('/login');
+        this.alertService.error("JWT SCADUTO", true);
+      })) */
   }
 }

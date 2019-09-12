@@ -21,9 +21,12 @@ public interface UtenteRuoloRepository extends CrudRepository<UtenteRuolo, idRuo
     @Query("select ur from UtenteRuolo ur where ur.id.utente = ?1")
     Iterable<UtenteRuolo> findByUtente(Utente utente);
 
-    @Query("select ur from UtenteRuolo ur where ur.id.NomeLinea = ?1 and ur.id.ruolo = 'admin' or ur.id.ruolo = 'system-admin'")
+    @Query("select ur from UtenteRuolo ur where (ur.id.NomeLinea = ?1 and ur.id.ruolo = 'admin') or ur.id.ruolo = 'system-admin'")
     Iterable<UtenteRuolo> findAdminByLinea(String linea);
 
     @Query("select ur from UtenteRuolo ur where ur.id.NomeLinea = ?1 and ur.id.ruolo = 'accompagnatore'")
     Iterable<UtenteRuolo> findAccompagnatoreByLinea(String linea);
+
+  @Query("select ur from UtenteRuolo ur where ur.id.utente.UserName = ?1 and (ur.id.ruolo = 'admin' or ur.id.ruolo = 'system-admin')")
+  Iterable<UtenteRuolo> findLineeByAdmin(String username);
 }

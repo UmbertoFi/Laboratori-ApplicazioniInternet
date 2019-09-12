@@ -29,6 +29,7 @@ export class AdminComponent implements OnInit {
   title = 'Pedibus';
 
   nomiLinee: nomeLinea[] = [];
+  nomiLineePerAdmin: String[] = [];
   corse: CorsaNew[] = [];
   tratte = {} as TrattaNew;
   figli: Bambino[] = [];
@@ -36,6 +37,7 @@ export class AdminComponent implements OnInit {
   // submitted: boolean = false;
   promuoviUserForm: FormGroup;
   utenti: UtenteNew[] = [];
+  utentiEsclusoMe: UtenteNew[] = [];
   trovaDisponibilitaForm: FormGroup;
   disponibilita: Disponibilita[] = [];
   consolidaTurnoForm: FormGroup;
@@ -70,7 +72,6 @@ export class AdminComponent implements OnInit {
   password1_blur=false;
   password2_blur=false;
   messaggio: string;
-
 
   constructor(private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder, private modalService: NgbModal) {
     this.notifications = new Array<Notifica>();
@@ -192,6 +193,13 @@ export class AdminComponent implements OnInit {
         return data.json();
       }).then((data) => {
         this.utenti = data;
+        return data;
+      }).then((data) => {
+        for(let u of this.utenti){
+          if(u.username.localeCompare(localStorage.getItem("username"))!=0){
+            this.utentiEsclusoMe.push(u);
+          }
+        }
       });
 
     let promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
@@ -276,6 +284,19 @@ export class AdminComponent implements OnInit {
               });
           });
       });
+
+    let promiseLineaPerAdmin = fetch('http://localhost:8080/utility/adminlines/'+localStorage.getItem("username"), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then((data) => {
+        return data.json();
+      }).then((data) => {
+        this.nomiLineePerAdmin = data;
+        return;
+      })
   }
 
   /* clickPersona($event: MouseEvent, verso, idFermata, idPersona) {

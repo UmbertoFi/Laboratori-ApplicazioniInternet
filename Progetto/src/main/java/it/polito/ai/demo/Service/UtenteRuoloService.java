@@ -22,4 +22,6 @@ public interface UtenteRuoloService {
     public List<Utente> getAdminByLinea(String linea);
 
     public List<Utente> getAccompagnatoreByLinea(String nome);
+
+    public List<String> getLinesbyUser(String username);
 }

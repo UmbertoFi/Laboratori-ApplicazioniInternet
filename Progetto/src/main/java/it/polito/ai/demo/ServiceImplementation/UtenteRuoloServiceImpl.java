@@ -112,6 +112,15 @@ public class UtenteRuoloServiceImpl implements UtenteRuoloService {
         utenteRuoloRepository.delete(ur);
     }
 
+  public List<String> getLinesbyUser(String username){
+      List<String> linee = new ArrayList<>();
+
+      for (UtenteRuolo ur : utenteRuoloRepository.findLineeByAdmin(username)){
+        linee.add(ur.getId().getNomeLinea());
+      }
+      return linee;
+  }
+
 
 }
 

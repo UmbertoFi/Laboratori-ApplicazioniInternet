@@ -553,6 +553,23 @@ public class UtilityController {
   }
 
 
+  @GetMapping(path = "/utility/adminlines/{utente}")
+  public @ResponseBody
+  List<String> getAllLinea(@PathVariable("utente") String username) throws Exception {
+    List<String> nomiLinee = utenteRuoloService.getLinesbyUser(username);
+    for(String linea : nomiLinee){
+      if(linea.compareTo("*")==0){
+        Iterable<Linea> allLinee = lineaService.getLines();
+        List<String> allNomiLinee = new ArrayList<>();
+        for(Linea l : allLinee)
+          allNomiLinee.add(l.getNome());
+        return allNomiLinee;
+      }
+    }
+    return nomiLinee;
+  }
+
+
 
 
 }
