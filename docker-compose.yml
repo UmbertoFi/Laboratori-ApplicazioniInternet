@@ -1,0 +1,46 @@
+version: '2.1'
+services:
+  db:
+    ports:
+      - '6033:3306'
+    container_name: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=adminadmin
+      - MYSQL_DATABASE=pedibus
+    healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10
+    image: mysql
+    networks:
+      - rete
+  app:
+    build:
+      context: ./Progetto/
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=demo-0.0.1-SNAPSHOT.jar
+    ports:
+      - '8080:8080'
+    container_name: docker-server
+    networks:
+      - rete
+    image: app
+    depends_on:
+      db:
+        condition: service_healthy
+  client:
+    build:
+      context: ./ProgettoClient/
+      dockerfile: Dockerfile
+    ports:
+      - '3201:80'
+    container_name: docker-client
+    networks:
+      - rete
+    image: labclient
+    depends_on:
+      - app
+networks:
+  rete:
+    driver: bridge
