@@ -565,12 +565,11 @@ export class SimpleuserComponent implements OnInit {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p, ind).subscribe(
         data => {
-          //this.trovato_accompagnatore = data;
-            //console.log('AAAAAAAAA'+this.notifications[ind].accompagnatore);
-          if(this.notifications[ind].accompagnatore){
+          // this.trovato_accompagnatore = data;
+            // console.log('AAAAAAAAA'+this.notifications[ind].accompagnatore);
+          if (this.notifications[ind].accompagnatore) {
             this.alertService.success('Turno consolidato con successo!', true);
-          }
-          else {
+          } else {
             this.alertService.success('Turno consolidato con successo! Purtroppo devi rifare il login!', true);
             this.authenticationService.logout();
             this.router.navigate(['/login']);

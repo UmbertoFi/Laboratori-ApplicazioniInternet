@@ -190,7 +190,7 @@ DisponibilitaService disponibilitaService;
     public void confermaTurno(@RequestBody TurnoDTO turnoDTO, HttpServletResponse response,
                                         @PathVariable("ind") String ind) throws IOException {
 
-      Map<Object, Object> model = new HashMap<>();
+      //Map<Object, Object> model = new HashMap<>();
         String[] dataPieces = turnoDTO.getData().split("-");
         LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
 
@@ -221,26 +221,40 @@ DisponibilitaService disponibilitaService;
 
                 List<Utente> accompagnatori = utenteRuoloService.getAccompagnatoreByLinea(t.get().getLinea().getNome());
 
-                int trovato_accompagnatore=0;
+                if(accompagnatori!=null) {
 
-                for(Utente a : accompagnatori){
-                  if(a.getUserName().compareTo(u.getUserName())==0){
-                    trovato_accompagnatore=1;
+                  int trovato_accompagnatore = 0;
+
+                  for (Utente a : accompagnatori) {
+                    if (a.getUserName().compareTo(u.getUserName()) == 0) {
+                      trovato_accompagnatore = 1;
+                    }
                   }
-                }
 
-                if(trovato_accompagnatore==0){
+                  if (trovato_accompagnatore == 0) {
+                    idRuolo id = idRuolo.builder().NomeLinea(t.get().getLinea().getNome()).ruolo("accompagnatore").utente(u).build();
+                    UtenteRuolo ur = UtenteRuolo.builder().id(id).build();
+
+                    utenteRuoloService.save(ur);
+                  }
+
+                  response.sendRedirect("/notifyC/" + iT.getUtente().getUserName() + "_" + iT.getData() + "_" + iT.getVerso() + "/" + t.get().getLinea().getNome());
+
+                  //model.put("accompagnatore", trovato_accompagnatore);
+                  return;
+                }
+                else{
+
                   idRuolo id = idRuolo.builder().NomeLinea(t.get().getLinea().getNome()).ruolo("accompagnatore").utente(u).build();
                   UtenteRuolo ur = UtenteRuolo.builder().id(id).build();
 
                   utenteRuoloService.save(ur);
                 }
 
-                response.sendRedirect("/notifyC/" + iT.getUtente().getUserName() + "_" + iT.getData() + "_" + iT.getVerso()+"/"+t.get().getLinea().getNome());
+              response.sendRedirect("/notifyC/" + iT.getUtente().getUserName() + "_" + iT.getData() + "_" + iT.getVerso() + "/" + t.get().getLinea().getNome());
 
-                //model.put("accompagnatore", trovato_accompagnatore);
-                return;
-
+              //model.put("accompagnatore", trovato_accompagnatore);
+              return;
             }
             throw new NotFoundException("turno non trovato");
         }
