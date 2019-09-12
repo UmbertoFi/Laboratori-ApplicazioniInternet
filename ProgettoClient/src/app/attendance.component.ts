@@ -534,6 +534,7 @@ export class AttendanceComponent implements OnInit {
 
     this.userService.cancellaTurno(new presaVisione(data, verso, username)).subscribe(
       data => {
+        this.turni.splice(ind, 1);
         this.alertService.success('Turno cancellato con successo!', true);
         this.router.navigate(['/attendance']);
         // this.router.navigate(['/simpleuser']);
@@ -553,7 +554,6 @@ export class AttendanceComponent implements OnInit {
       }).then((data) => {
         this.turni = data;
       });*/
-      this.turni.splice(ind, 1);
     // confirm('test' + ' ' + data + ' ' + verso + ' ' + username);
   }
 
