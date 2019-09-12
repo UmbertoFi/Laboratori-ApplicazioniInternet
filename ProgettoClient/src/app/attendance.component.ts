@@ -594,7 +594,9 @@ export class AttendanceComponent implements OnInit {
   }
 
 
-
+  getUtente() {
+    return localStorage.getItem("username");
+  }
 }
 
 

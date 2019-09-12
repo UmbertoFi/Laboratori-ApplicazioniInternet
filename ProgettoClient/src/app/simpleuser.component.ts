@@ -528,12 +528,21 @@ export class SimpleuserComponent implements OnInit {
     const pageDate = new Date(this.corse[this.pageIndex].data).setUTCHours(0o0, 0o0, 0o0, 0o0);
     const date = new Date(this.data).setUTCHours(0o0, 0o0, 0o0, 0o0);
     const diff = (date - pageDate) / (24 * 3600 * 1000);
+    console.log(diff);
 
     if ((this.pageIndex + diff) < 0 || (this.pageIndex + diff) > 364) {
       this.alertService.error('Corsa non esistente!');
       return;
     } else {
+      /* console.log(this.pageIndex);
+      console.log(this.corse[this.pageIndex].data); */
       this.pageIndex += diff;
+      /* console.log(this.pageIndex);
+      console.log(this.corse[this.pageIndex].data); */
+      if(isNaN(this.pageIndex)){
+        this.pageIndex=0;
+        return;
+      }
       const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
         headers: {
           'Content-Type': 'application/json',
@@ -677,6 +686,9 @@ export class SimpleuserComponent implements OnInit {
   }
 
 
+  getUtente() {
+    return localStorage.getItem("username");
+  }
 }
 
 function MustMatch(controlName: string, matchingControlName: string) {

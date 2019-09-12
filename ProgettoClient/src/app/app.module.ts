@@ -33,6 +33,7 @@ import {AdminComponent} from './admin.component';
 import {WebSocketService} from './_services/websocket.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NotFoundComponent} from './notfound.component';
+import {HomeComponent} from './home.component';
 
 
 const routes: Routes = [
@@ -41,13 +42,14 @@ const routes: Routes = [
   {path: 'attendance', component: AttendanceComponent},
   {path: 'simpleuser', component: SimpleuserComponent},
   {path: 'admin', component: AdminComponent},
+  {path: '', component: HomeComponent},
   {path: '**', component: NotFoundComponent}
 ];
 
 
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, RegisterComponent, AttendanceComponent, AlertComponent, SimpleuserComponent, AdminComponent, NotFoundComponent
+    AppComponent, LoginComponent, RegisterComponent, AttendanceComponent, AlertComponent, SimpleuserComponent, AdminComponent, HomeComponent, NotFoundComponent
   ],
   imports: [
     BrowserModule,

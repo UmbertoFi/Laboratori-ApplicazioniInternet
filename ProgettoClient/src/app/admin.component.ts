@@ -666,6 +666,10 @@ export class AdminComponent implements OnInit {
         this.notifications = data;
       });
   }
+
+  getUtente() {
+    return localStorage.getItem("username");
+  }
 }
 
 
