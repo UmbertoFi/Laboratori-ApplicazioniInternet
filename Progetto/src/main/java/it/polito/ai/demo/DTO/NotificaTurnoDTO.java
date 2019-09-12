@@ -17,6 +17,7 @@ public class NotificaTurnoDTO implements Serializable {
     private String verso;
     private String utente;
     private String linea;
+    private Boolean accompagnatore;
 
     public void increment() {
         this.count++;
