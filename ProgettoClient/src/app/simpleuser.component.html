@@ -151,7 +151,7 @@
         </mat-card>
       </mat-tab>
       <mat-tab>
-      <ng-template mat-tab-label><mat-icon style="color: darkorange">notification_important</mat-icon>{{notifica?.count}}</ng-template>
+        <ng-template mat-tab-label><mat-icon style="color: darkorange">notification_important</mat-icon><div *ngIf="this.notifica?.count!=0" style="color: red; font-weight: bold">{{notifica?.count}}</div></ng-template>
         <mat-card>
           <mat-card-header>
             <mat-card-title>Comunicazioni</mat-card-title>

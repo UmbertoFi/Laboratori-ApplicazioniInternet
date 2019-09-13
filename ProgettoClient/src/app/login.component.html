@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 offset-md-3">
-        <h2>Login</h2>
+        <h2>Login</h2><br>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label>Username</label>
@@ -21,7 +21,7 @@
               <div *ngIf="f.password.errors.required">Password richiesta</div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group"><br>
             <button class="btn btn-primary">Login</button>
             <a [routerLink]="['/register']" class="btn btn-link">Registrazione</a>
             <a class="btn btn-link" (click)="open(content)">Hai dimenticato la password?</a>
