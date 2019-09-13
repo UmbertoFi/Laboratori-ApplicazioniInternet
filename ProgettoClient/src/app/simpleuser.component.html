@@ -97,43 +97,6 @@
           </mat-card-content>
         </mat-card>
       </mat-tab>
-      <mat-tab label="Aggiungi Bambino">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Aggiungi bambino</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="col-md-6 offset-md-3">
-              <form [formGroup]="aggiungiBambinoForm" (ngSubmit)="onSubmit()">
-                <div class="form-group">
-                  <label>Nome</label>
-                  <input type="text" formControlName="nome" class="form-control"
-                         [ngClass]="{ 'is-invalid': (nome_blur && this.aggiungiBambinoForm.controls.nome.errors) || (submitted0 && this.aggiungiBambinoForm.controls.nome.errors)}"
-                         (blur)="onBlur(0)"/>
-                  <div
-                    *ngIf="this.aggiungiBambinoForm.controls.nome.errors"
-                    class="invalid-feedback">
-                    <div *ngIf="this.aggiungiBambinoForm.controls.nome.errors.required">Nome is required</div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Cognome</label>
-                  <input type="text" formControlName="cognome" class="form-control"
-                         [ngClass]="{ 'is-invalid': (cognome_blur && this.aggiungiBambinoForm.controls.cognome.errors)|| (submitted0 && this.aggiungiBambinoForm.controls.cognome.errors) }"
-                         (blur)="onBlur(1)"/>
-                  <div *ngIf="this.aggiungiBambinoForm.controls.cognome.errors"
-                       class="invalid-feedback">
-                    <div *ngIf="this.aggiungiBambinoForm.controls.cognome.errors.required">Cognome is required</div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-primary">Aggiungi</button>
-                </div>
-              </form>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-tab>
       <mat-tab label="Candidati accompagnatore">
         <mat-card>
           <mat-card-header>
@@ -153,7 +116,7 @@
                   </mat-select>
                   <div *ngIf="this.candidatiAccompagnatoreForm.controls.linea.errors"
                        class="invalid-feedback">
-                    <div *ngIf="this.candidatiAccompagnatoreForm.controls.linea.errors.required">Linea is required</div>
+                    <div *ngIf="this.candidatiAccompagnatoreForm.controls.linea.errors.required">Linea richiesta</div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -163,7 +126,7 @@
                          (blur)="onBlur(3)">
                   <div *ngIf="this.candidatiAccompagnatoreForm.controls.data.errors"
                        class="invalid-feedback">
-                    <div *ngIf="this.candidatiAccompagnatoreForm.controls.data.errors.required">Data is required</div>
+                    <div *ngIf="this.candidatiAccompagnatoreForm.controls.data.errors.required">Data richiesta</div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -176,36 +139,13 @@
                   </mat-select>
                   <div *ngIf="this.candidatiAccompagnatoreForm.controls.verso.errors"
                        class="invalid-feedback">
-                    <div *ngIf="this.candidatiAccompagnatoreForm.controls.verso.errors.required">Verso is required</div>
+                    <div *ngIf="this.candidatiAccompagnatoreForm.controls.verso.errors.required">Verso richiesto</div>
                   </div>
                 </div>
                 <div class="form-group">
                   <button class="btn btn-primary">Candidati</button>
                 </div>
               </form>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-tab>
-      <mat-tab label="Sezioni">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Sezioni</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="sezioni">
-              <div>
-                <button class="btn btn-primary" (click)="logout($event)">Logout</button>
-                <br><br></div>
-              <div>
-                <button class="btn btn-primary" (click)="open(content)">Cambia Password</button>
-                <br><br></div>
-              <div *ngIf="checkRuoli.checkAccompagnatore">
-                <button class="btn btn-primary" (click)="cambiaSezione('attendance')">Accompagnatore</button>
-                <br><br></div>
-              <div *ngIf="checkRuoli.checkAdmin || checkRuoli.checkSystemAdmin">
-                <button class="btn btn-primary" (click)="cambiaSezione('admin')">Admin</button>
-              </div>
             </div>
           </mat-card-content>
         </mat-card>
@@ -240,6 +180,66 @@
                 </div>
               </ul>
               <div class="sezioni"><button class="btn btn-primary" (click)="cancellaNotifiche($event)">Cancella Notifiche</button></div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Aggiungi Bambino">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Aggiungi bambino</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="col-md-6 offset-md-3">
+              <form [formGroup]="aggiungiBambinoForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                  <label>Nome</label>
+                  <input type="text" formControlName="nome" class="form-control"
+                         [ngClass]="{ 'is-invalid': (nome_blur && this.aggiungiBambinoForm.controls.nome.errors) || (submitted0 && this.aggiungiBambinoForm.controls.nome.errors)}"
+                         (blur)="onBlur(0)"/>
+                  <div
+                    *ngIf="this.aggiungiBambinoForm.controls.nome.errors"
+                    class="invalid-feedback">
+                    <div *ngIf="this.aggiungiBambinoForm.controls.nome.errors.required">Nome richiesto</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Cognome</label>
+                  <input type="text" formControlName="cognome" class="form-control"
+                         [ngClass]="{ 'is-invalid': (cognome_blur && this.aggiungiBambinoForm.controls.cognome.errors)|| (submitted0 && this.aggiungiBambinoForm.controls.cognome.errors) }"
+                         (blur)="onBlur(1)"/>
+                  <div *ngIf="this.aggiungiBambinoForm.controls.cognome.errors"
+                       class="invalid-feedback">
+                    <div *ngIf="this.aggiungiBambinoForm.controls.cognome.errors.required">Cognome richiesto</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary">Aggiungi</button>
+                </div>
+              </form>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Sezioni">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Sezioni</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="sezioni">
+              <div>
+                <button class="btn btn-primary" (click)="logout($event)">Logout</button>
+                <br><br></div>
+              <div>
+                <button class="btn btn-primary" (click)="open(content)">Cambia Password</button>
+                <br><br></div>
+              <div *ngIf="checkRuoli.checkAccompagnatore">
+                <button class="btn btn-primary" (click)="cambiaSezione('attendance')">Accompagnatore</button>
+                <br><br></div>
+              <div *ngIf="checkRuoli.checkAdmin || checkRuoli.checkSystemAdmin">
+                <button class="btn btn-primary" (click)="cambiaSezione('admin')">Admin</button>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>

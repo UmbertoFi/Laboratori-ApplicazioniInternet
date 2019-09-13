@@ -78,8 +78,8 @@ export class SimpleuserComponent implements OnInit {
       return data.json();
     }).then((data) => {
       this.x = data;
+      this.notifica = new Notifica(this.x, '', '', '', '', '', 0, false);
       if (this.x != 0) {
-        this.notifica = new Notifica(this.x, '', '', '', '', '', 0, false);
         this.notifications.push(this.notifica);
       }
     }).then(() => {
@@ -461,6 +461,7 @@ export class SimpleuserComponent implements OnInit {
         this.alertService.success('Bambino prenotato con successo per un anno intero!', true);
       } */
     }
+    this.alertService.error('Impossibile prenotare bambino poichè il bus è già passato');
     return;
   }
 
@@ -528,17 +529,12 @@ export class SimpleuserComponent implements OnInit {
     const pageDate = new Date(this.corse[this.pageIndex].data).setUTCHours(0o0, 0o0, 0o0, 0o0);
     const date = new Date(this.data).setUTCHours(0o0, 0o0, 0o0, 0o0);
     const diff = (date - pageDate) / (24 * 3600 * 1000);
-    console.log(diff);
 
     if ((this.pageIndex + diff) < 0 || (this.pageIndex + diff) > 364) {
       this.alertService.error('Corsa non esistente!');
       return;
     } else {
-      /* console.log(this.pageIndex);
-      console.log(this.corse[this.pageIndex].data); */
       this.pageIndex += diff;
-      /* console.log(this.pageIndex);
-      console.log(this.corse[this.pageIndex].data); */
       if(isNaN(this.pageIndex)){
         this.pageIndex=0;
         return;
@@ -564,7 +560,7 @@ export class SimpleuserComponent implements OnInit {
   }
 
   AzzeraContatore($event) {
-    if ($event.index == 4) {     // SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+    if ($event.index == 2) {     // SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
       this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }
@@ -575,11 +571,10 @@ export class SimpleuserComponent implements OnInit {
     this.userService.presaVisione(this.p, ind).subscribe(
         data => {
           // this.trovato_accompagnatore = data;
-            // console.log('AAAAAAAAA'+this.notifications[ind].accompagnatore);
           if (this.notifications[ind].accompagnatore) {
             this.alertService.success('Turno consolidato con successo!', true);
           } else {
-            this.alertService.success('Turno consolidato con successo! Purtroppo devi rifare il login!', true);
+            this.alertService.success('Turno consolidato con successo! Riloggare cortesemente poichè sono cambiati i privilegi!', true);
             this.authenticationService.logout();
             this.router.navigate(['/login']);
           }

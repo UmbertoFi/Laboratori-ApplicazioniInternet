@@ -115,7 +115,6 @@ export class UserService {
   }
 
   rimuoviPrenotazione(linea: string, data: string, resID: string) {
-    // console.log('http://localhost:8080/reservations/'+linea+'/'+data+'/'+resID);
     return this.http.delete('http://localhost:8080/reservations/' + linea + '/' + data + '/' + resID, this.httpOptions);
   }
 
@@ -172,7 +171,6 @@ export class UserService {
 
     changepass.password1 = criptaPassword(changepass.password1);
     changepass.password2 = criptaPassword(changepass.password2);
-    console.log(changepass.password0);
     return this.http.post<NewPassword>('http://localhost:8080/changepass', changepass, this.httpOptions);
   }
 

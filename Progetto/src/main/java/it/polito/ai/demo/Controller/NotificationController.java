@@ -117,7 +117,6 @@ DisponibilitaService disponibilitaService;
           List<String> ruoli=utenteRuoloService.getRuoli(utente.getUserName()).stream().map(r->r.getId().getRuolo()).collect(Collectors.toList());
             if(ruoli.contains("accompagnatore")==true){
             trovato_accompagnatore=true;
-            System.out.println(utente.getUserName());
           }
 
           notifications.setAccompagnatore(trovato_accompagnatore);

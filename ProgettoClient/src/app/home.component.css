@@ -16,3 +16,7 @@ mat-card{
   border: 1px black;
   width: 30%;
 }
+
+mat-card-content{
+  margin-left: 5%;
+}

@@ -112,31 +112,6 @@
           </mat-card-content>
         </mat-card>
       </mat-tab>
-      <mat-tab label="Sezioni">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Sezioni</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="sezioni">
-              <div>
-                <button class="btn btn-primary" (click)="logout($event)">Logout</button>
-                <br><br></div>
-              <div>
-                <button class="btn btn-primary" (click)="open(content)">Cambia Password</button>
-                <br><br></div>
-              <div>
-                <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
-                <br><br></div>
-              <div *ngIf="checkRuoli.checkAdmin || checkRuoli.checkSystemAdmin">
-                <button class="btn btn-primary" (click)="cambiaSezione('Admin')">
-                  Admin
-                </button>
-                <br></div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-tab>
       <mat-tab label="Turni">
         <mat-card>
           <mat-card-header>
@@ -151,8 +126,6 @@
           </mat-card-content>
         </mat-card>
       </mat-tab>
-
-
       <mat-tab label="Comunicazioni {{ notifica?.count }}" >
         <mat-card>
           <mat-card-header>
@@ -178,6 +151,31 @@
                 </div>
               </ul>
               <div class="sezioni"><button class="btn btn-primary" (click)="cancellaNotifiche($event)">Cancella Notifiche</button></div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Sezioni">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Sezioni</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="sezioni">
+              <div>
+                <button class="btn btn-primary" (click)="logout($event)">Logout</button>
+                <br><br></div>
+              <div>
+                <button class="btn btn-primary" (click)="open(content)">Cambia Password</button>
+                <br><br></div>
+              <div>
+                <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
+                <br><br></div>
+              <div *ngIf="checkRuoli.checkAdmin || checkRuoli.checkSystemAdmin">
+                <button class="btn btn-primary" (click)="cambiaSezione('Admin')">
+                  Admin
+                </button>
+                <br></div>
             </div>
           </mat-card-content>
         </mat-card>

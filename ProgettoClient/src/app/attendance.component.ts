@@ -45,8 +45,8 @@ export class AttendanceComponent implements OnInit {
       return data.json();
     }).then((data) => {
       this.x = data;
+      this.notifica = new Notifica(this.x, '', '', '', '', '', 0, false);
       if (this.x != 0) {
-        this.notifica = new Notifica(this.x, '', '', '', '', '', 0, false);
         this.notifications.push(this.notifica);
       }
     }).then(() => {
@@ -476,7 +476,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   AzzeraContatore($event) {
-    if ($event.index == 3) {     // SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO //old=2 new=3
+    if ($event.index == 2) {     // SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO //old=2 new=3
       this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }

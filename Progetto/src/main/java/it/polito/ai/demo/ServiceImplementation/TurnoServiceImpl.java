@@ -43,8 +43,6 @@ public class TurnoServiceImpl implements TurnoService {
 
       for (Turno t: turni.stream().filter(x->x.getId().getData().compareTo(LocalDate.now())>=0).collect(Collectors.toList())){
         String data=new String(t.getId().getData().getDayOfMonth()+"-"+t.getId().getData().getMonthValue()+"-"+t.getId().getData().getYear());
-        System.out.println("data scomposta "+ data);
-        System.out.println("data localdate "+ t.getId().getData());
         DisponibilitaGetDTO d=DisponibilitaGetDTO.builder().data(data)
                               .linea(t.getLinea().getNome())
                               .username(t.getId().getUtente().getUserName())

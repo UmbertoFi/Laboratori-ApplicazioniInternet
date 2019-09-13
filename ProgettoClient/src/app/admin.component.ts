@@ -85,8 +85,8 @@ export class AdminComponent implements OnInit {
       return data.json();
     }).then((data) => {
       this.x = data;
+      this.notifica = new Notifica(this.x, '', '', '', '', '', 0, false);
       if (this.x != 0) {
-        this.notifica = new Notifica(this.x, '', '', '', '', '', 0, false);
         this.notifications.push(this.notifica);
       }
     }).then(() => {
@@ -598,7 +598,7 @@ export class AdminComponent implements OnInit {
   }
 
   AzzeraContatore($event) {
-    if ($event.index == 3) {     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+    if ($event.index == 2) {     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
       this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }
@@ -612,7 +612,7 @@ export class AdminComponent implements OnInit {
           this.alertService.success('Turno consolidato con successo!', true);
         }
         else {
-          this.alertService.success('Turno consolidato con successo! Purtroppo devi rifare il login!', true);
+          this.alertService.success('Turno consolidato con successo! Riloggare cortesemente poichè sono cambiati i privilegi!', true);
           this.authenticationService.logout();
           this.router.navigate(['/login']);
         }

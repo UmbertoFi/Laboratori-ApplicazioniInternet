@@ -9,8 +9,8 @@
             <input type="text" formControlName="email" class="form-control"
                    [ngClass]="{ 'is-invalid': (submitted && f.email.errors) || (email_blur && f.email.errors)}" (blur)="onBlur(0)" (ngModelChange)="onChange()"/>
             <div *ngIf="f.email.errors" class="invalid-feedback">
-              <div *ngIf="f.email.errors.required">Email is required</div>
-              <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+              <div *ngIf="f.email.errors.required">Email richiesta</div>
+              <div *ngIf="f.email.errors.email">Email non valida</div>
               <div *ngIf="f.email.errors.notPresent">Email già utilizzata</div>
             </div>
           </div>

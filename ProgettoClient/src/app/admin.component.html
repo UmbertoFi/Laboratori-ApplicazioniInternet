@@ -31,7 +31,7 @@
                     </mat-option>
                   </mat-select>
                   <div *ngIf="this.promuoviUserForm.controls.username.errors" class="invalid-feedback">
-                    <div *ngIf="this.promuoviUserForm.controls.username.errors.required">Email is required</div>
+                    <div *ngIf="this.promuoviUserForm.controls.username.errors.required">Email richiesta</div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -44,7 +44,7 @@
                     </mat-option>
                   </mat-select>
                   <div *ngIf="this.promuoviUserForm.controls.linea.errors" class="invalid-feedback">
-                    <div *ngIf="this.promuoviUserForm.controls.linea.errors.required">Linea is required</div>
+                    <div *ngIf="this.promuoviUserForm.controls.linea.errors.required">Linea richiesta</div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -56,7 +56,7 @@
                     <mat-option class="clickable" value="Declassa">Declassa</mat-option>
                   </mat-select>
                   <div *ngIf="this.promuoviUserForm.controls.azione.errors" class="invalid-feedback">
-                    <div *ngIf="this.promuoviUserForm.controls.azione.errors.required">Azione is required</div>
+                    <div *ngIf="this.promuoviUserForm.controls.azione.errors.required">Azione richiesta</div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -85,7 +85,7 @@
                     </mat-option>
                   </mat-select>
                   <div *ngIf="this.trovaDisponibilitaForm.controls.linea.errors" class="invalid-feedback">
-                    <div *ngIf="this.trovaDisponibilitaForm.controls.linea.errors.required">Linea is required</div>
+                    <div *ngIf="this.trovaDisponibilitaForm.controls.linea.errors.required">Linea richiesta</div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -94,7 +94,7 @@
                          [ngClass]="{ 'is-invalid': (data_blur && this.trovaDisponibilitaForm.controls.data.errors) || (submitted1 && this.trovaDisponibilitaForm.controls.data.errors)}"
                          (blur)="onBlur(4)">
                   <div *ngIf="this.trovaDisponibilitaForm.controls.data.errors" class="invalid-feedback">
-                    <div *ngIf="this.trovaDisponibilitaForm.controls.data.errors.required">Data is required</div>
+                    <div *ngIf="this.trovaDisponibilitaForm.controls.data.errors.required">Data richiesta</div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -106,7 +106,7 @@
                     <mat-option class="clickable" value="Ritorno">Ritorno</mat-option>
                   </mat-select>
                   <div *ngIf="this.trovaDisponibilitaForm.controls.verso.errors" class="invalid-feedback">
-                    <div *ngIf="this.trovaDisponibilitaForm.controls.verso.errors.required">Verso is required</div>
+                    <div *ngIf="this.trovaDisponibilitaForm.controls.verso.errors.required">Verso richiesto</div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -124,7 +124,7 @@
                     </mat-option>
                   </mat-select>
                   <div *ngIf="this.consolidaTurnoForm.controls.username.errors" class="invalid-feedback">
-                    <div *ngIf="this.consolidaTurnoForm.controls.username.errors.required">Disponibilità is required
+                    <div *ngIf="this.consolidaTurnoForm.controls.username.errors.required">Disponibilità richiesta
                     </div>
                   </div>
                 </div>
@@ -132,32 +132,6 @@
                   <button class="btn btn-primary">Consolida turno</button>
                 </div>
               </form>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-tab>
-      <mat-tab label="Sezioni">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Sezioni</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="sezioni">
-              <div>
-                <button class="btn btn-primary" (click)="logout($event)">Logout</button>
-                <br><br></div>
-              <div>
-                <button class="btn btn-primary" (click)="open(content)">Cambia Password</button>
-                <br><br></div>
-              <div *ngIf="checkRuoli.checkSystemAdmin">
-                <button class="btn btn-primary" (click)="pulisciDatabase()">Pulisci Database</button>
-              <br><br></div>
-              <div>
-                <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
-                <br><br></div>
-              <div *ngIf="checkRuoli.checkAccompagnatore">
-                <button class="btn btn-primary" (click)="cambiaSezione('attendance')">Accompagnatore</button>
-              </div>
             </div>
           </mat-card-content>
         </mat-card>
@@ -190,6 +164,32 @@
                 </div>
               </ul>
               <div class="sezioni"><button class="btn btn-primary" (click)="cancellaNotifiche($event)">Cancella Notifiche</button></div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Sezioni">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Sezioni</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="sezioni">
+              <div>
+                <button class="btn btn-primary" (click)="logout($event)">Logout</button>
+                <br><br></div>
+              <div>
+                <button class="btn btn-primary" (click)="open(content)">Cambia Password</button>
+                <br><br></div>
+              <div *ngIf="checkRuoli.checkSystemAdmin">
+                <button class="btn btn-primary" (click)="pulisciDatabase()">Pulisci Database</button>
+                <br><br></div>
+              <div>
+                <button class="btn btn-primary" (click)="cambiaSezione('simpleuser')">Genitore</button>
+                <br><br></div>
+              <div *ngIf="checkRuoli.checkAccompagnatore">
+                <button class="btn btn-primary" (click)="cambiaSezione('attendance')">Accompagnatore</button>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>

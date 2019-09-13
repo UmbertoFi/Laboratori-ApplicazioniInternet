@@ -143,11 +143,9 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           // this.userService.login(data);
-          console.log('Ora puoi inserire le credenziali');
           this.alertService.success('Ora puoi inserire le credenziali');
           this.step2 = false;
           this.step3 = true;
-          console.log('step1 ' + this.step1 + ' step2 ' + this.step2);
         },
         error => {
           this.alertService.error('Codice scaduto o errato!');
@@ -171,11 +169,9 @@ export class LoginComponent implements OnInit {
           .subscribe(
             data => {
                 // this.userService.login(data);
-                console.log('Controlla la tua email!');
                 this.alertService.success('Controlla la tua email!');
                 this.step1 = false;
                 this.step2 = true;
-                console.log('step1' + this.step1 + 'step2' + this.step2);
             },
             error => {
               this.alertService.error('Email non valida.Riprova!');
@@ -196,7 +192,6 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           // this.userService.login(data);
-          console.log('password cambiata');
           this.alertService.success('Password cambiata!');
           this.modalService.dismissAll();
         },
