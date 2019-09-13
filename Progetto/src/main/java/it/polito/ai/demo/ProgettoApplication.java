@@ -96,7 +96,6 @@ public class ProgettoApplication {
                         String UUID=generateUUID();
                          u = Utente.builder()
                         .UserName(linea.getAmministratore())
-                        //.Password(new BCryptPasswordEncoder(11).encode(registerDTO.getPassword()))
                         .Password("{bcrypt}$2a$10$xDV2akL7gB9eH.v8LPmNn.qVdOcDeoHSReUX0IYUFMLhxzbiVaRgO")
                         .token(UUID)
                         .expiredToken(new Date())
@@ -198,9 +197,7 @@ public class ProgettoApplication {
                         ps.save(p.convertToEntity(fs, cr));
                     }
                 }
-                /* ListaCorseDTO corse = mapper.readValue(new ClassPathResource("json_new/corse.json").getInputStream(), ListaCorseDTO.class);
-                for(CorsaDTO c:corse.getCorse())
-                    cs.save(c.convertToEntity(lr)); */
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

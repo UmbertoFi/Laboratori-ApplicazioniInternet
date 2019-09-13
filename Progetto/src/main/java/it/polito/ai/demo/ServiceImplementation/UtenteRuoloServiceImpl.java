@@ -38,7 +38,6 @@ public class UtenteRuoloServiceImpl implements UtenteRuoloService {
 
     public List<UtenteRuolo> getRuoli(String username) {
 
-        //idRuolo id = idRuolo.builder().Username(username).NomeLinea(linea).build();
         Optional<Utente> utente = userRepository.findById(username);
         if(utente.isPresent()) {
             Iterable<UtenteRuolo> ur = utenteRuoloRepository.findByUtente(utente.get());

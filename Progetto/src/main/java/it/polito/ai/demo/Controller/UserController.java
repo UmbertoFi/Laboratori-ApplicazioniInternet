@@ -38,7 +38,6 @@ import static org.springframework.http.ResponseEntity.ok;
 
 
 @RestController
-//@RequestMapping(path = "demo")
 public class UserController {
 
 
@@ -71,7 +70,6 @@ public class UserController {
       Utente utente = userService.getUserById(username);
       if (utente != null) {
 
-        //UtenteRuolo ruoli = utenteRuoloService.getUtenteRuolo(username, "*");
 
         List<UtenteRuolo> u = utenteRuoloService.getRuoli(username);
         List<String> ruoli = u.stream().map(x -> x.getId().getRuolo()).collect(toList());
@@ -90,7 +88,6 @@ public class UserController {
       }
 
 
-      //String token = jwtTokenProvider.createToken(username, this.users.findById(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
 
 
       Map<Object, Object> model = new HashMap<>();
@@ -131,7 +128,6 @@ public class UserController {
     String UUID = generateUUID();
     Utente u = Utente.builder()
       .UserName(registerDTO.getEmail())
-      //.Password(new BCryptPasswordEncoder(11).encode(registerDTO.getPassword()))
       .Password(passwordEncoder.encode(registerDTO.getPassword()))
       .token(UUID)
       .expiredToken(new Date())
@@ -197,7 +193,6 @@ public class UserController {
       if ((utente.getEnabled() == true) && (utente.getExpiredAccount() == true) && (utente.getLocked() == true)) {
 
         String UUID = generateUUID();
-        // utente.setExpiredcredential(false);
         utente.setToken(UUID);
         utente.setExpiredToken(new Date());
         userService.save(utente);
@@ -269,13 +264,11 @@ public class UserController {
 
           if (changePassDTO.getPassword1().compareTo(changePassDTO.getPassword2()) == 0) {
             String UUID = generateUUID();
-            // utente.setExpiredcredential(false);
             utente.setExpiredcredential(true);
             utente.setToken(UUID);
             utente.setPassword(passwordEncoder.encode(changePassDTO.getPassword1()));
             utente.setExpiredToken(new Date());
             userService.save(utente);
-            // String body = "Gentilissimo, confermi di essere tu ad aver modificato la Password?, se sì clicca il seguente link per confermare la modifica http://localhost:8080/confirm/changepass/" + UUID;
             String body = "Gentilissimo, password cambiata come richiesto!";
             email.sendSimpleMessage(username, "Pedibus-Conferma modifica password!", body);
             return;
@@ -331,75 +324,7 @@ public class UserController {
   }
 
 
-    /* @PutMapping(path = "/users/{userID}")
-    @ResponseStatus(HttpStatus.OK)
-    public void altmodifyRole(HttpServletRequest req, @PathVariable("userID") String userID, @RequestBody ModificaRuoloDTO modificaRuoloDTO) {
 
-        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
-        List<String> ru = jwtTokenProvider.getRole(jwtTokenProvider.resolveToken(req));
-
-        if(ru.contains("system-admin")) {
-            if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
-
-                UtenteRuolo utenteRuolo = utenteRuoloService.getUtenteRuolo(userID, "*");
-
-                if (utenteRuolo != null) {
-                    idRuolo nuovoIdRuolo = idRuolo.builder()
-                            .NomeLinea(modificaRuoloDTO.getLinea())
-                            .username(userID)
-                            .build();
-                    UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
-                            .id(nuovoIdRuolo)
-                            .ruolo("admin")
-                            .build();
-                    utenteRuoloService.save(nuovoRuolo);
-                    return;
-                }
-                throw  new NotFoundException("errore");
-            } else {
-                UtenteRuolo utenteRuolo = utenteRuoloService.getUtenteRuolo(userID, modificaRuoloDTO.getLinea());
-                if (utenteRuolo != null) {
-                    utenteRuoloService.deleteOne(utenteRuolo);
-                    return;
-                }
-                throw  new NotFoundException("errore");
-            }
-        }else if(ru.contains("admin") ){
-
-            List<String> linee = jwtTokenProvider.getLinee(jwtTokenProvider.resolveToken(req));
-            if(linee.contains(modificaRuoloDTO.getLinea())==true) {
-
-                if (modificaRuoloDTO.getAzione().compareTo("promuovi") == 0) {
-
-                    UtenteRuolo utenteRuolo2 = utenteRuoloService.getUtenteRuolo(userID, "*");
-
-                    if (utenteRuolo2 != null) {
-                        idRuolo nuovoIdRuolo = idRuolo.builder()
-                                .NomeLinea(modificaRuoloDTO.getLinea())
-                                .username(userID)
-                                .build();
-                        UtenteRuolo nuovoRuolo = UtenteRuolo.builder()
-                                .id(nuovoIdRuolo)
-                                .ruolo("admin")
-                                .build();
-                        utenteRuoloService.save(nuovoRuolo);
-                        return;
-                    }
-                    throw  new NotFoundException("errore");
-                } else {
-                    UtenteRuolo utenteRuolo2 = utenteRuoloService.getUtenteRuolo(userID, modificaRuoloDTO.getLinea());
-                    if (utenteRuolo2 != null) {
-                        utenteRuoloService.deleteOne(utenteRuolo2);
-                        return;
-                    }
-                    throw  new NotFoundException("errore");
-                }
-
-            }
-        }
-        throw  new UnauthorizedException("non autorizzato");
-
-} */
 
   /***
    * funzione per generare un numero di conferma random

@@ -50,34 +50,6 @@ public class Fermata {
         return f;
     }
 
-    /* public DettagliLineaDTO convertToDettagliLineaDTO(String verso) {
-        if (verso.compareTo("andata") == 0) {
-            DettagliLineaDTO dl = DettagliLineaDTO.builder()
-                    .id(this.id)
-                    .nome(this.nome)
-                    .ora(this.ora_andata)
-                    .build();
-            return dl;
-        } else {
-            DettagliLineaDTO dl = DettagliLineaDTO.builder()
-                    .id(this.id)
-                    .nome(this.nome)
-                    .ora(this.ora_ritorno)
-                    .build();
-            return dl;
-        }
-    }
-
-    public DettagliLineaPersoneDTO convertToDettagliLineaPersoneDTO(List<String> strings) {
-        DettagliLineaPersoneDTO dtl = DettagliLineaPersoneDTO.builder()
-                .id(this.id)
-                .nome(this.nome)
-                .persone(strings)
-                .build();
-        return dtl;
-
-    } */
-
     public DettagliLineaPersoneDTONew convertToDettagliLineaPersoneDTONew(List<PersonaDTONew> persone, int verso) {
         String ora;
         if(verso==0)
