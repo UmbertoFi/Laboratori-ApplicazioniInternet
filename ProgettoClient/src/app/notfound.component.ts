@@ -13,6 +13,6 @@ export class NotFoundComponent {
   constructor(private webSocketService: WebSocketService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router) {}
 
     Home($event: MouseEvent) {
-      this.router.navigate(['/simpleuser']);
+      this.router.navigate(['/']);
   }
 }
