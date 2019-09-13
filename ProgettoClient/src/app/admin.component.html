@@ -8,7 +8,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title-group>
-      <mat-card-title>Sezione admin: {{getUtente()}}</mat-card-title>
+      <mat-card-title>Sezione admin: <em>{{getUtente()}}</em></mat-card-title>
     </mat-card-title-group>
   </mat-card-header>
   <mat-card-content>
@@ -136,7 +136,8 @@
           </mat-card-content>
         </mat-card>
       </mat-tab>
-      <mat-tab label="Comunicazioni {{ notifica?.count }}">
+      <mat-tab>
+      <ng-template mat-tab-label><mat-icon style="color: darkorange">notification_important</mat-icon>{{notifica?.count}}</ng-template>
         <mat-card>
           <mat-card-header>
             <mat-card-title>Comunicazioni</mat-card-title>

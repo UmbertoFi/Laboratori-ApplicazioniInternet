@@ -50,7 +50,7 @@ export class AttendanceComponent implements OnInit {
         this.notifications.push(this.notifica);
       }
     }).then(() => {
-      const promiseTratte = fetch('http://localhost:8080/utility/notificheoffline/' + localStorage.getItem('username'), {
+      const promiseNotificheOffline = fetch('http://localhost:8080/utility/notificheoffline/' + localStorage.getItem('username'), {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -74,6 +74,18 @@ export class AttendanceComponent implements OnInit {
         // Update notifications attribute with the recent messsage sent from the server
         this.notifica = JSON.parse(notifications.body);
         this.notifications.push(this.notifica);
+
+        const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
+          }
+        })
+          .then((data) => {
+            return data.json();
+          }).then((data) => {
+            this.tratte = data;
+          });
       });
     });
   }
@@ -428,11 +440,25 @@ export class AttendanceComponent implements OnInit {
         data => {
           this.alertService.success('Presenza del bambino registrata con successo!', true);
           // this.router.navigate(['/simpleuser']);
+          const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[0].nome + '/' + this.corse[this.pageIndex].data, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + localStorage.getItem('access_token')
+            }
+          })
+            .then((data) => {
+              return data.json();
+            }).then((data) => {
+              this.tratte = data;
+              this.tratte.fermateA.sort((a, b) => a.ora.localeCompare(b.ora));
+              this.tratte.fermateR.sort((a, b) => a.ora.localeCompare(b.ora));
+            });
         },
         error => {
           this.alertService.error('Impossibile registrare la presenza del bambino!');
         });
     }
+    this.alertService.error('Impossibile registrare la presenza del bambino poichè non è la data corrente');
     return;
   }
 
@@ -516,7 +542,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   cancellaNotifiche($event: MouseEvent) {
-    const promiseTratte = fetch('http://localhost:8080/utility/cancellaNotifiche/' + localStorage.getItem('username'), {
+    const promiseCancellaNotifiche = fetch('http://localhost:8080/utility/cancellaNotifiche/' + localStorage.getItem('username'), {
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
