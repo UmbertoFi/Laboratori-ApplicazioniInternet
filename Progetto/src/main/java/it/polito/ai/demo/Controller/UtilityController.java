@@ -347,10 +347,28 @@ public class UtilityController {
         Corsa c = corsaService.getCorsa(l.getId(), date, verso);
         if (c != null) {
 
+          if(date.equals(LocalDate.now())) {
+            String oraFermata = "23:59:00";
+
+            for (Fermata f : c.getLinea().getFermate()) {
+              if (verso.equals("A")) {
+                if (f.getOra_andata().compareTo(oraFermata) < 0)
+                  oraFermata = f.getOra_andata();
+              } else {
+                if (f.getOra_ritorno().compareTo(oraFermata) < 0)
+                  oraFermata = f.getOra_ritorno();
+              }
+            }
+
+            if (oraFermata.compareTo(java.time.LocalTime.now().toString()) < 0) {
+              throw new BadRequestException("Disponibilità non accettata perchè corsa già partita");
+            }
+          }
+
           idTurno id = idTurno.builder().utente(u).data(c.getData()).verso(c.getVerso()).build();
           Optional<Turno> t = turnoService.getTurnoById(id);
 
-          if(t.isPresent()){
+          if (t.isPresent()) {
             throw new BadRequestException("Disponibilità non accettata perchè già assegnato in un turno consolidato per quella data e verso");
           }
 
@@ -508,8 +526,8 @@ public class UtilityController {
     LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
 
     List<Disponibilita> disponibilita = disponibilitaService.getDisponibilitaByData(data);
-      for (Disponibilita d : disponibilita)
-        disponibilitaService.deleteOne(d);
+    for (Disponibilita d : disponibilita)
+      disponibilitaService.deleteOne(d);
 
     List<Turno> turni = turnoService.getTurniByData(data);
     for (Turno t : turni)
@@ -518,16 +536,15 @@ public class UtilityController {
   }
 
 
-
   @GetMapping(path = "/utility/checkChildren/{id_bambino}")
   @ResponseStatus(HttpStatus.OK)
   public @ResponseBody
-  void controllaFiglio(@PathVariable("id_bambino") int id, HttpServletRequest req){
+  void controllaFiglio(@PathVariable("id_bambino") int id, HttpServletRequest req) {
     String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
     Utente u = userService.getUserById(username);
     List<BambinoDTO> figli = bambinoService.getFigli(u);
-    for (BambinoDTO b : figli){
-      if(b.getId_bambino() == id)
+    for (BambinoDTO b : figli) {
+      if (b.getId_bambino() == id)
         return;
     }
     throw new BadRequestException("Errore: Il genitore non può cancellare la prenotazione di un figlio non suo");
@@ -536,19 +553,19 @@ public class UtilityController {
 
   @GetMapping("utility/turni")
   @ResponseStatus(HttpStatus.OK)
-  public @ResponseBody List<DisponibilitaGetDTO> getTurni(HttpServletRequest req){
-
+  public @ResponseBody
+  List<DisponibilitaGetDTO> getTurni(HttpServletRequest req) {
 
 
     String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
-    Utente u=userService.getUserById(username);
-    if(u==null)
-    throw new BadRequestException("utente non esistente ");
+    Utente u = userService.getUserById(username);
+    if (u == null)
+      throw new BadRequestException("utente non esistente ");
 
-    if(!jwtTokenProvider.getRole(jwtTokenProvider.resolveToken(req)).contains("accompagnatore"))
+    if (!jwtTokenProvider.getRole(jwtTokenProvider.resolveToken(req)).contains("accompagnatore"))
       throw new UnauthorizedException("utente non è abilitato come accompagnatore");
 
-    List<DisponibilitaGetDTO> turni=turnoService.getProxTurni(u);
+    List<DisponibilitaGetDTO> turni = turnoService.getProxTurni(u);
     return turni;
   }
 
@@ -557,19 +574,17 @@ public class UtilityController {
   public @ResponseBody
   List<String> getAllLinea(@PathVariable("utente") String username) throws Exception {
     List<String> nomiLinee = utenteRuoloService.getLinesbyUser(username);
-    for(String linea : nomiLinee){
-      if(linea.compareTo("*")==0){
+    for (String linea : nomiLinee) {
+      if (linea.compareTo("*") == 0) {
         Iterable<Linea> allLinee = lineaService.getLines();
         List<String> allNomiLinee = new ArrayList<>();
-        for(Linea l : allLinee)
+        for (Linea l : allLinee)
           allNomiLinee.add(l.getNome());
         return allNomiLinee;
       }
     }
     return nomiLinee;
   }
-
-
 
 
 }
