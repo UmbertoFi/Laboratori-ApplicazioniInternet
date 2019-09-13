@@ -77,41 +77,7 @@ public class UtilityController {
 
   }
 
-    /* @GetMapping(path = "/utility/linea/{nome_linea}")
-    public @ResponseBody
-    ResponseEntity convertNomeLinea(@PathVariable("nome_linea") String nomeLinea) {
 
-        Linea l = lineaService.getLinea(nomeLinea);
-        Map<Object, Object> model = new HashMap<>();
-
-        if (l != null) {
-            model.put("codice", l.getId());
-
-            return ok(model);
-        }
-        model.put("codice", null);
-
-        return ok(model);
-
-    } */
-
-    /* @GetMapping(path = "/utility/fermata/{n_fermata}")
-    public @ResponseBody
-    ResponseEntity convertNumFermata(@PathVariable("n_fermata") String nfermata) {
-
-        Optional<Fermata> f = fermataService.getFermata(Integer.parseInt(nfermata));
-
-        Map<Object, Object> model = new HashMap<>();
-
-        if (f.isPresent()== true) {
-            model.put("nome_fermata", f.get().getNome());
-
-            return ok(model);
-        }
-        model.put("nome_fermata", null);
-
-        return ok(model);
-    } */
 
   @GetMapping(path = "/utility/children")
   public @ResponseBody
@@ -149,7 +115,6 @@ public class UtilityController {
 
       if (children == null) {
         children = new ArrayList<>();
-        // throw new BadRequestException("bambini non trovati!");
       }
 
       return children;
@@ -158,16 +123,7 @@ public class UtilityController {
 
   }
 
-    /* @GetMapping(path = "/utility/corse")
-    public @ResponseBody
-    List<CorsaSDTO> getAllCorse() throws Exception {
 
-        Iterable<Corsa> cors = corsaService.getCorse();
-        List<CorsaSDTO> corse = new ArrayList<>();
-        for (Corsa c : cors)
-            corse.add(c.convertToDTO());
-        return corse;
-    } */
 
   @GetMapping(path = "/utility/corse/{nome_linea}")
   public @ResponseBody
@@ -243,88 +199,6 @@ public class UtilityController {
 
   }
 
-//    @PostMapping(path = "/utility/reservations/{nome_linea}/{date}")
-//    public @ResponseBody
-//    IdPrenotazioneDTO postNuovaPrenotazione(@PathVariable("nome_linea") String nomeLinea,
-//                                            @PathVariable("date") String date,
-//                                            @RequestBody PrenotazioneDTONew prenotazioneDTO) {
-//
-//
-//        Optional<Fermata> f = fermataService.getFermata(prenotazioneDTO.getId_fermata());
-//        if (f.isPresent()) {
-//
-//            String[] pieces = date.split("-");
-//            LocalDate data = LocalDate.of(Integer.parseInt(pieces[0]), Integer.parseInt(pieces[1]), Integer.parseInt(pieces[2]));
-//            LocalDate curr = LocalDate.now();
-//
-//            idPrenotazione iP = idPrenotazione.builder()
-//                    .data(data)
-//                    .id_bambino(prenotazioneDTO.getId_bambino())
-//                    .verso(prenotazioneDTO.getVerso())
-//                    .build();
-//
-//            if (prenotazioneService.getPrenotazione(iP).isPresent()) {
-//                // UPDATE
-//                Prenotazione p = prenotazioneService.getPrenotazione(iP).get();
-//                // if(p.getFermata().getLinea()!=fermataService.getFermata(prenotazioneDTO.getId_fermata()).get().getLinea()) {
-//                f.get().getPrenotazioni().remove(p);
-//                p.setFermata(f.get());
-//                prenotazioneService.save(p);
-//                f.get().getPrenotazioni().add(p);
-//                return IdPrenotazioneDTO.builder().id(iP.toString()).build();
-//                //}
-//            } else {
-//                // INSERT
-//                boolean presente;
-//                if (data.compareTo(curr) == 0) {
-//                    presente = true;
-//                } else {
-//                    presente = false;
-//                }
-//                Prenotazione p = Prenotazione.builder()
-//                        .fermata(f.get())
-//                        .presente(presente)
-//                        .corsa(corsaService.getCorsa(f.get().getLinea().getId(), data, prenotazioneDTO.getVerso()))
-//                        .id(iP)
-//                        .build();
-//
-//                prenotazioneService.save(p);
-//                f.get().getPrenotazioni().add(p);
-//                return IdPrenotazioneDTO.builder().id(iP.toString()).build();
-//            }
-//        }
-//        throw new NotFoundException("errore nella prenotazione");
-//    }
-//
-//    @PutMapping(path = "/utility/reservations/{date}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public @ResponseBody
-//    void updatePrenotazione(@PathVariable("date") String date,
-//                            @RequestBody PrenotazioneDTONew prenotazioneDTO) {
-//
-//
-//        String[] dataPieces = date.split("-");
-//        LocalDate data = LocalDate.of(Integer.parseInt(dataPieces[0]), Integer.parseInt(dataPieces[1]), Integer.parseInt(dataPieces[2]));
-//
-//        idPrenotazione iP = idPrenotazione.builder()
-//                .data(data)
-//                .id_bambino(prenotazioneDTO.getId_bambino())
-//                .verso(prenotazioneDTO.getVerso())
-//                .build();
-//
-//        Optional<Prenotazione> p = prenotazioneService.getPrenotazione(iP);
-//        if (p.isPresent()) {
-//            if (p.get().isPresente() == true)
-//                p.get().setPresente(false);
-//            else
-//                p.get().setPresente(true);
-//            prenotazioneService.save(p.get());
-//            return;
-//        }
-//
-//        throw new BadRequestException("errore nella modifica ");
-//    }
-
   @PostMapping(path = "/utility/available/{username}")
   public @ResponseBody
   void postNuovaPrenotazione(@PathVariable("username") String username,
@@ -374,8 +248,6 @@ public class UtilityController {
 
           Disponibilita d = Disponibilita.builder()
             .id(idDisponibilita.builder().corsa(c).utente(u).build())
-            /* .fermataA()
-             .fermataR()*/
             .build();
 
           disponibilitaService.save(d);
@@ -583,6 +455,16 @@ public class UtilityController {
         return allNomiLinee;
       }
     }
+    return nomiLinee;
+  }
+
+  @GetMapping(path = "/lines")
+  public @ResponseBody
+  List<NomeLineaDTO> getAllLinea() throws Exception {
+    Iterable<Linea> linee = lineaService.getLines();
+    List<NomeLineaDTO> nomiLinee = new ArrayList<>();
+    for (Linea linea : linee)
+      nomiLinee.add(linea.convertToNomeLineaDTO());
     return nomiLinee;
   }
 

@@ -32,9 +32,6 @@ public class BambinoServiceImpl implements BambinoService {
         em.persist(b);
     }
 
-    /* public Iterable<Bambino> getLines() {
-        return lineaRepository.findAll();
-    } */
 
     public String getNome(int id_bambino){
         Optional<Bambino> bambino = bambinoRepository.findById(id_bambino);

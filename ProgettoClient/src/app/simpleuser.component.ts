@@ -461,7 +461,8 @@ export class SimpleuserComponent implements OnInit {
         this.alertService.success('Bambino prenotato con successo per un anno intero!', true);
       } */
     }
-    this.alertService.error('Impossibile prenotare bambino poichè il bus è già passato');
+    else
+      this.alertService.error('Impossibile prenotare bambino poichè il bus è già passato');
     return;
   }
 
@@ -650,6 +651,8 @@ export class SimpleuserComponent implements OnInit {
       .then((data) => {
         return data.json();
       }).then((data) => {
+        this.notifica.count=0;
+        this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
         this.notifications = data;
       });
   }

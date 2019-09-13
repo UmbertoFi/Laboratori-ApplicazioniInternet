@@ -41,15 +41,5 @@ public class Prenotazione {
         return Objects.hash(id, fermata);
     }
 
-    /* public PrenotatoDTO convertToDTO() {
 
-        PrenotatoDTO p = PrenotatoDTO.builder()
-                .id_bambino(this.getId().getId_bambino())
-                .data(this.getId().getLocalData())
-                .verso(this.getId().getVerso())
-                .id_fermata(this.getFermata().getId())
-                .build();
-
-        return p;
-    } */
 }

@@ -24,9 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests().antMatchers("/utility/checkUsername/**","/login", "/register", "/confirm/**", "/recover/**", "/socket/**", "/notify/**").permitAll()
-                /*.and()
-                .csrf().disable()
-                .authorizeRequests().antMatchers("/users/**").hasRole("system-admin")*/
+
 
                 .anyRequest().authenticated()
                 .and()

@@ -663,6 +663,8 @@ export class AdminComponent implements OnInit {
       .then((data) => {
         return data.json();
       }).then((data) => {
+        this.notifica.count=0;
+        this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
         this.notifications = data;
       });
   }

@@ -513,6 +513,17 @@ export class AttendanceComponent implements OnInit {
     this.userService.presaVisione(this.p, ind).subscribe(
       data => {
         this.alertService.success('Turno consolidato con successo!', true);
+        const promiseTurni = fetch('http://localhost:8080/utility/turni', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
+          }
+        })
+          .then((data) => {
+            return data.json();
+          }).then((data) => {
+            this.turni = data;
+          });
       },
       error => {
         this.alertService.error('Impossibile consolidare il turno!');
@@ -551,6 +562,8 @@ export class AttendanceComponent implements OnInit {
       .then((data) => {
         return data.json();
       }).then((data) => {
+        this.notifica.count=0;
+        this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
         this.notifications = data;
       });
   }
@@ -558,16 +571,18 @@ export class AttendanceComponent implements OnInit {
 
   cancellaTurno($event: MouseEvent, data: string, verso: string, username: string, ind: number) {
 
-    this.userService.cancellaTurno(new presaVisione(data, verso, username)).subscribe(
-      data => {
-        this.turni.splice(ind, 1);
-        this.alertService.success('Turno cancellato con successo!', true);
-        this.router.navigate(['/attendance']);
-        // this.router.navigate(['/simpleuser']);
-      },
-      error => {
-        this.alertService.error('Impossibile cancellare il turno!');
-      });
+    if (confirm('Desideri cancellare il turno?')) {
+      this.userService.cancellaTurno(new presaVisione(data, verso, username)).subscribe(
+        data => {
+          this.turni.splice(ind, 1);
+          this.alertService.success('Turno cancellato con successo!', true);
+          this.router.navigate(['/attendance']);
+          // this.router.navigate(['/simpleuser']);
+        },
+        error => {
+          this.alertService.error('Impossibile cancellare il turno!');
+        });
+    }
 
  /*   const promiseTurni = fetch('http://localhost:8080/utility/turni', {
       headers: {
