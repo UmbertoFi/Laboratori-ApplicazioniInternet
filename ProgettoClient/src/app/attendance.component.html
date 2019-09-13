@@ -149,6 +149,11 @@
                     <div>{{ n?.msg }} del bambino {{n?.utente}} per la data {{n?.data}}, linea {{n?.linea}}, verso {{n?.verso}}
                     </div>
                   </div>
+                  <div *ngIf="n?.tipo==4">
+                    <div>{{ n?.msg }} L'utente {{n?.utente}} ha cancellato il suo turno programmato per la data {{n?.data}}, linea {{n?.linea}}, verso {{n?.verso}}
+                    </div>
+                  </div>
+                  <mat-icon>remove</mat-icon>
                 </div>
               </ul>
               <div class="sezioni"><button class="btn btn-primary" (click)="cancellaNotifiche($event)">Cancella Notifiche</button></div>
