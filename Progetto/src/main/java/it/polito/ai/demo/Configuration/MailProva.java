@@ -18,8 +18,8 @@ public class MailProva {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername("sbagliocross87@gmail.com");
-        mailSender.setPassword("provagmail87");
+        mailSender.setUsername("pedibus.ad@gmail.com");
+        mailSender.setPassword("Applicazioni2019");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

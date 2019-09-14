@@ -170,11 +170,11 @@ export class AttendanceComponent implements OnInit {
         this.ruoli = data;
         return;
       }).then((data) => {
+        this.checkRuoli.checkAccompagnatore = false;
+        this.checkRuoli.checkAdmin = false;
+        this.checkRuoli.checkSystemAdmin = false;
+        this.checkRuoli.checkUser = false;
         for (const r of this.ruoli) {
-          this.checkRuoli.checkAccompagnatore = false;
-          this.checkRuoli.checkAdmin = false;
-          this.checkRuoli.checkSystemAdmin = false;
-          this.checkRuoli.checkUser = false;
           if (r.ruolo.localeCompare('admin') == 0) {
             this.checkRuoli.checkAdmin = true;
           } else if (r.ruolo.localeCompare('system-admin') == 0) {

@@ -68,9 +68,9 @@ export class AdminComponent implements OnInit {
   username2_blur = false;
 
   changePasswordForm: FormGroup;
-  password0_blur=false;
-  password1_blur=false;
-  password2_blur=false;
+  password0_blur = false;
+  password1_blur = false;
+  password2_blur = false;
   messaggio: string;
 
   constructor(private webSocketService: WebSocketService, private lineaService: LineaService, private userService: UserService, private authenticationService: AuthenticationService, private alertService: AlertService, private router: Router, private formBuilder: FormBuilder, private modalService: NgbModal) {
@@ -101,7 +101,7 @@ export class AdminComponent implements OnInit {
         }).then((data) => {
           this.notifications = data;
         });
-    });;
+    });
 
 
 // Open connection with server socket
@@ -154,10 +154,10 @@ export class AdminComponent implements OnInit {
     });
 
 
-    let promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
+    const promiseRuoli = fetch('http://localhost:8080/utility/ruoli', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -170,23 +170,23 @@ export class AdminComponent implements OnInit {
         this.checkRuoli.checkAdmin = false;
         this.checkRuoli.checkSystemAdmin = false;
         this.checkRuoli.checkUser = false;
-        for (let r of this.ruoli) {
+        for (const r of this.ruoli) {
           if (r.ruolo.localeCompare('admin') == 0) {
             this.checkRuoli.checkAdmin = true;
           } else if (r.ruolo.localeCompare('system-admin') == 0) {
             this.checkRuoli.checkSystemAdmin = true;
           } else if (r.ruolo.localeCompare('accompagnatore') == 0) {
             this.checkRuoli.checkAccompagnatore = true;
-          } else if(r.ruolo.localeCompare('user') == 0){
+          } else if (r.ruolo.localeCompare('user') == 0) {
             this.checkRuoli.checkUser = true;
           }
         }
       });
 
-    let promiseUtenti = fetch('http://localhost:8080/users', {
+    const promiseUtenti = fetch('http://localhost:8080/users', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -195,17 +195,17 @@ export class AdminComponent implements OnInit {
         this.utenti = data;
         return data;
       }).then((data) => {
-        for(let u of this.utenti){
-          if(u.username.localeCompare(localStorage.getItem("username"))!=0){
+        for (const u of this.utenti) {
+          if (u.username.localeCompare(localStorage.getItem('username')) != 0) {
             this.utentiEsclusoMe.push(u);
           }
         }
       });
 
-    let promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
+    const promiseFigli = fetch('http://localhost:8080/utility/children/' + localStorage.getItem('username'), {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -226,10 +226,10 @@ export class AdminComponent implements OnInit {
         this.bambini = data;
       }); */
 
-    let promiseLinea = fetch('http://localhost:8080/lines', {
+    const promiseLinea = fetch('http://localhost:8080/lines', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -238,10 +238,10 @@ export class AdminComponent implements OnInit {
         this.nomiLinee = data;
         return;
       }).then(() => {
-        let promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[0].nome, {
+        const promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[0].nome, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         })
           .then((data) => {
@@ -269,10 +269,10 @@ export class AdminComponent implements OnInit {
             this.pageIndex = j;
           })
           .then(() => {
-            let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[0].nome + '/' + this.corse[this.pageIndex].data, {
+            const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[0].nome + '/' + this.corse[this.pageIndex].data, {
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+                Authorization: 'Bearer ' + localStorage.getItem('access_token')
               }
             })
               .then((data) => {
@@ -285,10 +285,10 @@ export class AdminComponent implements OnInit {
           });
       });
 
-    let promiseLineaPerAdmin = fetch('http://localhost:8080/utility/adminlines/'+localStorage.getItem("username"), {
+    const promiseLineaPerAdmin = fetch('http://localhost:8080/utility/adminlines/' + localStorage.getItem('username'), {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -296,7 +296,7 @@ export class AdminComponent implements OnInit {
       }).then((data) => {
         this.nomiLineePerAdmin = data;
         return;
-      })
+      });
   }
 
   /* clickPersona($event: MouseEvent, verso, idFermata, idPersona) {
@@ -360,10 +360,10 @@ export class AdminComponent implements OnInit {
 
   selezionaLineaMenu(idLinea: number) {
     this.lineaSelezionataMenu = idLinea;
-    let promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[this.lineaSelezionataMenu].nome, {
+    const promiseCorsa = fetch('http://localhost:8080/utility/corse/' + this.nomiLinee[this.lineaSelezionataMenu].nome, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -391,10 +391,10 @@ export class AdminComponent implements OnInit {
         this.pageIndex = j;
       })
       .then(() => {
-        let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+        const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         })
           .then((data) => {
@@ -407,10 +407,10 @@ export class AdminComponent implements OnInit {
 
   selezionaCorsaPaginator(pageEvent: PageEvent) {
     this.pageIndex = pageEvent.pageIndex;
-    let promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
+    const promiseTratte = fetch('http://localhost:8080/utility/reservations/' + this.nomiLinee[this.lineaSelezionataMenu].nome + '/' + this.corse[this.pageIndex].data, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     })
       .then((data) => {
@@ -428,11 +428,11 @@ export class AdminComponent implements OnInit {
   }
 
   onBlurChangePassword(field: number) {
-    if(field==0){
+    if (field == 0) {
       this.password0_blur = true;
-    } else if(field==1){
+    } else if (field == 1) {
       this.password1_blur = true;
-    } else if(field==2){
+    } else if (field == 2) {
       this.password2_blur = true;
     }
   }
@@ -509,15 +509,14 @@ export class AdminComponent implements OnInit {
       return;
     }
 
-    let promiseDisponibilita = fetch('http://localhost:8080/utility/disponibilita/' + this.trovaDisponibilitaForm.value.linea + '/' + this.trovaDisponibilitaForm.value.data + '/' + this.trovaDisponibilitaForm.value.verso, {
+    const promiseDisponibilita = fetch('http://localhost:8080/utility/disponibilita/' + this.trovaDisponibilitaForm.value.linea + '/' + this.trovaDisponibilitaForm.value.data + '/' + this.trovaDisponibilitaForm.value.verso, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
-    }).then( (response) => {if (response.status>=400 && response.status<500){
-      throw "errore throw";
-    }
-    else{
+    }).then( (response) => {if (response.status >= 400 && response.status < 500) {
+      throw new Error('errore throw');
+    } else {
       return response;
     }})
       .then((data) => {
@@ -564,9 +563,9 @@ export class AdminComponent implements OnInit {
 
   changePasswordSubmit() {
     this.submitted2 = true;
-    //if (this.changePasswordForm.invalid) {
+    // if (this.changePasswordForm.invalid) {
     //  return;
-    //}
+    // }
     // stop here if form is invalid
 
     this.userService.cambiaPassword(this.changePasswordForm.value)
@@ -575,12 +574,12 @@ export class AdminComponent implements OnInit {
         data => {
           this.changePasswordForm.reset();
           this.alertService.success('Password cambiata con successo!', true);
-          //this.router.navigate(['/simpleuser']);
+          // this.router.navigate(['/simpleuser']);
           this.modalService.dismissAll();
         },
         error => {
           this.alertService.error('Cambio Password fallito!');
-          //this.messaggio='Cambio Password fallito!';
+          // this.messaggio='Cambio Password fallito!';
         });
   }
 
@@ -588,7 +587,7 @@ export class AdminComponent implements OnInit {
     if (this.disponibilita != undefined) {
       this.consolidaTurnoForm.reset();
       while (this.disponibilita.pop()) {
-        ;
+
       }
     }
   }
@@ -598,20 +597,19 @@ export class AdminComponent implements OnInit {
   }
 
   AzzeraContatore($event) {
-    if ($event.index == 2) {     //SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
+    if ($event.index == 2) {     // SE SI AGGIUNGONO ALTRE MAT-TAB VA CAMBIATO IL NUMERO
       this.notifica.count = 0;
       this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
     }
   }
 
-  presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind:number) {
+  presavisione($event: MouseEvent, data: string, verso: string, utente: string, ind: number) {
     this.p = new presaVisione(data, verso, utente);
     this.userService.presaVisione(this.p, ind).subscribe(
       data => {
-        if(this.notifications[ind].accompagnatore){
+        if (this.notifications[ind].accompagnatore) {
           this.alertService.success('Turno consolidato con successo!', true);
-        }
-        else {
+        } else {
           this.alertService.success('Turno consolidato con successo! Riloggare cortesemente poichè sono cambiati i privilegi!', true);
           this.authenticationService.logout();
           this.router.navigate(['/login']);
@@ -620,7 +618,7 @@ export class AdminComponent implements OnInit {
       error => {
         this.alertService.error('Impossibile consolidare il turno!');
       });
-    var element = <HTMLInputElement> document.getElementById("myBtn"+ind);
+    const element = document.getElementById('myBtn' + ind) as HTMLInputElement;
     element.disabled = true;
   }
 
@@ -663,14 +661,14 @@ export class AdminComponent implements OnInit {
       .then((data) => {
         return data.json();
       }).then((data) => {
-        this.notifica.count=0;
+        this.notifica.count = 0;
         this.userService.azzeraNotifica(localStorage.getItem('username')).subscribe();
         this.notifications = data;
       });
   }
 
   getUtente() {
-    return localStorage.getItem("username");
+    return localStorage.getItem('username');
   }
 }
 

@@ -148,40 +148,7 @@ public class UserController {
   }
 
 
-  @GetMapping(path = "/confirm/{randomUUID}")
-  @ResponseStatus(HttpStatus.OK)
-  public @ResponseBody
-  void confirmNuovoUser(@PathVariable("randomUUID") String randomUUID) {
-    Utente u = userService.getToken(randomUUID);
-    if (u == null) {
-      throw new NotFoundException("utente non valido");
-    }
-    Date now = new Date();
-    long diff = now.getTime() - u.getExpiredToken().getTime();
-    if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione
-      throw new NotFoundException("token scaduto");
-    u.setEnabled(true);
-    userService.save(u);
 
-    UtenteRuolo ur;
-    String ruolo;
-    if (utenteRuoloService.getByRuoloSystemAdmin() == false) {
-      ruolo = "system-admin";
-    } else {
-      ruolo = "user";
-    }
-    idRuolo id = idRuolo.builder()
-      .utente(u)
-      .ruolo(ruolo)
-      .NomeLinea("*")
-      .build();
-
-    ur = UtenteRuolo.builder()
-      .id(id)
-      .build();
-
-    utenteRuoloService.save(ur);
-  }
 
 
   @PostMapping(path = "/recover")
@@ -280,6 +247,41 @@ public class UserController {
       throw new NotFoundException("token scaduto o invalido");
     }
     throw new BadCredentialsException("utente non valido");
+  }
+
+
+  @GetMapping(path = "/confirm/{randomUUID}")
+  @ResponseStatus(HttpStatus.OK)
+  public void confirmNuovoUser(@PathVariable("randomUUID") String randomUUID) {
+    Utente u = userService.getToken(randomUUID);
+    if (u == null) {
+      throw new NotFoundException("utente non valido");
+    }
+    Date now = new Date();
+    long diff = now.getTime() - u.getExpiredToken().getTime();
+    if (diff > 3600000)                         // Tempo entro il quale poter confermare la registrazione
+      throw new NotFoundException("token scaduto");
+    u.setEnabled(true);
+    userService.save(u);
+
+    UtenteRuolo ur;
+    String ruolo;
+    if (utenteRuoloService.getByRuoloSystemAdmin() == false) {
+      ruolo = "system-admin";
+    } else {
+      ruolo = "user";
+    }
+    idRuolo id = idRuolo.builder()
+      .utente(u)
+      .ruolo(ruolo)
+      .NomeLinea("*")
+      .build();
+
+    ur = UtenteRuolo.builder()
+      .id(id)
+      .build();
+
+    utenteRuoloService.save(ur);
   }
 
   @GetMapping("/confirm/changepass/{randomUUID}")
