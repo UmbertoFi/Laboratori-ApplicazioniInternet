@@ -121,7 +121,7 @@ public class UserController {
       throw new NotFoundException("la password non deve superare i 12 caratteri");
     }
 
-    if (checkValidPass(registerDTO.getPassword(), registerDTO.getConfirmPassword()) == false) {
+    if (checkPasswordLength(registerDTO.getPassword(), registerDTO.getConfirmPassword()) == false) {
       throw new NotFoundException("password invalide");
     }
 
@@ -341,11 +341,11 @@ public class UserController {
     return generatedString.toString();
   }
 
-  private boolean checkValidPass(String pass1, String pass2) {
+  private boolean checkPasswordLength(String pass1, String pass2) {
     int l1 = pass1.length();
     int l2 = pass2.length();
 
-    if (l1 > 7 && l1 < 20 && l2 > 7 && l2 < 20) {
+    if (l1 >=6 && l1 <= 12 && l2 >= 6 && l2 < 12) {
       return true;
     }
     return false;
